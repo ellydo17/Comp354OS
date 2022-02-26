@@ -27,8 +27,10 @@ char* itoa(int num);
 
 void main() {
   //test for bonus 2
+  
   int num = 12345;
   printInt(num);
+  
   
   //test for bonus 1
   /*
@@ -38,6 +40,7 @@ void main() {
   printString("\n\0");
   printString(line);
   */
+  
   
   //test for "Creating printString, readChar, and readString System Calls"
   /*
@@ -309,8 +312,6 @@ int readString(char *buf, int maxChar) {
       interrupt(0x10, 0x0E * 256 +0x08, 0, 0, 0); //move cursor one step back again
     } else if (i >= maxChar) {
       break;
-      //buf[i] = 0x00;
-      //return i;
     } else { //when we do not hit backspace or haven't reached the limit
       buf[i] = ch;
       charRead[0]=ch;
