@@ -148,6 +148,10 @@ int readSector(char *buf, int absSector) {
   return 1;
 }
 
+/*
+ * Helper method that carries out the function of the modulus operator. It 
+ * yields the remainder when the first operand is divided by the second.
+ */
 int mod(int dividend, int divisor) {
   while (dividend >= divisor) {
     dividend = dividend - divisor;
