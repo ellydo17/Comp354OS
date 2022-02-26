@@ -121,23 +121,32 @@ void main() {
   }
 }
 
+/*
+ * Modify the handleInterrupt21 function to create system calls that allow us to
+ * print a string, read a character, and read a string using the printString, 
+ * readChar, and readString functions
+ */
+
 int handleInterrupt21(int ax, int bx, int cx, int dx){
-  if(ax==0x00){
+  if(ax==0x00){ //0x00 specifies that we need to print a string
     return printString(bx);
-  }else if(ax==0x11){
+  }else if(ax==0x11){ //0x11 specifies that we need to read a character
     char ch = readChar();
     char* buf = bx;
     buf[0] = ch;
     return 1;
-  }else if(ax==0x01){
+  }else if(ax==0x01){ //0x01 specifies that we need to read a string (read characters until ENTER is pressed
     return readString(bx);
   }else{
     return -1;
   }
 }
 
+/*
+ * Reads a Sector from Disk via the BIOS (Interrupt 0x13)
+ */
+
 int readSector(char *buf, int absSector) {
-  // prbly we need to write into buffer
   int relSector;
   int head;
   int track;
@@ -150,14 +159,23 @@ int readSector(char *buf, int absSector) {
 
 /*
  * Helper method that carries out the function of the modulus operator. It 
- * yields the remainder when the first operand is divided by the second.
+ * yields the remainder when the first operand is divided by the second
  */
+
 int mod(int dividend, int divisor) {
   while (dividend >= divisor) {
     dividend = dividend - divisor;
   }
   return dividend;
 }
+
+/*
+ * Read an entire string by utilizing the readChar method that reads one 
+ * character at a time from the Keyboard via the BIOS (Interrupt 0x16)
+ *
+ * Includes Bonus 1 feature where so the calling program can specify the maximum
+ * number of characters that will be placed into the provided buffer
+ */
 
 int readString(char *buf, int maxChar) {
   int i = 0;
@@ -196,6 +214,10 @@ int readString(char *buf, int maxChar) {
   return i;
 }
 
+/*
+ * Read one character at a time from the Keyboard via the BIOS (Interrupt 0x16)
+ */
+
 int readChar() {
   return interrupt(0x16, 0x00, 0, 0, 0);
 }
@@ -203,7 +225,6 @@ int readChar() {
 /*
  * Display a string to the screen via the BIOS (Interrupt 0x10)
  */
-
 
 int printString(char *str) {
   int i = 0;
