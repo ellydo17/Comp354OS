@@ -200,6 +200,11 @@ int readChar() {
   return interrupt(0x16, 0x00, 0, 0, 0);
 }
 
+/*
+ * Display a string to the screen via the BIOS (Interrupt 0x10)
+ */
+
+
 int printString(char *str) {
   int i = 0;
   while(str[i] != '\0') {
