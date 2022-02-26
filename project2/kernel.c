@@ -167,17 +167,19 @@ int getNumDigits(int num){
 }
 
 char* itoa(int num, int numDigits){
-  //int i = 0;
-  int i = 1;
+  int i = 0;
   char* resultStr = "";
   int isNeg = 0; //false
   char readChar[2];
-  //char* numList = "0\0  1\0  2\0  3\0  4\0  5\0  6\0  7\0  8\0  9\0";
   char* numList = "0 1 2 3 4 5 6 7 8 9\0";
 
+  //set the first character as the null terminator
+  resultStr[i] = '\0';
+  i++;
+    
   if (num == 0){
-    resultStr[i++] = '0';
-    resultStr[i] = '\0';
+    resultStr[i] = '0';
+    i++;
     return resultStr;
   }
  
@@ -186,13 +188,10 @@ char* itoa(int num, int numDigits){
     num = -num;
   }
   
-  //int = 0;
-  resultStr[0] = '\0';
   while (num != 0) {
     int rem = mod(num, 10);
-    //readChar[0] = digits[rem*4];
     readChar[0] = numList[rem*2];
-    resultStr[i] = numList[0];
+    resultStr[i] = readChar[0];
     i++;
     num = num/10;
   }
@@ -200,7 +199,6 @@ char* itoa(int num, int numDigits){
   if (isNeg==1){
     resultStr[i] = '-';
     i++;
-    //resultStr[i] = '\0';
   }
     
   reverse(resultStr, i);
