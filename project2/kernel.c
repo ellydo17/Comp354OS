@@ -20,21 +20,15 @@ int handleInterrupt21(int ax, int bx, int cx, int dx);
 int printInt(int num);
 
 int getNumDigits(int num);
-//int getNumDigits(int num, char *buf);
+
+void reverse(char* numStr, int numDigits);
 
 char* itoa(int num, int numDigits);
 
 void main() {
   //test for bonus 2
-  int num = 1234;
-  char line[20];
-  printString("Enter a line: \0");
-  readString(line, 10);
-  printString("\n\0");
-  printString(line);
-  printString("\n\0");
-  printString("The index of the letter printed below will show the numDigits returned\0");
-  printInt(num, line);
+  int num = 12345;
+  printInt(num);
   
   //test for bonus 1
   /*
@@ -147,7 +141,6 @@ void main() {
  */
 
 int printInt(int num){
-  //int printInt(int num, char *buf){
   //get the number of digits
   int numDigits = getNumDigits(num);
   
@@ -155,16 +148,8 @@ int printInt(int num){
   char *str = itoa(num, numDigits);
   
   //print out the string
-  
-  
-  //for testing purpose
-  /*
-  char charRead[2];
-  charRead[1]=0x00;
-  charRead[0] = buf[numDigits];
-  printString(charRead);
-  */
-  
+  printString(str);
+   
   //return the numbers of digits printed out
   return numDigits;
 }
@@ -182,6 +167,8 @@ int getNumDigits(int num){
 }
 
 char* itoa(int num, int numDigits){
+  //int i = 0;
+  int i = 1;
   char* resultStr = "";
   int isNeg = 0; //false
   char readChar[2];
@@ -201,12 +188,11 @@ char* itoa(int num, int numDigits){
   
   //int = 0;
   resultStr[0] = '\0';
-  int i = 1;
   while (num != 0) {
     int rem = mod(num, 10);
     //readChar[0] = digits[rem*4];
-    readChar[0] = digits[rem*2];
-    resultStr[i] = readChar[0];
+    readChar[0] = numList[rem*2];
+    resultStr[i] = numList[0];
     i++;
     num = num/10;
   }
