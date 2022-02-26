@@ -23,7 +23,7 @@ int getNumDigits(int num);
 
 void reverse(char* numStr, int numDigits);
 
-char* itoa(int num, int numDigits);
+char* itoa(int num);
 
 void main() {
   //test for bonus 2
@@ -154,6 +154,11 @@ int printInt(int num){
   return numDigits;
 }
 
+/*
+ * Helper method for printInt function
+ * It returns the number of digits that make up the integer value num
+ */
+
 int getNumDigits(int num){
   int length = 0;
   if(num<0){
@@ -166,7 +171,12 @@ int getNumDigits(int num){
   return length;
 }
 
-char* itoa(int num, int numDigits){
+/*
+ * Helper method for printInt function
+ * It returns the string representation of the integer num
+ */
+
+char* itoa(int num){
   int i = 0;
   char* resultStr = "";
   int isNeg = 0; //false
@@ -204,6 +214,11 @@ char* itoa(int num, int numDigits){
   reverse(resultStr, i);
   return resultStr;
 }
+
+/*
+ * Helper method for printInt function
+ * It returns the reversed version of the string numStr
+ */
 
 void reverse(char* numStr, int numDigits) {
   int begin = 0;
