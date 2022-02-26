@@ -17,13 +17,30 @@ int readSector(char *buf, int absSector);
 
 int handleInterrupt21(int ax, int bx, int cx, int dx);
 
+int printInt(int num);
+
+int getNumDigits(int num);
+
 void main() {
-  //test for bonus 1
+  //test for bonus 2
+  int num = 1234;
   char line[20];
   printString("Enter a line: \0");
   readString(line, 10);
   printString("\n\0");
   printString(line);
+  printString("\n\0");
+  printString("The index of the letter printed below will show the numDigits returned\0");
+  printInt(num, line);
+  
+  //test for bonus 1
+  /*
+  char line[20];
+  printString("Enter a line: \0");
+  readString(line, 10);
+  printString("\n\0");
+  printString(line);
+  */
   
   //test for "Creating printString, readChar, and readString System Calls"
   /*
@@ -122,6 +139,35 @@ void main() {
 }
 
 /*
+ * Bonus 2 feature: printInt function accepts a single integer argument 
+ * and prints its decimal value to the screen
+ */
+
+int printInt(int num, char *buf){
+  //get the number of digits
+  int numDigits = getNumDigits(num);
+  //convert the integer to string
+  //print out the string
+  //for testing purpose
+  char ch = buf[numDigits];
+  printString(ch);
+  //return the numbers of digits printed out
+  return numDigits
+}
+
+int getNumDigits(int num){
+  int length = 0;
+  if(num<0){
+    length = 1;
+  }
+  while(num!=0){
+    length++;
+    num=num/10;
+  }
+  return length;
+}
+
+/*
  * Modify the handleInterrupt21 function to create system calls that allow us to
  * print a string, read a character, and read a string using the printString, 
  * readChar, and readString functions
@@ -173,7 +219,7 @@ int mod(int dividend, int divisor) {
  * Read an entire string by utilizing the readChar method that reads one 
  * character at a time from the Keyboard via the BIOS (Interrupt 0x16)
  *
- * Includes Bonus 1 feature where so the calling program can specify the maximum
+ * Includes Bonus 1 feature: the calling program can specify the maximum
  * number of characters that will be placed into the provided buffer
  */
 
