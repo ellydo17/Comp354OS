@@ -20,6 +20,9 @@ int handleInterrupt21(int ax, int bx, int cx, int dx);
 int printInt(int num);
 
 int getNumDigits(int num);
+//int getNumDigits(int num, char *buf);
+
+char* itoa(int num, int numDigits);
 
 void main() {
   //test for bonus 2
@@ -143,16 +146,27 @@ void main() {
  * and prints its decimal value to the screen
  */
 
-int printInt(int num, char *buf){
+int printInt(int num){
+  //int printInt(int num, char *buf){
   //get the number of digits
   int numDigits = getNumDigits(num);
+  
   //convert the integer to string
+  char *str = itoa(num, numDigits);
+  
   //print out the string
+  
+  
   //for testing purpose
-  char ch = buf[numDigits];
-  printString(ch);
+  /*
+  char charRead[2];
+  charRead[1]=0x00;
+  charRead[0] = buf[numDigits];
+  printString(charRead);
+  */
+  
   //return the numbers of digits printed out
-  return numDigits
+  return numDigits;
 }
 
 int getNumDigits(int num){
@@ -165,6 +179,59 @@ int getNumDigits(int num){
     num=num/10;
   }
   return length;
+}
+
+char* itoa(int num, int numDigits){
+  char* resultStr = "";
+  int isNeg = 0; //false
+  char readChar[2];
+  //char* numList = "0\0  1\0  2\0  3\0  4\0  5\0  6\0  7\0  8\0  9\0";
+  char* numList = "0 1 2 3 4 5 6 7 8 9\0";
+
+  if (num == 0){
+    resultStr[i++] = '0';
+    resultStr[i] = '\0';
+    return resultStr;
+  }
+ 
+  if (num < 0){
+    isNeg = 1; //true
+    num = -num;
+  }
+  
+  //int = 0;
+  resultStr[0] = '\0';
+  int i = 1;
+  while (num != 0) {
+    int rem = mod(num, 10);
+    //readChar[0] = digits[rem*4];
+    readChar[0] = digits[rem*2];
+    resultStr[i] = readChar[0];
+    i++;
+    num = num/10;
+  }
+  
+  if (isNeg==1){
+    resultStr[i] = '-';
+    i++;
+    //resultStr[i] = '\0';
+  }
+    
+  reverse(resultStr, i);
+  return resultStr;
+}
+
+void reverse(char* numStr, int numDigits) {
+  int begin = 0;
+  int terminate = numDigits - 1;
+  while (begin < terminate) {
+    int temp = numStr[begin];
+    numStr[begin] = numStr[terminate];
+    numStr[terminate] = temp;
+    
+    begin++;
+    terminate--;
+  }
 }
 
 /*
