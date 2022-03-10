@@ -161,10 +161,11 @@ void main() {
 
 int readfile(char *filename, char *buf){
   int readSectors = 0;
-  char fileIndex = -1;
+  int fileIndex = -1;
   char diskSector[512]; //address of buffer into which data will be placed
   printString("diskSector contents:\0");
   printString(diskSector);
+  printString("\n\0");
   
   //read the file from disk sector, if it is read successfully, it will return 1
   if(readSector(diskSector, 2)!=1){ //file is read from sector 2
@@ -174,7 +175,7 @@ int readfile(char *filename, char *buf){
   fileIndex = findFile(filename, diskSector);
   printString("fileIndex is:\0");
   printString(fileIndex);
-  printString("\0");
+  printString("\n\0");
   
   //read sectors from the file if file was found
   if(fileIndex != -1){ //file found
