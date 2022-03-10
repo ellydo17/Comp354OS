@@ -160,9 +160,12 @@ void main() {
  */
 
 int readfile(char *filename, char *buf){
-  int readSectors = 0;
+  int totalSectorsRead = 0;
   int fileIndex = -1;
+  int i = 0;
   char diskSector[512]; //address of buffer into which data will be placed
+  char content;
+  int bufIndex = 0;
   printString("diskSector contents:\0");
   printString(diskSector);
   printString("\n\0");
@@ -177,16 +180,29 @@ int readfile(char *filename, char *buf){
   printString(fileIndex);
   printString("\n\0");
   
-  //read sectors from the file if file was found
+  //read contents from the file if file was found
   if(fileIndex != -1){ //file found
     printString("file was found\0");
+    for(i=6; i<32; i++){
+      content = diskSector[fileIndex+i]; //content is the next sector to read
+      if(content=='\0'){
+	break;
+      }
+      //put the content into buf: content contains the next sector index to read and each sector has 512 bytes, so once a sector is read, we want to increment the index of buf by 512 bytes.
+      readSector(buf+bufIndex, content);
+      totalSectorsRead++;
+      printString("total sectors read so far\0");
+      printString(totalSectorsRead);
+      printString("\n\0");
+      bufIndex = bufIndex + 512;
+    }
   }else{
     printString("file not found\0");
     return -1;
-
   }
 
-  return readSectors;
+  printString("successfully read file\0");
+  return totalSectorsRead;
 }
 
 int findFile(char *filename, char *diskSector){
