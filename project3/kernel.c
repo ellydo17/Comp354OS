@@ -36,7 +36,7 @@ void main() {
   char buffer[13312]; /* the maximum size of a file*/
   makeInterrupt21();
   /*read the file into buffer*/
-  interrupt(0x21, 0x03, “messag\0”, buffer, 0);
+  interrupt(0x21, 0x03, "messag\0", buffer, 0);
   /*print out the file*/
   interrupt(0x21, 0x00, buffer, 0, 0);
   
