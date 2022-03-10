@@ -33,7 +33,7 @@ void main() {
   //tests for project 3
 
   //tests for "Loading and Printing a File"
-  char buffer[13312] /* the maximum size of a file*/
+  char buffer[13312]; /* the maximum size of a file*/
   makeInterrupt21();
   /*read the file into buffer*/
   interrupt(0x21, 0x03, “messag\0”, buffer, 0);
