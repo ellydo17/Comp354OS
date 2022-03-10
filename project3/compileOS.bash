@@ -22,9 +22,10 @@ dd if=map.img of=floppya.img bs=512 count=1 seek=1 conv=notrunc
 dd if=dir.img of=floppya.img bs=512 count=1 seek=2 conv=notrunc
 
 #compile loadFile.c with gcc
-gcc –o loadFile loadFile.c
+gcc -o loadFile loadFile.c
 
-#once loadFile has been compiled, it can be used to copy the contents of the message.txt file to your disk image with this command
+#once loadFile has been compiled, it can be used to copy the contents of the message.txt file
+#to your disk image with this command
 ./loadFile message.txt
 
 #run bochs to allow the bootloader to load the kernel
