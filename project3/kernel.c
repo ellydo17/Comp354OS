@@ -194,7 +194,7 @@ int findFile(char *filename, char *diskSector){
   
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      if(diskSector[(i*32)+j]!=filname[j]){
+      if(diskSector[(i*32)+j]!=filename[j]){
 	break;
       }
     }
