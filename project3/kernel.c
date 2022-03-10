@@ -166,9 +166,6 @@ int readfile(char *filename, char *buf){
   char diskSector[512]; //address of buffer into which data will be placed
   char content;
   int bufIndex = 0;
-  printString("diskSector contents:\0");
-  printString(diskSector);
-  printString("\n\0");
   
   //read the file from disk sector, if it is read successfully, it will return 1
   if(readSector(diskSector, 2)!=1){ //file is read from sector 2
@@ -191,9 +188,6 @@ int readfile(char *filename, char *buf){
       //put the content into buf: content contains the next sector index to read and each sector has 512 bytes, so once a sector is read, we want to increment the index of buf by 512 bytes.
       readSector(buf+bufIndex, content);
       totalSectorsRead++;
-      printString("total sectors read so far\0");
-      printString(totalSectorsRead);
-      printString("\n\0");
       bufIndex = bufIndex + 512;
     }
   }else{
