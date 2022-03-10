@@ -189,8 +189,11 @@ int readfile(char *filename, char *buf){
 }
 
 int findFile(char *filename, char *diskSector){
-  for(int i=0; i<16; i++){
-    for(int j=0; j<6; j++){
+  int i=0;
+  int j=0;
+  
+  for(i=0; i<16; i++){
+    for(j=0; j<6; j++){
       if(diskSector[(i*32)+j]!=filname[j]){
 	break;
       }
