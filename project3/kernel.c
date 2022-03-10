@@ -161,7 +161,7 @@ void main() {
 
 int readfile(char *filename, char *buf){
   int readSectors = 0;
-  int fileIndex = -1;
+  char fileIndex = -1;
   char diskSector[512]; //address of buffer into which data will be placed
   printString("diskSector contents:\0");
   printString(diskSector);
