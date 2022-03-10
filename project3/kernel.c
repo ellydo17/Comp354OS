@@ -25,9 +25,19 @@ void reverse(char* numStr, int numDigits);
 
 char* itoa(int num);
 
+int readfile(char *filename, char *buf);
+
 void main() {
   //tests for project 3
 
+  //tests for "Loading and Printing a File"
+  char buffer[13312] /* the maximum size of a file*/
+  makeInterrupt21();
+  /*read the file into buffer*/
+  interrupt(0x21, 0x03, “messag\0”, buffer, 0);
+  /*print out the file*/
+  interrupt(0x21, 0x00, buffer, 0, 0);
+  
   //tests for project 2
   
   //test for bonus 2
@@ -144,6 +154,17 @@ void main() {
 }
 
 /*
+ * Loading and printing file
+ */
+
+int readfile(char *filename, char *buf){
+  return handleInterrupt21(0x03, filename, buf, 0, 0); 
+}
+
+
+/* Functions for project 2 */
+
+/*
  * Bonus 2 feature: printInt function accepts a single integer argument 
  * and prints its decimal value to the screen
  */
@@ -255,8 +276,10 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     char* buf = bx;
     buf[0] = ch;
     return 1;
-  }else if(ax==0x01){ //0x01 specifies that we need to read a string (read characters until ENTER is pressed
+  }else if(ax==0x01){ //0x01 specifies that we need to read a string (read characters until ENTER is pressed)
     return readString(bx);
+  }else if(ax==0x03){ //0x03 specifies that we need to read the contents of a file into a buffer
+    readSector(buf,2);
   }else{
     return -1;
   }
@@ -355,6 +378,8 @@ int printString(char *str) {
   }
   return i;
 }
+
+/* Functions for project 1 */
 
 /*
  * Display a string in a specified color at a specified location on the 
