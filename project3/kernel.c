@@ -26,10 +26,15 @@ void reverse(char* numStr, int numDigits);
 char* itoa(int num);
 
 void main() {
-  //test for bonus 2
+  //tests for project 3
+
+  //tests for project 2
   
+  //test for bonus 2
+  /*
   int num = 12345;
   printInt(num);
+  */
   
   
   //test for bonus 1
