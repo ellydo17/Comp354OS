@@ -27,6 +27,8 @@ char* itoa(int num);
 
 int readfile(char *filename, char *buf);
 
+int findFile(char *filename, char *diskSector);
+
 void main() {
   //tests for project 3
 
@@ -158,9 +160,47 @@ void main() {
  */
 
 int readfile(char *filename, char *buf){
-  return handleInterrupt21(0x03, filename, buf, 0, 0); 
+  int readSectors = 0;
+  int fileIndex = -1;
+  char diskSector[512]; //address of buffer into which data will be placed
+  printString("diskSector contents:\0");
+  printString(diskSector);
+  
+  //read the file from disk sector, if it is read successfully, it will return 1
+  if(readSector(diskSector, 2)!=1){ //file is read from sector 2
+    printString("file cannot be read from disk sector\0"); //file may be corrupt or not have permission
+  }
+  //helper method to find the file in disk
+  fileIndex = findFile(filename, diskSector);
+  printString("fileIndex is:\0");
+  printString(fileIndex);
+  printString("\0");
+  
+  //read sectors from the file if file was found
+  if(fileIndex != -1){ //file found
+    printString("file was found\0");
+  }else{
+    printString("file not found\0");
+    return -1;
+
+  }
+
+  return readSectors;
 }
 
+int findFile(char *filename, char *diskSector){
+  for(int i=0; i<16; i++){
+    for(int j=0; j<6; j++){
+      if(diskSector[(i*32)+j]!=filname[j]){
+	break;
+      }
+    }
+    if(j==6){ //found file
+      return i; //this is the index of the file in the disk sector
+    }
+  }
+  return -1;
+}
 
 /* Functions for project 2 */
 
@@ -279,7 +319,7 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
   }else if(ax==0x01){ //0x01 specifies that we need to read a string (read characters until ENTER is pressed)
     return readString(bx);
   }else if(ax==0x03){ //0x03 specifies that we need to read the contents of a file into a buffer
-    readSector(buf,2);
+    return readfile(bx,cx);
   }else{
     return -1;
   }
