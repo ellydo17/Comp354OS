@@ -29,6 +29,17 @@ int readfile(char *filename, char *buf);
 
 int findFile(char *filename, char *diskSector);
 
+typedef char byte;
+
+struct dirEntry{
+  char name[6];
+  byte sectors[26];
+};
+
+struct directory{
+  struct dirEntry entries[16];
+}
+
 void main() {
   //tests for project 3
 
@@ -166,6 +177,10 @@ int readfile(char *filename, char *buf){
   char diskSector[512]; //address of buffer into which data will be placed
   char content;
   int bufIndex = 0;
+
+  struct directory diskEntries;
+  
+  readSector((char *)&diskEntries, 2);
   
   //read the file from disk sector, if it is read successfully, it will return 1
   if(readSector(diskSector, 2)!=1){ //file is read from sector 2
@@ -187,6 +202,13 @@ int readfile(char *filename, char *buf){
       }
       //put the content into buf: content contains the next sector index to read and each sector has 512 bytes, so once a sector is read, we want to increment the index of buf by 512 bytes.
       readSector(buf+bufIndex, content);
+      
+      printString("index is ");
+      printString(i);
+      printString("\n\0");
+      printString(buf);
+      printString("\n\0");
+      
       totalSectorsRead++;
       bufIndex = bufIndex + 512;
     }
