@@ -204,6 +204,9 @@ int readfile(char *filename, char *buf){
       readSector(buf+bufIndex, sector);
       
       totalSectorsRead++;
+      printString("totalSectors Read is \0");
+      printString(totalSectorsRead);
+      printString("\n\0");
       bufIndex = bufIndex + 512;
     }
   }else{
@@ -212,6 +215,8 @@ int readfile(char *filename, char *buf){
   }
 
   printString("successfully read file\0");
+  printString(buf);
+  printString("\n\0");
   return totalSectorsRead;
 }
 
