@@ -187,10 +187,6 @@ int readfile(char *filename, char *buf){
   
   //read contents from the file if file was found
   if(fileIndex != -1){ //file found
-    printString("file was found\0");
-    printString("fileIndex is:\0");
-    printInt(fileIndex);
-    printString("\n\0");
     //check if the sector is empty or if we have reached the end of sectors
     while(diskDir.entries[fileIndex].sectors[i]!=0x00 && i < 26) {
       sector = diskDir.entries[fileIndex].sectors[i];
@@ -199,11 +195,7 @@ int readfile(char *filename, char *buf){
       //put the content from the sector into buf
       readSector(buf+bufIndex, sector);   
       totalSectorsRead++;
-      /*
-      printString("totalSectors Read is \0");
-      printString(totalSectorsRead);
-      printString("\n\0");
-      */
+
       //each sector has 512 bytes, so increment bufIndex by 512 bytes once a sector is read
       bufIndex = bufIndex + 512;
     }
@@ -212,9 +204,6 @@ int readfile(char *filename, char *buf){
     return -1;
   }
 
-  printString("successfully read file\0");
-  //printString(buf);
-  printString("\n\0");
   return totalSectorsRead;
 }
 
