@@ -27,7 +27,7 @@ char* itoa(int num);
 
 int readfile(char *filename, char *buf);
 
-int findFile(char *filename, char *diskSector);
+int findFile(char *filename, struct directory *diskSector);
 
 typedef char byte;
 
@@ -193,7 +193,8 @@ int readfile(char *filename, char *buf){
     printString(fileIndex);
     printString("\n\0");
     for(i=6; i<32; i++){
-      sector = diskDir.entries[fileIndex].sectors[i++];
+      sector = diskDir.entries[fileIndex].sectors[i];
+      i++;
 
       /*if(content=='\0'){
 	break;
@@ -214,10 +215,9 @@ int readfile(char *filename, char *buf){
   return totalSectorsRead;
 }
 
-int findFile(char *filename, char* diskDir){
+int findFile(char *filename, struct directory* diskDir){
   int i=0;
   int j=0;
-  struct directory diskDir = diskDir;
 
   printString("got into the findFile method\0");
   printString("\n\0");
@@ -226,11 +226,12 @@ int findFile(char *filename, char* diskDir){
     for(j=0; j<6; j++){
       printString("cur i is \0");
       printString(i);
-      printString("and \0");
+      /*printString("and \0");
       printString("cur j is \0");
       printString(j);
+      */
       printString("\n\0");
-      if(diskDir.entries[i].name[j]!=filename[j]){
+      if(diskDir->entries[i].name[j]!=filename[j]){
 	break;
       }
     }
