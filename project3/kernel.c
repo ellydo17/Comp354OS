@@ -191,23 +191,20 @@ int readfile(char *filename, char *buf){
     printString("fileIndex is:\0");
     printInt(fileIndex);
     printString("\n\0");
-    while(diskDir.entries[fileIndex].sectors[i]!=0x00 && i <= 25) {
+    //check if the sector is empty or if we have reached the end of sectors
+    while(diskDir.entries[fileIndex].sectors[i]!=0x00 && i < 26) {
       sector = diskDir.entries[fileIndex].sectors[i];
       i++;
 
-      /*if(content=='\0'){
-	break;
-	}*/
-      
-      //put the content from the sector into buf: sector contains the next sector index to read and each sector has 512 bytes, so once a sector is read, we want to increment the index of buf by 512 bytes.
-      readSector(buf+bufIndex, sector);
-      
+      //put the content from the sector into buf
+      readSector(buf+bufIndex, sector);   
       totalSectorsRead++;
       /*
       printString("totalSectors Read is \0");
       printString(totalSectorsRead);
       printString("\n\0");
       */
+      //each sector has 512 bytes, so increment bufIndex by 512 bytes once a sector is read
       bufIndex = bufIndex + 512;
     }
   }else{
@@ -216,7 +213,7 @@ int readfile(char *filename, char *buf){
   }
 
   printString("successfully read file\0");
-  printString(buf);
+  //printString(buf);
   printString("\n\0");
   return totalSectorsRead;
 }
