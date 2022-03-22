@@ -43,13 +43,17 @@ struct directory{
 void main() {
   //tests for project 3
 
+  //new test
+
   //tests for "Loading and Printing a File"
-  char buffer[13312]; /* the maximum size of a file*/
+  /*
+  char buffer[13312]; // the maximum size of a file
   makeInterrupt21();
-  /*read the file into buffer*/
+  //read the file into buffer
   interrupt(0x21, 0x03, "messag\0", buffer, 0);
-  /*print out the file*/
+  //print out the file
   interrupt(0x21, 0x00, buffer, 0, 0);
+  */
   
   //tests for project 2
   
@@ -207,6 +211,12 @@ int readfile(char *filename, char *buf){
   return totalSectorsRead;
 }
 
+/*
+ * Helper method for the readfile method
+ * It returns the index of the file we are looking for in the disk sector 
+ * if it is found, returns -1 otherwise
+ */
+
 int findFile(char *filename, struct directory* diskDir){
   int i=0;
   int j=0;
@@ -218,7 +228,7 @@ int findFile(char *filename, struct directory* diskDir){
       }
     }
     if(j==6){ //found file
-      return i; //this is the index of the file in the disk sector
+      return i; // index of the file in the disk sector
     }
   }
   
