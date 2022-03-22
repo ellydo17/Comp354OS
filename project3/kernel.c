@@ -217,7 +217,13 @@ int readfile(char *filename, char *buf){
 int findFile(char *filename, char* diskDir){
   int i=0;
   int j=0;
-  
+
+  dirEntry entry = diskDir->entries[0];
+  char firstLetter = entry.name[0];
+  printString("first letter of first entry is \0");
+  printString(firstLetter);
+  printString("\n\0");
+  /*
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
       if(diskDir->entries[i].name[j]!=filename[j]){
@@ -228,6 +234,7 @@ int findFile(char *filename, char* diskDir){
       return i; //this is the index of the file in the disk sector
     }
   }
+  */
   return -1;
 }
 
