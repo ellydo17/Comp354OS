@@ -38,7 +38,7 @@ struct dirEntry{
 
 struct directory{
   struct dirEntry entries[16];
-}
+};
 
 void main() {
   //tests for project 3
@@ -220,7 +220,7 @@ int findFile(char *filename, char* diskDir){
   
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      if(diskDir.entries[i].name[j]!=filename[j]){
+      if(diskDir->entries[i].name[j]!=filename[j]){
 	break;
       }
     }
