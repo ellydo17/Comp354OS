@@ -217,9 +217,10 @@ int readfile(char *filename, char *buf){
 int findFile(char *filename, char* diskDir){
   int i=0;
   int j=0;
+  struct directory diskDir = diskDir;
 
   printString("first letter of first entry is \0");
-  printString(diskDir->entries[0].name[0]);
+  printString(diskDir.entries[0].name[0]);
   printString("\n\0");
   /*
   for(i=0; i<16; i++){
