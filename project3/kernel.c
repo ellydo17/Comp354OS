@@ -174,20 +174,17 @@ int readfile(char *filename, char *buf){
   int totalSectorsRead = 0;
   int fileIndex = -1;
   int i = 0;
-  char diskSector[512]; //address of buffer into which data will be placed
-  char content;
+  char sector;
   int bufIndex = 0;
 
-  struct directory diskEntries;
-  
-  readSector((char *)&diskEntries, 2);
+  struct directory diskDir;
   
   //read the file from disk sector, if it is read successfully, it will return 1
-  if(readSector(diskSector, 2)!=1){ //file is read from sector 2
+  if(readSector((char *)&diskDir, 2)!=1){ //file is read from sector 2
     printString("file cannot be read from disk sector\0"); //file may be corrupt or not have permission
   }
   //helper method to find the file in disk
-  fileIndex = findFile(filename, diskSector);
+  fileIndex = findFile(filename, &diskDir);
   printString("fileIndex is:\0");
   printString(fileIndex);
   printString("\n\0");
@@ -196,18 +193,14 @@ int readfile(char *filename, char *buf){
   if(fileIndex != -1){ //file found
     printString("file was found\0");
     for(i=6; i<32; i++){
-      content = diskSector[fileIndex+i]; //content is the next sector to read
-      if(content=='\0'){
+      sector = diskDir.entries[fileIndex].sectors[i++];
+
+      /*if(content=='\0'){
 	break;
-      }
-      //put the content into buf: content contains the next sector index to read and each sector has 512 bytes, so once a sector is read, we want to increment the index of buf by 512 bytes.
-      readSector(buf+bufIndex, content);
+	}*/
       
-      printString("index is ");
-      printString(i);
-      printString("\n\0");
-      printString(buf);
-      printString("\n\0");
+      //put the content from the sector into buf: sector contains the next sector index to read and each sector has 512 bytes, so once a sector is read, we want to increment the index of buf by 512 bytes.
+      readSector(buf+bufIndex, sector);
       
       totalSectorsRead++;
       bufIndex = bufIndex + 512;
@@ -221,13 +214,13 @@ int readfile(char *filename, char *buf){
   return totalSectorsRead;
 }
 
-int findFile(char *filename, char *diskSector){
+int findFile(char *filename, char* diskDir){
   int i=0;
   int j=0;
   
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      if(diskSector[(i*32)+j]!=filename[j]){
+      if(diskDir.entries[i].name[j]!=filename[j]){
 	break;
       }
     }
