@@ -218,14 +218,10 @@ int findFile(char *filename, char* diskDir){
   int i=0;
   int j=0;
   struct directory diskDir = diskDir;
-
-  printString("first letter of first entry is \0");
-  printString(diskDir.entries[0].name[0]);
-  printString("\n\0");
-  /*
+  
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      if(diskDir->entries[i].name[j]!=filename[j]){
+      if(diskDir.entries[i].name[j]!=filename[j]){
 	break;
       }
     }
@@ -233,7 +229,7 @@ int findFile(char *filename, char* diskDir){
       return i; //this is the index of the file in the disk sector
     }
   }
-  */
+  
   return -1;
 }
 
