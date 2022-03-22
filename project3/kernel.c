@@ -174,15 +174,14 @@ int readfile(char *filename, char *buf){
   int totalSectorsRead = 0;
   int fileIndex = -1;
   int i = 0;
-  char sector;
+  int sector;
   int bufIndex = 0;
 
   struct directory diskDir;
   
-  //read the file from disk sector, if it is read successfully, it will return 1
-  if(readSector((char *)&diskDir, 2)!=1){ //file is read from sector 2
-    printString("file cannot be read from disk sector\0"); //file may be corrupt or not have permission
-  }
+  //read the file from disk sector
+  readSector(&diskDir, 2);
+  
   //helper method to find the file in disk
   fileIndex = findFile(filename, &diskDir);
   
@@ -190,9 +189,9 @@ int readfile(char *filename, char *buf){
   if(fileIndex != -1){ //file found
     printString("file was found\0");
     printString("fileIndex is:\0");
-    printString(fileIndex);
+    printInt(fileIndex);
     printString("\n\0");
-    for(i=6; i<32; i++){
+    while(diskDir.entries[fileIndex].sectors[i]!=0x00 && i <= 25) {
       sector = diskDir.entries[fileIndex].sectors[i];
       i++;
 
@@ -204,9 +203,11 @@ int readfile(char *filename, char *buf){
       readSector(buf+bufIndex, sector);
       
       totalSectorsRead++;
+      /*
       printString("totalSectors Read is \0");
       printString(totalSectorsRead);
       printString("\n\0");
+      */
       bufIndex = bufIndex + 512;
     }
   }else{
