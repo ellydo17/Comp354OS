@@ -221,19 +221,9 @@ int readfile(char *filename, char *buf){
 int findFile(char *filename, struct directory* diskDir){
   int i=0;
   int j=0;
-
-  printString("got into the findFile method\0");
-  printString("\n\0");
   
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      printString("cur i is \0");
-      printString(i);
-      /*printString("and \0");
-      printString("cur j is \0");
-      printString(j);
-      */
-      printString("\n\0");
       if(diskDir->entries[i].name[j]!=filename[j]){
 	break;
       }
