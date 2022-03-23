@@ -46,14 +46,14 @@ void main() {
   //new test
 
   //tests for "Loading and Printing a File"
-  /*
+  
   char buffer[13312]; // the maximum size of a file
   makeInterrupt21();
   //read the file into buffer
   interrupt(0x21, 0x03, "messag\0", buffer, 0);
   //print out the file
   interrupt(0x21, 0x00, buffer, 0, 0);
-  */
+  
   
   //tests for project 2
   
@@ -220,20 +220,47 @@ int readfile(char *filename, char *buf){
 int findFile(char *filename, struct directory* diskDir){
   int i=0;
   int j=0;
+  int l=0;
+  
+  int k=0;
+  int countFileLength=0;
+  
+  for (k=0; filename[k] != '\0'; k++) {
+    countFileLength++;
+  }
+
+  l =  countFileLength;
   
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      if(diskDir->entries[i].name[j]!=filename[j]){
+      if(diskDir->entries[i].name[j]!=filename[j] && diskDir->entries[i].name[j] == 0x00 || diskDir->entries[i].name[j] == '\0'){
 	break;
       }
+      
     }
-    if(j==6){ //found file
+    if(l==j){ //found file
       return i; // index of the file in the disk sector
     }
   }
   
   return -1;
 }
+
+/*
+ * Helper method for the findFile method
+ * It returns the number of characters of the file
+ */
+/*
+int countLengthFile(char* filename) {
+  int i=0;
+  int countFileLength=0;
+  
+  for (i=0; filename[i] != '\0'; i++) {
+    countFileLength++;
+  }
+  return countFileLength;
+}
+*/
 
 /* Functions for project 2 */
 
