@@ -227,13 +227,16 @@ int findFile(char *filename, struct directory* diskDir){
   
   for (k=0; filename[k] != '\0'; k++) {
     countFileLength++;
+    printString("length of file name = ");
+    printInt(countFileLength);
+    printString("\n\0");
   }
 
   l =  countFileLength;
   
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      if(diskDir->entries[i].name[j]!=filename[j] && diskDir->entries[i].name[j] == 0x00 || diskDir->entries[i].name[j] == '\0'){
+      if(diskDir->entries[i].name[j]!=filename[j] || diskDir->entries[i].name[j] == 0x00 || j>=l){
 	break;
       }
       
