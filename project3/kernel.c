@@ -62,7 +62,6 @@ void main() {
   */
 
   //tests for "Loading and Printing a File"
-
   /*
   char buffer[13312]; // the maximum size of a file
   makeInterrupt21();
@@ -187,9 +186,12 @@ void main() {
   }
 }
 
+/* Functions for project 3 */
+
 /*
  * Terminating a user program
  */
+
 void terminate() {
   //reset the segment registers and stack pointer to the memory segment containing the kernel
   resetSegments();
@@ -202,20 +204,21 @@ void terminate() {
 /*
  * Loading and executing a program
  */
+
 int executeProgram(char *name, int segment){
   char buffer[13312];
-  int i=0;
+  int i = 0;
   int totalSectorsRead = readfile(name, buffer);
-  if(totalSectorsRead==-1){ //if program/file not found
+  if (totalSectorsRead == -1) { //if program/file not found
     return -1;
   }else{  //if program/file found
     //check for invalid segment, if segment is invalid, return -2
-    if(segment==0x0000 || segment==0x1000 || segment==0xA000){
+    if (segment == 0x0000 || segment == 0x1000 || segment == 0xA000) {
       printString("Invalid segment\0");
       return -2;
-    }else{ //segment is valid
+    } else { //segment is valid
       //iterate through the buffer and place each element from the buffer into the memory segment
-      while(i<(totalSectorsRead*512)){
+      while (i < (totalSectorsRead*512)) {
 	putInMemory(segment, i, buffer[i]);
 	i++;
       }
@@ -246,7 +249,7 @@ int readfile(char *filename, char *buf){
   //read contents from the file if file was found
   if(fileIndex != -1){ //file found
     //check if the sector is empty or if we have reached the end of sectors
-    while(diskDir.entries[fileIndex].sectors[i]!=0x00 && i < 26) {
+    while(diskDir.entries[fileIndex].sectors[i] != 0x00 && i < 26) {
       sector = diskDir.entries[fileIndex].sectors[i];
       i++;
 
@@ -272,11 +275,11 @@ int readfile(char *filename, char *buf){
  */
 
 int findFile(char *filename, struct directory* diskDir){
-  int i=0;
-  int j=0;
+  int i = 0;
+  int j = 0;
   
-  int k=0;
-  int fileNameLen=0;
+  int k = 0;
+  int fileNameLen = 0;
   
   for (k=0; filename[k] != '\0'; k++) {
     fileNameLen++;
@@ -284,7 +287,7 @@ int findFile(char *filename, struct directory* diskDir){
   
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      if(diskDir->entries[i].name[j]!=filename[j] || diskDir->entries[i].name[j] == 0x00 || j>=fileNameLen){
+      if(diskDir->entries[i].name[j] != filename[j] || diskDir->entries[i].name[j] == 0x00 || j >= fileNameLen){
 	break;
       }
       
@@ -325,12 +328,12 @@ int printInt(int num){
 
 int getNumDigits(int num){
   int length = 0;
-  if(num<0){
+  if (num < 0) {
     length = 1;
   }
-  while(num!=0){
+  while (num != 0) {
     length++;
-    num=num/10;
+    num = num/10;
   }
   return length;
 }
@@ -405,20 +408,20 @@ void reverse(char* numStr, int numDigits) {
  */
 
 int handleInterrupt21(int ax, int bx, int cx, int dx){
-  if(ax==0x00){ //0x00 specifies that we need to print a string
+  if (ax == 0x00) { //0x00 specifies that we need to print a string
     return printString(bx);
-  }else if(ax==0x11){ //0x11 specifies that we need to read a character
+  }else if (ax == 0x11) { //0x11 specifies that we need to read a character
     char ch = readChar();
     char* buf = bx;
     buf[0] = ch;
     return 1;
-  }else if(ax==0x01){ //0x01 specifies that we need to read a string (read characters until ENTER is pressed)
+  }else if (ax == 0x01) { //0x01 specifies that we need to read a string (read characters until ENTER is pressed)
     return readString(bx);
-  }else if(ax==0x03){ //0x03 specifies that we need to read the contents of a file into a buffer (project 3)
+  }else if (ax == 0x03) { //0x03 specifies that we need to read the contents of a file into a buffer (project 3)
     return readfile(bx,cx);
-  }else if(ax==0x04){ //0x04 specifies that we need to load a program into memory annd execute it (project 3)
+  }else if (ax == 0x04) { //0x04 specifies that we need to load a program into memory annd execute it (project 3)
     return executeProgram(bx, cx);
-  } else if (ax==0x05) {  //0x05 specifies that we need to terminate a user program (project 3)
+  } else if (ax == 0x05) {  //0x05 specifies that we need to terminate a user program (project 3)
     return terminate();
   }else{
     return -1;
@@ -466,13 +469,13 @@ int readString(char *buf, int maxChar) {
 
   char enter = 0x0D;
   char ch;
-  charRead[1]=0x00;
+  charRead[1] = 0x00;
 
-  ch=0x00;
-  ch=readChar();
+  ch = 0x00;
+  ch = readChar();
   while (ch != enter) {
     //if user hits backspace, remove the deleted character from the buf as well as the screen
-    if(ch==0x08){
+    if (ch==0x08) {
       i--; //move index one step back
       interrupt(0x10, 0x0E * 256 +0x08, 0, 0, 0); //move cursor one step back
       buf[i]=' '; //replace the deleted character with a space
