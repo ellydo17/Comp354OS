@@ -40,18 +40,26 @@ struct directory{
   struct dirEntry entries[16];
 };
 
+void terminate();
+
 int executeProgram(char *name, int segment);
 
 void main() {
   //tests for project 3
 
-  //new test
+  //tests for "Terminating a User Program"
+  makeInterrupt21();
+  interrupt(0x21, 0x05, "uprog2\0", 0x2000, 0);
+  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+  while(1);
 
-  //tests for "Loading and Exectung a Program"
+  //tests for "Loading and Executing a Program"
+  /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "uprog1\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
   while(1);
+  */
 
   //tests for "Loading and Printing a File"
 
@@ -177,6 +185,18 @@ void main() {
   while(1) {
   /*infinite loop*/
   }
+}
+
+/*
+ * Terminating a user program
+ */
+void terrminate() {
+  //reset the segment registers and stack pointer to the memory segment containing the kernel
+  resetSegments();
+  print("I'm back!\0");
+
+  //enter an infinite loop
+  while(1);
 }
 
 /*
@@ -398,6 +418,8 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     return readfile(bx,cx);
   }else if(ax==0x04){ //0x04 specifies that we need to load a program into memory annd execute it (project 3)
     return executeProgram(bx, cx);
+  } else if (ax==0x05) {  //0x05 specifies that we need to terminate a user program (project 3)
+    return terminate();
   }else{
     return -1;
   }
