@@ -45,6 +45,12 @@ void main() {
 
   //new test
 
+  //tests for "Loading and Exectung a Program"
+  makeInterrupt21();
+  interrupt(0x21, 0x04, "uprog1\0", 0x2000, 0);
+  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+  while(1);
+
   //tests for "Loading and Printing a File"
   
   char buffer[13312]; // the maximum size of a file
