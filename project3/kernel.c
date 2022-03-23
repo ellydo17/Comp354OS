@@ -40,6 +40,8 @@ struct directory{
   struct dirEntry entries[16];
 };
 
+int executeProgram(char *name, int segment);
+
 void main() {
   //tests for project 3
 
@@ -52,14 +54,15 @@ void main() {
   while(1);
 
   //tests for "Loading and Printing a File"
-  
+
+  /*
   char buffer[13312]; // the maximum size of a file
   makeInterrupt21();
   //read the file into buffer
   interrupt(0x21, 0x03, "messag\0", buffer, 0);
   //print out the file
   interrupt(0x21, 0x00, buffer, 0, 0);
-  
+  */
   
   //tests for project 2
   
@@ -174,6 +177,31 @@ void main() {
   while(1) {
   /*infinite loop*/
   }
+}
+
+/*
+ * Loading and executing a program
+ */
+int executeProgram(char *name, int segment){
+  char buffer[13312];
+  int i=0;
+  int totalSectorsRead = readfile(name, buffer);
+  if(totalSectorsRead==-1){ //if program/file not found
+    return -1;
+  }else{  //if program/file found
+    //check for invalid segment, if segment is invalid, return -2
+    if(segment==0x0000 || segment==0x1000 || segment==0xA000){
+      printString("Invalid segment\0");
+      return -2;
+    }else{ //segment is valid
+      //iterate through the buffer and place each element from the buffer into the memory segment
+      while(i<(totalSectorsRead*512)){
+	putInMemory(segment, i, buffer[i]);
+	i++;
+      }
+    }
+  }
+  launchProgram(segment);
 }
 
 /*
@@ -350,9 +378,10 @@ void reverse(char* numStr, int numDigits) {
 }
 
 /*
- * Modify the handleInterrupt21 function to create system calls that allow us to
- * print a string, read a character, and read a string using the printString, 
- * readChar, and readString functions
+ * Modify the handleInterrupt21 function to create system calls that allow 
+ * us to print a string, read a character, read a string, read a file, and 
+ * load and execute a program using the printString, readChar, readString, 
+ * readfile, and executeProgram functions
  */
 
 int handleInterrupt21(int ax, int bx, int cx, int dx){
@@ -365,8 +394,10 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     return 1;
   }else if(ax==0x01){ //0x01 specifies that we need to read a string (read characters until ENTER is pressed)
     return readString(bx);
-  }else if(ax==0x03){ //0x03 specifies that we need to read the contents of a file into a buffer
+  }else if(ax==0x03){ //0x03 specifies that we need to read the contents of a file into a buffer (project 3)
     return readfile(bx,cx);
+  }else if(ax==0x04){ //0x04 specifies that we need to load a program into memory annd execute it (project 3)
+    return executeProgram(bx, cx);
   }else{
     return -1;
   }
