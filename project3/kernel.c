@@ -49,7 +49,7 @@ void main() {
 
   //tests for "Terminating a User Program"
   makeInterrupt21();
-  interrupt(0x21, 0x05, "uprog2\0", 0x2000, 0);
+  interrupt(0x21, 0x04, "uprog2\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
   while(1);
 
@@ -190,10 +190,10 @@ void main() {
 /*
  * Terminating a user program
  */
-void terrminate() {
+void terminate() {
   //reset the segment registers and stack pointer to the memory segment containing the kernel
   resetSegments();
-  print("I'm back!\0");
+  printString("I'm back!\0");
 
   //enter an infinite loop
   while(1);
