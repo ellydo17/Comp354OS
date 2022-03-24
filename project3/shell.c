@@ -1,5 +1,5 @@
-int getcommand(char* line, char* command);
-int getfilename(char* line,  char* filename, int filenameIndex);
+char* getcommand(char* line);
+char* getfilename(char* line);
 int compareCommand(char* cmd1, char* cmd2);
 
 void main() {
@@ -24,7 +24,7 @@ void main() {
     */
 
     //get the command
-    filenameIndex = getcommand(line, command);
+    command = getcommand(line);
 
     interrupt(0x21, 0, "command is:\0", 0, 0);
     interrupt(0x21, 0, command, 0, 0);
@@ -36,7 +36,7 @@ void main() {
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     
     //get the file name
-    getfilename(line, filename, filenameIndex);
+    filename = getfilename(line);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     
@@ -78,7 +78,8 @@ void main() {
   }
 }
 
-int getcommand(char* line, char* command) {
+char* getcommand(char* line) {
+  char* command = "";
   int i;
   
   while (line[i] != ' ') { //try to get the command name before the space
@@ -87,12 +88,18 @@ int getcommand(char* line, char* command) {
   }
   command[i] = '\0';
   i++;
-  return i;
+  return command;
 }
 
-int getfilename(char* line,  char* filename, int filenameIndex) {
-  int i=filenameIndex;
+char* getfilename(char* line) {
+  int i=0;
   int j=0;
+  char* filename = "";
+
+  while (line[i] != ' ') { //try to get the command name before the space
+    i++;
+  }
+  i++; //skip over the space character
   
   while (line[i] != '\0') { //read the file name from the characters after the space
     filename[j] = line[i];
@@ -101,7 +108,7 @@ int getfilename(char* line,  char* filename, int filenameIndex) {
   }
   
   filename[j] = '\0';
-  return j;
+  return filename;
 }
 
 int compareCommand(char* cmd1, char* cmd2) {
@@ -116,8 +123,6 @@ int compareCommand(char* cmd1, char* cmd2) {
   interrupt(0x21, 0, "cmd2 is\0", 0, 0);
   interrupt(0x21, 0, cmd2, 0, 0);
   interrupt(0x21, 0, "\r\n\0", 0, 0);
-  
-  interrupt(0x21, 0, "compareCommand is called.\r\n\0", 0, 0);
 
   while(*cmd1 != '\0' && *cmd2 != '\0'){
     interrupt(0x21, 0, "cmd1 is:\0", 0, 0);
