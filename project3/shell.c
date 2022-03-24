@@ -1,5 +1,6 @@
 char* getcommand(char* line);
 char* getfilename(char* line);
+int compareCommand(char* cmd1, char* cmd2);
 
 void main() {
   char line[80];
@@ -13,11 +14,16 @@ void main() {
     interrupt(0x21, 0x01, line, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
+    interrupt(0x21, 0, "line is: \0", 0, 0);
+    interrupt(0x21, 0, line, 0, 0);
+    interrupt(0x21, 0, "\r\n\0", 0, 0);
+
     //get the command
     command = getcommand(line, command);
 
     interrupt(0x21, 0, "command is: \0", 0, 0);
     interrupt(0x21, 0, command, 0, 0);
+    interrupt(0x21, 0, "hmm\0", 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     
     //get the file name
@@ -26,6 +32,7 @@ void main() {
 
     interrupt(0x21, 0, "filename is: \0", 0, 0);
     interrupt(0x21, 0, filename, 0, 0);
+    interrupt(0x21, 0, "hmm\0", 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     if(compareCommand(command, "type\0") == 1){
@@ -62,7 +69,7 @@ char* getcommand(char* line, char* command) {
     command[i] = line[i];
     i++;
   }
-  //command[i] = '\0';
+  command[i] = '\0';
   return command;
 }
 
@@ -81,11 +88,11 @@ char* getfilename(char* line,  char* filename) {
     i++;
   }
   
-  //filename[j] = '\0';
+  filename[j] = '\0';
   return filename;
 }
 
-int compareCommand(char* cmd1, char* cmd2){
+int compareCommand(char* cmd1, char* cmd2) {
   while(*cmd1 != '\0' && *cmd2 != '\0'){
     if(*cmd1 != *cmd2){ //commands not same
       return -1;
