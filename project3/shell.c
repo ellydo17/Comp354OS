@@ -1,6 +1,9 @@
+char* getcommand(char* line);
+char* getfilename(char* line);
+
 void main() {
   char line[80];
-  char filename[6];
+  char* filename;
   char* command;
   char buffer[13312];
   char ch[1];
