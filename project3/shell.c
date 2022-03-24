@@ -13,10 +13,16 @@ void main() {
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     //get the command
-    command = getcommand(line);
+    command = getcommand(line, command);
+    printString("command is: \0");
+    printString(command);
+    printString("\r\n\0");
 
     //get the file name
-    filename = getfilename(line);
+    filename = getfilename(line, filename);
+    printString("filename is: \0");
+    printString(filename);
+    printString("\r\n\0");
     
     //interrupt to read file
     interrupt(0x21, 0x03, filename, buffer, 0); 
@@ -24,29 +30,31 @@ void main() {
   }
 }
 
-char* getcommand(char* line) {
+char* getcommand(char* line, char* command) {
   int i;
-  char* nameOfCommand;
   
   while (line[i] != ' ') { //try to get the command name before the space
-    nameOfCommand[i] = line[i];
+    command[i] = line[i];
     i++;
   }
-  return nameOfCommand;
+  command[i] = '\0';
+  return command;
 }
 
-char* getfilename(char* line) {
+char* getfilename(char* line,  char* filename) {
   int i=0;
   int j=0;
-  char* nameOfFile;
   
   while (line[i] != ' ') { //try to reach the space then read the file name 
     i++;
   }
   
   while (line[i] != '\0') { //read the file name from the characters after the space
-    nameOfFile[j] = line[i];
+    filename[j] = line[i];
+    j++;
+    i++;
   }
   
-  return nameOfFile;
+  filename[j] = '\0';
+  return filename;
 }
