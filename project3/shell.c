@@ -1,11 +1,12 @@
 int getcommand(char* line, char* command);
-int getfilename(char* line,  char* filename);
+int getfilename(char* line,  char* filename, int filenameIndex);
 int compareCommand(char* cmd1, char* cmd2);
 
 void main() {
   char line[80];
-  char* filename;
-  char* command;
+  char* filename = "";
+  char* command = "";
+  int filenameIndex = 0;
   char* execute = "execute\0";
   char* type = "type\0";
   char buffer[13312];
@@ -23,7 +24,7 @@ void main() {
     */
 
     //get the command
-    getcommand(line, command);
+    filenameIndex = getcommand(line, command);
 
     interrupt(0x21, 0, "command is:\0", 0, 0);
     interrupt(0x21, 0, command, 0, 0);
@@ -35,7 +36,7 @@ void main() {
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     
     //get the file name
-    getfilename(line, filename);
+    getfilename(line, filename, filenameIndex);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     
@@ -85,17 +86,13 @@ int getcommand(char* line, char* command) {
     i++;
   }
   command[i] = '\0';
+  i++;
   return i;
 }
 
-int getfilename(char* line,  char* filename) {
-  int i=0;
+int getfilename(char* line,  char* filename, int filenameIndex) {
+  int i=filenameIndex;
   int j=0;
-  
-  while (line[i] != ' ') { //try to reach the space then read the file name 
-    i++;
-  }
-  i++; //skip the space character
   
   while (line[i] != '\0') { //read the file name from the characters after the space
     filename[j] = line[i];
