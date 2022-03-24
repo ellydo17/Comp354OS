@@ -10,20 +10,24 @@ void main() {
   while(1){
     interrupt(0x21, 0, "Shell>\r\n\0", 0, 0);
     interrupt(0x21, 0x01, line, 0, 0);
-    interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     //get the command
     command = getcommand(line, command);
     interrupt(0x21, 0, "command is:\r\n\0", 0, 0);
     interrupt(0x21, 0, command, 0, 0);
+    interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     //get the file name
     filename = getfilename(line, filename);
     interrupt(0x21, 0, "filename is:\r\n\0", 0, 0);
     interrupt(0x21, 0, filename, 0, 0);
+    interrupt(0x21, 0, "\r\n\0", 0, 0);
     
     //interrupt to read file
-    interrupt(0x21, 0x03, filename, buffer, 0); 
+    interrupt(0x21, 0x03, filename, buffer, 0);
+    //print out the file
+    interrupt(0x21, 0, buffer, 0, 0);
+  
     //interrupt(0x21, 0, "Unrecognized command\r\n\0", 0, 0);
   }
 }
