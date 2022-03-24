@@ -1,5 +1,5 @@
 int getcommand(char* line, char* command);
-int getfilename(char* line,  char* filename)
+int getfilename(char* line,  char* filename);
 int compareCommand(char* cmd1, char* cmd2);
 
 void main() {
@@ -25,12 +25,14 @@ void main() {
     //get the command
     getcommand(line, command);
 
-    
     interrupt(0x21, 0, "command is:\0", 0, 0);
     interrupt(0x21, 0, command, 0, 0);
     interrupt(0x21, 0, "hmm\0", 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
-    
+
+    interrupt(0x21, 0, "line after getting the command name is: \0", 0, 0);
+    interrupt(0x21, 0, line, 0, 0);
+    interrupt(0x21, 0, "\r\n\0", 0, 0);
     
     //get the file name
     getfilename(line, filename);
@@ -39,6 +41,15 @@ void main() {
     
     interrupt(0x21, 0, "filename is:\0", 0, 0);
     interrupt(0x21, 0, filename, 0, 0);
+    interrupt(0x21, 0, "hmm\0", 0, 0);
+    interrupt(0x21, 0, "\r\n\0", 0, 0);
+
+    interrupt(0x21, 0, "line after getting the file name is: \0", 0, 0);
+    interrupt(0x21, 0, line, 0, 0);
+    interrupt(0x21, 0, "\r\n\0", 0, 0);
+
+    interrupt(0x21, 0, "command after getting the file name is:\0", 0, 0);
+    interrupt(0x21, 0, command, 0, 0);
     interrupt(0x21, 0, "hmm\0", 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     
