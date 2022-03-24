@@ -13,14 +13,9 @@ void main() {
 
     //get the command
     command = getcommand(line, command);
-    interrupt(0x21, 0, "command is:\r\n\0", 0, 0);
-    interrupt(0x21, 0, command, 0, 0);
-    interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     //get the file name
     filename = getfilename(line, filename);
-    interrupt(0x21, 0, "filename is:\r\n\0", 0, 0);
-    interrupt(0x21, 0, filename, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     
     //interrupt to read file
