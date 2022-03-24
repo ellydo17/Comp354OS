@@ -23,9 +23,15 @@ void main() {
       interrupt(0x21, 0x03, filename, buffer, 0);
       //print out the file
       interrupt(0x21, 0, buffer, 0, 0);
+
+      /*currently, our type part does not work for file not found. It is still printing the message from before (from the file that was found) because the buffer stores the message from the previous cycle. We need to fix it so that the buffer is updated to an empty string and reloaded in each cycle.*/
+      
     }else if(compareCommand(command, "execute\0")){
       //interrupt to execute file
       interrupt(0x21, 0x04, filename, 0x2000, 0);
+
+      /*currently, it prints out junk and not the message from the user programs. It printed out the same junk when called in a loop*/
+      
     }else{
       interrupt(0x21, 0, "Unrecognized command\r\n\0", 0, 0);
     }
