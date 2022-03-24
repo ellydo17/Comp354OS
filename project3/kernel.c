@@ -269,7 +269,7 @@ int readfile(char *filename, char *buf){
       bufIndex = bufIndex + 512;
     }
   }else{
-    printString("file not found\0");
+    printString("Error: file not found\0");
     return -1;
   }
 
