@@ -41,7 +41,7 @@ void main() {
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     */
 
-    if(compareCommand(command, "type\0") == 1){
+    if(compareCommand(command, "type\0") == 0){
       interrupt(0x21, 0, "command is type\r\n\0", 0, 0);
       
       //interrupt to read file
@@ -53,7 +53,7 @@ void main() {
 
       /*currently, our type part does not work for file not found. It is still printing the message from before (from the file that was found) because the buffer stores the message from the previous cycle. We need to fix it so that the buffer is updated to an empty string and reloaded in each cycle.*/
       
-    } else if (compareCommand(command, "execute\0") == 1){
+    } else if (compareCommand(command, "execute\0") == 0){
       interrupt(0x21, 0, "command is execute\r\n\0", 0, 0);
       
       //interrupt to execute file
@@ -98,23 +98,30 @@ char* getfilename(char* line,  char* filename) {
   return filename;
 }
 
-int compareCommand(char* cmd1, char* cmd2) {
+int compareCommand(char cmd1[], char cmd2[]) {
+  int flag=0; //default true, command is same
+  int i=0;
+  
   interrupt(0x21, 0, "compareCommand is called.\r\n\0", 0, 0);
 
-  while(*cmd1 != '\0' && *cmd2 != '\0'){
+  while(cmd1[i] != '\0' && cmd2[i] != '\0'){
     interrupt(0x21, 0, "cmd1 is:\0", 0, 0);
-    interrupt(0x21, 0, *cmd1, 0, 0);
+    interrupt(0x21, 0, cmd1[i], 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     interrupt(0x21, 0, "cmd2 is:\0", 0, 0);
-    interrupt(0x21, 0, *cmd2, 0, 0);
+    interrupt(0x21, 0, cmd2[i], 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     
-    if(*cmd1 != *cmd2){ //commands not same
-      return -1;
+    if(cmd1[i] != cmd2[i]){ //commands not same
+      flag = 1; //false, command not same
+      break;
     }
-    *cmd1++;
-    *cmd2++;
+    i++;
   }
-  return 1; //command is the same
+  if(flag == 0){
+    return 0; //same
+  }else{
+    return 1; //not same
+  }
 }
