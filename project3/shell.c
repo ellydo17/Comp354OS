@@ -6,6 +6,8 @@ void main() {
   char line[80];
   char* filename;
   char* command;
+  char* execute = "execute\0";
+  char* type = "type\0";
   char buffer[13312];
   char bufferReset[13312]; //to reset the buffer after an interrupt
   char ch[1];
@@ -41,13 +43,13 @@ void main() {
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     */
 
-    if (compareCommand(command, "execute\0") == 0){
+    if (compareCommand(command, execute) == 0){
       interrupt(0x21, 0, "command is execute\r\n\0", 0, 0);
       
       //interrupt to execute file
       interrupt(0x21, 0x04, filename, 0x2000, 0);
       
-    } else if(compareCommand(command, "type\0") == 0){
+    } else if(compareCommand(command, type) == 0){
       interrupt(0x21, 0, "command is type\r\n\0", 0, 0);
       
       //interrupt to read file
