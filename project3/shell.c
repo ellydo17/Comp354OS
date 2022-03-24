@@ -62,7 +62,7 @@ char* getcommand(char* line, char* command) {
     command[i] = line[i];
     i++;
   }
-  command[i] = '\0';
+  //command[i] = '\0';
   return command;
 }
 
@@ -81,7 +81,7 @@ char* getfilename(char* line,  char* filename) {
     i++;
   }
   
-  filename[j] = '\0';
+  //filename[j] = '\0';
   return filename;
 }
 
