@@ -41,13 +41,13 @@ void main() {
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     */
 
-    if (compareCommand(&command, "execute\0") == 0){
+    if (compareCommand(command, "execute\0") == 0){
       interrupt(0x21, 0, "command is execute\r\n\0", 0, 0);
       
       //interrupt to execute file
       interrupt(0x21, 0x04, filename, 0x2000, 0);
       
-    } else if(compareCommand(&command, "type\0") == 0){
+    } else if(compareCommand(command, "type\0") == 0){
       interrupt(0x21, 0, "command is type\r\n\0", 0, 0);
       
       //interrupt to read file
