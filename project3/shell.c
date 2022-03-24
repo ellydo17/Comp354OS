@@ -97,6 +97,16 @@ char* getfilename(char* line,  char* filename) {
 int compareCommand(char cmd1[], char cmd2[]) {
   int flag=0; //default true, command is same
   int i=0;
+
+  interrupt(0x21, 0, "compareCommand is called.\r\n\0", 0, 0);
+  
+  interrupt(0x21, 0, "cmd1 is\0", 0, 0);
+  interrupt(0x21, 0, cmd1, 0, 0);
+  interrupt(0x21, 0, "\r\n\0", 0, 0);
+
+  interrupt(0x21, 0, "cmd2 is\0", 0, 0);
+  interrupt(0x21, 0, cmd2, 0, 0);
+  interrupt(0x21, 0, "\r\n\0", 0, 0);
   
   interrupt(0x21, 0, "compareCommand is called.\r\n\0", 0, 0);
 
