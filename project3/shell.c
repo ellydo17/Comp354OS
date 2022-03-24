@@ -8,7 +8,7 @@ void main() {
   char buffer[13312];
   char ch[1];
   while(1){
-    interrupt(0x21, 0, "Shell>\r\n\0", 0, 0);
+    interrupt(0x21, 0, "Shell> \0", 0, 0);
     interrupt(0x21, 0x01, line, 0, 0);
 
     //get the command
@@ -17,13 +17,19 @@ void main() {
     //get the file name
     filename = getfilename(line, filename);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
+
+    if(compareCommand(command, "type\0")){	
+      //interrupt to read file
+      interrupt(0x21, 0x03, filename, buffer, 0);
+      //print out the file
+      interrupt(0x21, 0, buffer, 0, 0);
+    }else if(compareCommand(command, "execute\0")){
+      //interrupt to execute file
+      interrupt(0x21, 0x04, filename, 0x2000, 0);
+    }else{
+      interrupt(0x21, 0, "Unrecognized command\r\n\0", 0, 0);
+    }
     
-    //interrupt to read file
-    interrupt(0x21, 0x03, filename, buffer, 0);
-    //print out the file
-    interrupt(0x21, 0, buffer, 0, 0);
-  
-    //interrupt(0x21, 0, "Unrecognized command\r\n\0", 0, 0);
   }
 }
 
@@ -55,4 +61,15 @@ char* getfilename(char* line,  char* filename) {
   
   filename[j] = '\0';
   return filename;
+}
+
+int compareCommand(char* cmd1, char* cmd2){
+  while(*cmd1 != '\0' && *cmd2 != '\0'){
+    if(*cmd1 != *cmd2){ //commands not same
+      return -1;
+    }
+    *cmd1++;
+    *cmd2++;
+  }
+  return 1; //command is the same
 }
