@@ -14,15 +14,13 @@ void main() {
 
     //get the command
     command = getcommand(line, command);
-    printString("command is: \0");
-    printString(command);
-    printString("\r\n\0");
+    interrupt(0x21, 0, "command is:\r\n\0", 0, 0);
+    interrupt(0x21, 0, command, 0, 0);
 
     //get the file name
     filename = getfilename(line, filename);
-    printString("filename is: \0");
-    printString(filename);
-    printString("\r\n\0");
+    interrupt(0x21, 0, "filename is:\r\n\0", 0, 0);
+    interrupt(0x21, 0, filename, 0, 0);
     
     //interrupt to read file
     interrupt(0x21, 0x03, filename, buffer, 0); 
