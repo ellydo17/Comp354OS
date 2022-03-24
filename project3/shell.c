@@ -21,7 +21,7 @@ void main() {
     */
 
     //get the command
-    command = getcommand(line, command);
+    getcommand(line, &command);
 
     
     interrupt(0x21, 0, "command is:\0", 0, 0);
@@ -64,7 +64,7 @@ void main() {
   }
 }
 
-char* getcommand(char* line, char* command) {
+void getcommand(char* line, char* command) {
   int i;
   
   while (line[i] != ' ') { //try to get the command name before the space
@@ -72,7 +72,7 @@ char* getcommand(char* line, char* command) {
     i++;
   }
   command[i] = '\0';
-  return command;
+  //return command;
 }
 
 char* getfilename(char* line,  char* filename) {
