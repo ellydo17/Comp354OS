@@ -14,26 +14,32 @@ void main() {
     interrupt(0x21, 0x01, line, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
+    /*
     interrupt(0x21, 0, "line is: \0", 0, 0);
     interrupt(0x21, 0, line, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
+    */
 
     //get the command
     command = getcommand(line, command);
 
+    /*
     interrupt(0x21, 0, "command is: \0", 0, 0);
     interrupt(0x21, 0, command, 0, 0);
     interrupt(0x21, 0, "hmm\0", 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
+    */
     
     //get the file name
     filename = getfilename(line, filename);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
+    /*
     interrupt(0x21, 0, "filename is: \0", 0, 0);
     interrupt(0x21, 0, filename, 0, 0);
     interrupt(0x21, 0, "hmm\0", 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
+    */
 
     if(compareCommand(command, "type\0") == 1){
       interrupt(0x21, 0, "command is type\r\n\0", 0, 0);
@@ -93,7 +99,17 @@ char* getfilename(char* line,  char* filename) {
 }
 
 int compareCommand(char* cmd1, char* cmd2) {
+  interrupt(0x21, 0, "compareCommand is called.\r\n\0", 0, 0);
+
   while(*cmd1 != '\0' && *cmd2 != '\0'){
+    interrupt(0x21, 0, "cmd1 is:\0", 0, 0);
+    interrupt(0x21, 0, *cmd1, 0, 0);
+    interrupt(0x21, 0, "\r\n\0", 0, 0);
+
+    interrupt(0x21, 0, "cmd2 is:\0", 0, 0);
+    interrupt(0x21, 0, *cmd2, 0, 0);
+    interrupt(0x21, 0, "\r\n\0", 0, 0);
+    
     if(*cmd1 != *cmd2){ //commands not same
       return -1;
     }
