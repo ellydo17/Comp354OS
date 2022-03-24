@@ -41,7 +41,7 @@ void main() {
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     */
 
-    if(compareCommand(command, "type\0") == 0){
+    if(compareCommand(&command, "type\0") == 0){
       interrupt(0x21, 0, "command is type\r\n\0", 0, 0);
       
       //interrupt to read file
@@ -53,7 +53,7 @@ void main() {
 
       /*currently, our type part does not work for file not found. It is still printing the message from before (from the file that was found) because the buffer stores the message from the previous cycle. We need to fix it so that the buffer is updated to an empty string and reloaded in each cycle.*/
       
-    } else if (compareCommand(command, "execute\0") == 0){
+    } else if (compareCommand(&command, "execute\0") == 0){
       interrupt(0x21, 0, "command is execute\r\n\0", 0, 0);
       
       //interrupt to execute file
