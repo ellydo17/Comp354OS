@@ -46,6 +46,7 @@ char* getfilename(char* line,  char* filename) {
   while (line[i] != ' ') { //try to reach the space then read the file name 
     i++;
   }
+  i++; //skip the space character
   
   while (line[i] != '\0') { //read the file name from the characters after the space
     filename[j] = line[i];
