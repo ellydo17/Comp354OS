@@ -33,23 +33,23 @@ void main() {
     
     
     //get the file name
-    filename = getfilename(line, filename);
+    getfilename(line, &filename);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
-    /*
+    
     interrupt(0x21, 0, "filename is:\0", 0, 0);
     interrupt(0x21, 0, filename, 0, 0);
     interrupt(0x21, 0, "hmm\0", 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
-    */
+    
 
-    if (compareCommand(command, execute) == 0){
+    if (compareCommand(&command, &execute) == 0){
       interrupt(0x21, 0, "command is execute\r\n\0", 0, 0);
       
       //interrupt to execute file
       interrupt(0x21, 0x04, filename, 0x2000, 0);
       
-    } else if(compareCommand(command, type) == 0){
+    } else if(compareCommand(&command, &type) == 0){
       interrupt(0x21, 0, "command is type\r\n\0", 0, 0);
       
       //interrupt to read file
@@ -66,7 +66,7 @@ void main() {
   }
 }
 
-void getcommand(char* line, char* command) {
+int getcommand(char* line, char* command) {
   int i;
   
   while (line[i] != ' ') { //try to get the command name before the space
@@ -74,10 +74,10 @@ void getcommand(char* line, char* command) {
     i++;
   }
   command[i] = '\0';
-  //return command;
+  return i;
 }
 
-char* getfilename(char* line,  char* filename) {
+int getfilename(char* line,  char* filename) {
   int i=0;
   int j=0;
   
@@ -93,12 +93,11 @@ char* getfilename(char* line,  char* filename) {
   }
   
   filename[j] = '\0';
-  return filename;
+  return j;
 }
 
-int compareCommand(char cmd1[], char cmd2[]) {
+int compareCommand(char* cmd1, char* cmd2) {
   int flag=0; //default true, command is same
-  int i=0;
 
   interrupt(0x21, 0, "compareCommand is called.\r\n\0", 0, 0);
   
@@ -112,20 +111,21 @@ int compareCommand(char cmd1[], char cmd2[]) {
   
   interrupt(0x21, 0, "compareCommand is called.\r\n\0", 0, 0);
 
-  while(cmd1[i] != '\0' && cmd2[i] != '\0'){
+  while(*cmd1 != '\0' && *cmd2 != '\0'){
     interrupt(0x21, 0, "cmd1 is:\0", 0, 0);
-    interrupt(0x21, 0, cmd1[i], 0, 0);
+    interrupt(0x21, 0, *cmd1, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
 
     interrupt(0x21, 0, "cmd2 is:\0", 0, 0);
-    interrupt(0x21, 0, cmd2[i], 0, 0);
+    interrupt(0x21, 0, *cmd2, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
     
-    if(cmd1[i] != cmd2[i]){ //commands not same
+    if(*cmd1 != *cmd2){ //commands not same
       flag = 1; //false, command not same
       break;
     }
-    i++;
+    *cmd1++;
+    *cmd2++;
   }
   if(flag == 0){
     return 0; //same
