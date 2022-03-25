@@ -23,7 +23,7 @@ void main() {
     if (command[0] == 't' && command[1] == 'y' && command[2] == 'p' && command[3] == 'e') {
       printString("Command is type.\r\n\0");
       
-      flag = readFile(command+5, buffer);
+      flag = readfile(command+5, buffer);
 
       if (flag != -1) { //file was found
 	printString(buffer);
@@ -35,9 +35,9 @@ void main() {
 
       flag = executeProgram(command+8, 0x2000);
 
-      if (result == -1) { //file was found
+      if (flag == -1) { //file was found
 	printString("Error: cannot execute file.\r\n\0");
-      } else if (result == -2) {
+      } else if (flag == -2) {
 	printString("Invalid segment.\r\n\0");
       } else {
 	printString("Program was executed.\r\n\0");
