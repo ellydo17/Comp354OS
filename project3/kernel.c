@@ -217,6 +217,7 @@ int executeProgram(char *name, int segment){
   char buffer[13312];
   int i = 0;
   int totalSectorsRead = readfile(name, buffer);
+  
   if (totalSectorsRead == -1) { //if program/file not found
     printString("Error: cannot execute\0");
     printString(name);
@@ -224,7 +225,7 @@ int executeProgram(char *name, int segment){
     return -1;
   }else{  //if program/file found
     //check for invalid segment, if segment is invalid, return -2
-    if (segment == 0x0000 || segment == 0x1000 || segment == 0xA000) {
+    if (mod(segment, 0x1000) != 0 || segment == 0x0000 || segment == 0x1000 || segment >= 0xA000) {
       printString("Invalid segment\0");
       return -2;
     } else { //segment is valid
@@ -235,6 +236,7 @@ int executeProgram(char *name, int segment){
       }
     }
   }
+  
   launchProgram(segment);
 }
 
