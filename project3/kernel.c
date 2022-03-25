@@ -219,9 +219,6 @@ int executeProgram(char *name, int segment){
   int totalSectorsRead = readfile(name, buffer);
   
   if (totalSectorsRead == -1) { //if program/file not found
-    printString("Error: cannot execute\0");
-    printString(name);
-    printString("file\r\n\0");
     return -1;
   }else{  //if program/file found
     //check for invalid segment, if segment is invalid, return -2
