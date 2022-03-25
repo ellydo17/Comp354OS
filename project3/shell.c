@@ -18,12 +18,12 @@ void main() {
   char ch[1];
   
   while(1){
-    /*
+    
     interrupt(0x21, 0, "Shell> \0", 0, 0);
     interrupt(0x21, 0x01, line, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
-    */
-    printString("Shell>\0");
+    
+    //printString("Shell>\0");
 
     /*
     interrupt(0x21, 0, "line is: \0", 0, 0);

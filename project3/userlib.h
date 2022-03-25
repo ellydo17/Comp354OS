@@ -1,5 +1,5 @@
-#ifndef U_H
-#define U_H
+#ifndef U_H_
+#define U_H_
 
 //printString
 int printString(char *str);
