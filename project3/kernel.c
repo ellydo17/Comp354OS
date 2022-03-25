@@ -203,7 +203,7 @@ void main() {
 void terminate() {
   //reset the segment registers and stack pointer to the memory segment containing the kernel
   resetSegments();
-  printString("I'm back!\0");
+  printString("I'm back!\r\n\0");
 
   //Run the shell program again
   executeProgram("shell\0", 0x2000);
