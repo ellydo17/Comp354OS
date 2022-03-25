@@ -205,8 +205,8 @@ void terminate() {
   resetSegments();
   printString("I'm back!\0");
 
-  //enter an infinite loop
-  while(1);
+  //Run the shell program again
+  executeProgram("shell\0", 0x2000);
 }
 
 /*
