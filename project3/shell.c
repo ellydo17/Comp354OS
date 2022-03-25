@@ -22,7 +22,8 @@ void main() {
     interrupt(0x21, 0, "Shell> \0", 0, 0);
     interrupt(0x21, 0x01, line, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
-    
+
+    interrupt(0x21, 0, "Unrecognized command\r\n\0", 0, 0);
     //printString("Shell>\0");
 
     /*
@@ -32,6 +33,7 @@ void main() {
     */
 
     //get the command
+    /*
     command = getcommand(line);
 
     interrupt(0x21, 0, "command is:\0", 0, 0);
@@ -84,7 +86,7 @@ void main() {
     } else {
       interrupt(0x21, 0, "Unrecognized command\r\n\0", 0, 0);
     }
-    
+    */
   }
 }
 
