@@ -20,7 +20,7 @@ void main() {
     //compare command and execute it accordingly
     
     //command is "type"
-    if (command[0] == 't' && command[1] == 'y' && command[2] == 'p' && command[3] == 'e') {
+    if (command[0] == 't' && command[1] == 'y' && command[2] == 'p' && command[3] == 'e' && command[4] == ' ') {
       //printString("Command is type.\r\n\0");
       
       flag = readfile(command+5, buffer);
@@ -33,7 +33,7 @@ void main() {
     }
     
       //command is "execute"
-    else if (command[0] == 'e' && command[1] == 'x'&& command[2] == 'e' && command[3] == 'c' && command[4] == 'u' && command[5] == 't' && command[6] == 'e') {
+    else if (command[0] == 'e' && command[1] == 'x'&& command[2] == 'e' && command[3] == 'c' && command[4] == 'u' && command[5] == 't' && command[6] == 'e' && command[7] == ' ') {
       //printString("Command is execute.\r\n\0");
 
       flag = executeProgram(command+8, 0x2000);
