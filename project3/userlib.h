@@ -1,3 +1,6 @@
+#ifndef U_H
+#define U_H
+
 //printString
 int printString(char *str);
 
@@ -15,4 +18,6 @@ int executeProgram(char *name, int segment);
 
 //terminate
 void terminate();
+
+#endif
   

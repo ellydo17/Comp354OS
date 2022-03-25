@@ -1,3 +1,5 @@
+#include "userlib.h"
+
 char* getcommand(char* line);
 char* getfilename(char* line);
 int compareCommand(char* cmd1, char* cmd2);
@@ -16,9 +18,12 @@ void main() {
   char ch[1];
   
   while(1){
+    /*
     interrupt(0x21, 0, "Shell> \0", 0, 0);
     interrupt(0x21, 0x01, line, 0, 0);
     interrupt(0x21, 0, "\r\n\0", 0, 0);
+    */
+    printString("Shell>\0");
 
     /*
     interrupt(0x21, 0, "line is: \0", 0, 0);
