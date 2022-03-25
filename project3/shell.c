@@ -7,10 +7,11 @@ void main() {
   char* filename = "";
   char* command = "";
   int filenameIndex = 0;
+  
   char* execute = "execute\0";
   char* type = "type\0";
+  
   char buffer[13312];
-  char bufferReset[13312]; //to reset the buffer after an interrupt
   int i; //for resetting the buffer
   char ch[1];
   
@@ -72,7 +73,7 @@ void main() {
       interrupt(0x21, 0, buffer, 0, 0);
       //reset the buffer
       for (i=0; i <= 13312; i++) {
-	buffer[i] = bufferReset[i];
+	buffer[i] = 0x00;
       }
       
     } else {

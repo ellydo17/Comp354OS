@@ -1,15 +1,33 @@
-void main() {
-  if (input == "print\0") { //printString
-    interrupt(0x21, 0x00, 0, 0, 0);
-  } else if (input == "read char\0") { //readChar
-    interrupt(0x21, 0x11, 0, 0, 0);
-  } else if (input == "read string\0") { //readString
-    interrupt(0x21, 0x01, bx, 0, 0);
-  } else if (input == "read file\0") { //readfile
-    interrupt(0x21, 0x03, 0, 0, 0);
-  } else if (input == "execute prog\0") { //executeProgram
-    interrupt(0x21, 0x04, 0, 0, 0);
-  } else if (input == "terminate\0") { //terminate
-    interrupt(0x21, 0x05, 0, 0, 0);
-  }
+#include "userlib.h"
+
+//printString
+int printString(char *str) {
+  return interrupt(0x21, 0x00, str, 0, 0);
+}
+
+//readChar
+int readChar() {
+  char ch[2];
+  ch[1] = '\0';
+  return interrupt(0x21, 0x11, ch, 0, 0); //double-check bx later, probably we don't need ch because buffer is empty at the beginning. Or we don't need ch for the readChar method in the InterruptHander21 in kernel.c
+}
+
+//readString
+int readString(char *buf) {
+  return interrupt(0x21, 0x01, buf, 0, 0);
+}
+
+//readfile
+int readfile(char *filename, char *buf) {
+  return interrupt(0x21, 0x03, filename, buf, 0);
+}
+
+//executeProgram
+int executeProgram(char *name, int segment) {
+  return interrupt(0x21, 0x04, name, segment, 0);
+}
+
+//terminate
+void terminate() {
+  return interrupt(0x21, 0x05, 0, 0, 0);
 }
