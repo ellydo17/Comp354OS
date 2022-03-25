@@ -67,14 +67,14 @@ ld86 -o shell -d shell.o lib.o
 
 #Improvements - creating a user library
 
-#compile shell.c with bcc
-bcc -ansi -c -o shell.o shell.c
+#compile userlib.c with bcc
+bcc -ansi -c -o userlib.o userlib.c
 
-#to link the shell.o and lib.o files into the executable kernel file
-ld86 -o shell -d shell.o lib.o
+#to link the userlib.o and lib.o files into the executable kernel file
+ld86 -o userlib -d userlib.o lib.o
 
 #loadFile is used to copy the contents of the shell file to the disk image
-./loadfile shell
+./loadfile userlib
 
 #run bochs to allow the bootloader to load the kernel
 bochs -f opsys.bxrc
