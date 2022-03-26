@@ -288,22 +288,14 @@ int findFile(char *filename, struct directory* diskDir){
   int i = 0;
   int j = 0;
   
-  int k = 0;
-  int fileNameLen = 0;
-  
-  for (k=0; filename[k] != '\0'; k++) {
-    fileNameLen++;
-  }
-  
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
-      if(diskDir->entries[i].name[j] != filename[j] || diskDir->entries[i].name[j] == 0x00 || j >= fileNameLen){
+      if(diskDir->entries[i].name[j] != filename[j]){
 	break;
       }
-      
-    }
-    if(fileNameLen==j){ //found file
+      if(j==5){ //found file
       return i; // index of the file in the disk sector
+      }
     }
   }
   
