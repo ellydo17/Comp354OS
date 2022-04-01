@@ -44,21 +44,29 @@ void terminate();
 
 int executeProgram(char *name, int segment);
 
+int writeSector(char *buf, int absSector);
+
 void main() {
+  //tests for project 4
+
+  //tests for "Writing a Disk Sector"
+  char* buffer1 = "April Fools"
+  writeSector(buffer1,2789);
+  
   //tests for project 3
 
   //tests for "Command line shell"
+  /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  while(1);
+  */
   
   //tests for "Terminating a User Program"
   /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "uprog2\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  while(1);
   */
 
   //tests for "Loading and Executing a Program"
@@ -66,7 +74,6 @@ void main() {
   makeInterrupt21();
   interrupt(0x21, 0x04, "uprog1\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  while(1);
   */
 
   //tests for "Loading and Printing a File"
@@ -192,6 +199,23 @@ void main() {
   while(1) {
   /*infinite loop*/
   }
+}
+
+/* Functions for project 4 */
+
+/*
+ * Writing a Disk Sector
+ */
+
+int writeSector(char *buf, int absSector){
+  int relSector;
+  int head;
+  int track;
+  relSector = mod(absSector, 18) + 1;
+  head = mod(absSector /18, 2);
+  track = ( absSector / 36 );
+  interrupt(0x13, 0x03 * 256 + 0x01, buf, track * 256 + relSector, head * 256 + 0x00);
+  return 1;
 }
 
 /* Functions for project 3 */
