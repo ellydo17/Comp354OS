@@ -51,8 +51,7 @@ void main() {
   
   //tests for "Writing a disk sector"
   char* str = "April Fool";
-  //writeSector(buffer1, 0);
-  writeSector(str, 2879);
+  writeSector(str, 0);
 
   
   //tests for project 3
