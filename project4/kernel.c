@@ -50,10 +50,9 @@ void main() {
   //tests for project 4
   
   //tests for "Writing a disk sector"
-  char buffer1[512] = "Hello World";
-  char buffer2[512] = "Elly and Sweta";
-  writeSector(buffer1, 0);
-  writeSector(buffer2, 2879);
+  char* str = "Elly and Sweta";
+  //writeSector(buffer1, 0);
+  writeSector(str, 2879);
 
   
   //tests for project 3
