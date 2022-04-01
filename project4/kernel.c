@@ -50,7 +50,7 @@ void main() {
   //tests for project 4
   
   //tests for "Writing a disk sector"
-  char* str = "April Fool";
+  char* str = "Tomorrow is not april fool";
   writeSector(str, 0);
 
   
