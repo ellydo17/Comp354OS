@@ -46,12 +46,23 @@ int executeProgram(char *name, int segment);
 
 int writeSector(char *buf, int absSector);
 
+int deleteFile(char* filename);
+
 void main() {
   //tests for project 4
 
+  //tests for "Deleting a File"
+  /*
+  char* fileToDelete = "fileTD";
+  deleteFile(fileToDelete);
+  printString("deleted file\r\n\0");
+  */
+  
   //tests for "Writing a Disk Sector"
+  /*
   char* buffer1 = "Today Is Sunday";
-  writeSector(buffer1,2789); //right now, the message appears at 15CA and the chunk of code that appears towards the top of the file as well. Next time, change the text and see if it appears in the same place."
+  writeSector(buffer1,2789);
+  */
   
   //tests for project 3
 
@@ -202,6 +213,35 @@ void main() {
 }
 
 /* Functions for project 4 */
+
+/*
+ * Deleting a File
+ */
+
+int deleteFile(char* filename){
+  int fileIndex = -1;
+  int i = 0;
+  int sector;
+  int bufIndex = 0;
+
+  struct directory diskDir;
+  
+  //read the file from disk sector
+  readSector(&diskDir, 2);
+  
+  //helper method to find the file in disk
+  fileIndex = findFile(filename, &diskDir);
+  
+  //replace first char of filename if file was found
+  if(fileIndex != -1){ //file found
+    diskDir.entries[fileIndex].name[0] = 0x00;
+  }else{
+    printString("Error: file not found\0");
+    return -1;
+  }
+
+  return 1;
+}
 
 /*
  * Writing a Disk Sector
