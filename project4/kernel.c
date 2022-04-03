@@ -225,8 +225,10 @@ int deleteFile(char* filename){
   int bufIndex = 0;
 
   struct directory diskDir;
-  
+  struct directory map;
   //read the file from disk sector
+
+  readSector(&map,1);
   readSector(&diskDir, 2);
   
   //helper method to find the file in disk
