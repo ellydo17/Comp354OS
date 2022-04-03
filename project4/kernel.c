@@ -50,7 +50,7 @@ void main() {
   //tests for project 4
 
   //tests for "Writing a Disk Sector"
-  char* buffer1 = "April Fools";
+  char* buffer1 = "Today Is Sunday";
   writeSector(buffer1,2789); //right now, the message appears at 15CA and the chunk of code that appears towards the top of the file as well. Next time, change the text and see if it appears in the same place."
   
   //tests for project 3
