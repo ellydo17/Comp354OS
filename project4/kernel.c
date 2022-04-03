@@ -52,8 +52,13 @@ void main() {
   //tests for project 4
 
   //tests for "Deleting a File"
-  interrupt(0x21, 0x04, "fileTD\0", 0x2000, 0);
-  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+  //load new file first, will delete it later
+  char buffer[13312]; // the maximum size of a file
+  makeInterrupt21();
+  //read the file into buffer
+  interrupt(0x21, 0x03, "fileTo\0", buffer, 0);
+  //print out the file
+  interrupt(0x21, 0x00, buffer, 0, 0);
   /*
   char* fileToDelete = "fileTD";
   deleteFile(fileToDelete);
@@ -219,12 +224,10 @@ void main() {
 /*
  * Deleting a File
  */
-
+//kind of completed part 2 of the method (for diskDir), still need to do part 1 where we will be using diskmap
 int deleteFile(char* filename){
   int fileIndex = -1;
   int i = 0;
-  int sector;
-  int bufIndex = 0;
 
   struct directory diskDir;
   struct directory map;
