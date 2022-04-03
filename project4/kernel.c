@@ -52,6 +52,8 @@ void main() {
   //tests for project 4
 
   //tests for "Deleting a File"
+  interrupt(0x21, 0x04, "fileTD\0", 0x2000, 0);
+  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
   /*
   char* fileToDelete = "fileTD";
   deleteFile(fileToDelete);
