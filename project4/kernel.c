@@ -230,18 +230,30 @@ int deleteFile(char* filename){
   int i = 0;
 
   struct directory diskDir;
-  struct directory map;
+  char* diskMap;
   //read the file from disk sector
 
-  readSector(&map,1);
+  readSector(&diskMap,1);
   readSector(&diskDir, 2);
   
   //helper method to find the file in disk
   fileIndex = findFile(filename, &diskDir);
-  
-  //replace first char of filename if file was found
+
+  //if file is found, all sectors allocated to the file must be marked as free and thee first char og the filename must also be set to 0x00
   if(fileIndex != -1){ //file found
+    
+    while(diskDir.entries[fileIndex].sectors[i] != 0x00 && i < 26) {
+      sector = diskDir.entries[fileIndex].sectors[i];
+      i++;
+
+      //free up space for that particular sector
+      map[sector] = 0x00;
+    }
+    
+    //replace first char of filename if file was found
     diskDir.entries[fileIndex].name[0] = 0x00;
+    writeSector(diskMap, 1);
+    writeSector(&diskDir, 2);
   }else{
     printString("Error: file not found\0");
     return -1;
@@ -496,6 +508,8 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     return executeProgram(bx, cx);
   } else if (ax == 0x05) {  //0x05 specifies that we need to terminate a user program (project 3)
     return terminate();
+  }else if (ax == 0x07) {  //0x05 specifies that we need to terminate a user program (project 3)
+    return  deleteFile(bx);
   }else{
     return -1;
   }
