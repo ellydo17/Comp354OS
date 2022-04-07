@@ -59,10 +59,15 @@ void main() {
   interrupt(0x21, 0x03, "fileTo\0", buffer, 0);
   //print out the file
   interrupt(0x21, 0x00, buffer, 0, 0);
-  
+
+  //delete the file "fileToDelete"
+  //interrupt(0x21, 0x07, "fileToDelete\0", 0, 0);
+  /*
   char* fileToDel = "fileToDelete";
   deleteFile(fileToDel);
+  */
   printString("deleted file\r\n\0");
+  
   
   
   //tests for "Writing a Disk Sector"
@@ -228,9 +233,10 @@ void main() {
 int deleteFile(char* filename){
   int fileIndex = -1;
   int i = 0;
+  int sector;
 
   struct directory diskDir;
-  char* diskMap;
+  char diskMap[512];
   //read the file from disk sector
 
   readSector(&diskMap,1);
@@ -247,7 +253,7 @@ int deleteFile(char* filename){
       i++;
 
       //free up space for that particular sector
-      map[sector] = 0x00;
+      diskMap[sector] = 0x00;
     }
     
     //replace first char of filename if file was found
