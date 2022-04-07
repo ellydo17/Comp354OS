@@ -61,7 +61,7 @@ void main() {
   interrupt(0x21, 0x00, buffer, 0, 0);
 
   //delete the file "fileToDelete"
-  //interrupt(0x21, 0x07, "fileToDelete\0", 0, 0);
+  interrupt(0x21, 0x07, "fileToDelete\0", 0, 0);
   /*
   char* fileToDel = "fileToDelete";
   deleteFile(fileToDel);
