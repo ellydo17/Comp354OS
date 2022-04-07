@@ -59,11 +59,11 @@ void main() {
   interrupt(0x21, 0x03, "fileTo\0", buffer, 0);
   //print out the file
   interrupt(0x21, 0x00, buffer, 0, 0);
-  /*
-  char* fileToDelete = "fileTD";
-  deleteFile(fileToDelete);
+  
+  char* fileToDel = "fileToDelete";
+  deleteFile(fileToDel);
   printString("deleted file\r\n\0");
-  */
+  
   
   //tests for "Writing a Disk Sector"
   /*
