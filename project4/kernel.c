@@ -56,8 +56,28 @@ int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int 
 
 void main() {
   //tests for project 4
+  
+  //tests for "Writing a file"
+  //load the new file called happy.txt
+  char buffer1[13312]; // the maximum size of a file
+  char buffer2[13312];
+  makeInterrupt21();
+  //read the file into buffer1
+  interrupt(0x21, 0x03, "happy\0", buffer1, 0);
+  //print out the contents from buffer1
+  interrupt(0x21, 0x00, buffer1, 0, 0);
 
+  //write the file to disk
+  interrupt(0x21, 0x08, "happy2\0", buffer1, 1);
+  printString("wrote the file to disk\r\n\0");
+
+   //read the file into buffer2
+  interrupt(0x21, 0x03, "happy2\0", buffer2, 0);
+  //print out the contents from buffer2
+  interrupt(0x21, 0x00, buffer2, 0, 0);
+  
   //tests for "Deleting a File"
+  /*
   //load new file first, will delete it later
   char buffer[13312]; // the maximum size of a file
   makeInterrupt21();
@@ -68,12 +88,8 @@ void main() {
 
   //delete the file "fileToDelete"
   interrupt(0x21, 0x07, "fileToDelete\0", 0, 0);
-  /*
-  char* fileToDel = "fileToDelete";
-  deleteFile(fileToDel);
-  */
   printString("deleted file\r\n\0");
-  
+  */
   
   
   //tests for "Writing a Disk Sector"
@@ -233,7 +249,7 @@ void main() {
 /* Functions for project 4 */
 
 /*
- * Write a File
+ * Writing a File
  */
 int writeFile(char *filename, char *buffer, int sectors) {
   int i = 0;
@@ -261,6 +277,8 @@ int writeFile(char *filename, char *buffer, int sectors) {
     while(i < 16) {
       
       if (diskDir.entries[i].name[0] = 0x00) {//found a empty entry
+	diskDir.entries[i].name = filename;
+	fileIndex = i;
 	return writeFileHelper(&diskDir, &diskMap, &buf, sectors, fileIndex);	
       } else {//didn't find a new entry, so keep looking
 	i++;
@@ -318,6 +336,7 @@ int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int 
     //write the file
     while(indexForWriteSector<sectorsToOccupyIndex){
       writeSector(&buf[i*512], sectorsToOccupy[i]);
+      diskDir.entries[fileIndex].sectors[i] = sectorsToOccupy[i];
       totalSectorsWritten++;
     }
 
