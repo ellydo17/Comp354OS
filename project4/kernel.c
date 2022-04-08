@@ -254,6 +254,7 @@ void main() {
 int writeFile(char *filename, char *buffer, int sectors) {
   int i = 0;
   int fileIndex = -1;
+  int j = 0;
   
   struct directory diskDir;
   char diskMap[512];
@@ -267,7 +268,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
   
   if(fileIndex != -1){ //file found, we need to overwrite the sectors of the previous file
 
-    return writeFileHelper(&diskDir, &diskMap, &buf, sectors, fileIndex);
+    return writeFileHelper(&diskDir, &diskMap, &buffer, sectors, fileIndex);
   
   } else { //file not found
     
@@ -277,9 +278,12 @@ int writeFile(char *filename, char *buffer, int sectors) {
     while(i < 16) {
       
       if (diskDir.entries[i].name[0] = 0x00) {//found a empty entry
-	diskDir.entries[i].name = filename;
+	while (j < 6 && filename[j] != '\0') {
+	  diskDir.entries[i].name[j] = filename[j];
+	  j++;
+	}
 	fileIndex = i;
-	return writeFileHelper(&diskDir, &diskMap, &buf, sectors, fileIndex);	
+	return writeFileHelper(&diskDir, &diskMap, &buffer, sectors, fileIndex);	
       } else {//didn't find a new entry, so keep looking
 	i++;
       }
@@ -312,7 +316,7 @@ int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int 
 	sector = diskDir.entries[fileIndex].sectors[i];
 	i++;
 
-	sectorToOccupy[sectorsToOccupyIndex] = sector;
+	sectorsToOccupy[sectorsToOccupyIndex] = sector;
 	sectorsToOccupyIndex++;
       }
 
@@ -326,7 +330,7 @@ int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int 
     }
 
     //find new available space in diskMap if needed and add to the char array
-    while (sectorToOccupyIndex < sectorsfromNewFile && availableSpace(diskMap) != -1){
+    while (sectorsToOccupyIndex < sectorsfromNewFile && availableSpace(diskMap) != -1){
       availableSpaceIndex = availableSpace(diskMap);
       sectorsToOccupy[sectorsToOccupyIndex] = availableSpaceIndex;
       diskMap[availableSpaceIndex] = 0xFF;
@@ -335,7 +339,7 @@ int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int 
 
     //write the file
     while(indexForWriteSector<sectorsToOccupyIndex){
-      writeSector(&buf[i*512], sectorsToOccupy[i]);
+      writeSector(&buffer[i*512], sectorsToOccupy[i]);
       diskDir.entries[fileIndex].sectors[i] = sectorsToOccupy[i];
       totalSectorsWritten++;
     }
