@@ -272,17 +272,28 @@ int writeFile(char *filename, char *buffer, int sectors) {
   
   } else { //file not found
     
-    printString("no such file exists, we are now looking for a free entry space in the diskDir\0");
+    printString("no such file exists, we are now looking for a free entry space in the diskDir\r\n\0");
     
     //find an empty entry in the Disk Directory
     while(i < 16) {
       
       if (diskDir.entries[i].name[0] = 0x00) {//found a empty entry
+	printString("found an empty entry\r\n\0");
+	
 	while (j < 6 && filename[j] != '\0') {
 	  diskDir.entries[i].name[j] = filename[j];
 	  j++;
 	}
+	printString("name of new file = \0");
+	printString(filename);
+	printString("\r\n\0");
+	
 	fileIndex = i;
+	
+	printString("index of empty entry where we edited filename is \0");
+	printString(i);
+	printString("\r\n\0");
+	
 	return writeFileHelper(&diskDir, &diskMap, &buffer, sectors, fileIndex);	
       } else {//didn't find a new entry, so keep looking
 	i++;
