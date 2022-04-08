@@ -48,10 +48,11 @@ int writeSector(char *buf, int absSector);
 
 int deleteFile(char* filename);
 
-int writeFile(char *fname, char *buffer, int sectors);
+int writeFile(char *filename, char *buffer, int sectors);
 
 int availableSpace(char diskMap[]);
 
+int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int sectors);
 
 void main() {
   //tests for project 4
@@ -234,16 +235,9 @@ void main() {
 /*
  * Write a File
  */
-int writeFile(char *fname, char *buffer, int sectors) {
+int writeFile(char *filename, char *buffer, int sectors) {
   int i = 0;
   int fileIndex = -1;
-  int totalSectorsWritten = 0;
-  int sector = 0;
-  int sectorsfromNewFile = sectors;
-  int availableSpaceIndex;
-  char* sectorsToOccupy;
-  int sectorsToOccupyIndex = 0;
-  int indexForWriteSector = 0;
   
   struct directory diskDir;
   char diskMap[512];
@@ -254,27 +248,63 @@ int writeFile(char *fname, char *buffer, int sectors) {
   
   //helper method to find the file in disk
   fileIndex = findFile(filename, &diskDir);
-
+  
   if(fileIndex != -1){ //file found, we need to overwrite the sectors of the previous file
-    if(sectorsfromNewFile>26){
+
+    return writeFileHelper(&diskDir, &diskMap, &buf, sectors, fileIndex);
+  
+  } else { //file not found
+    
+    printString("no such file exists, we are now looking for a free entry space in the diskDir\0");
+    
+    //find an empty entry in the Disk Directory
+    while(i < 16) {
+      
+      if (diskDir.entries[i].name[0] = 0x00) {//found a empty entry
+	return writeFileHelper(&diskDir, &diskMap, &buf, sectors, fileIndex);	
+      } else {//didn't find a new entry, so keep looking
+	i++;
+      }
+      
+    }
+    
+    //no empty entries in the entire disk directory
+    return -1;
+  }
+}
+
+int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int sectors, int fileIndex){
+  int i = 0;
+  int totalSectorsWritten = 0;
+  int sector = 0;
+  int sectorsfromNewFile = sectors;
+  int availableSpaceIndex;
+  char* sectorsToOccupy;
+  int sectorsToOccupyIndex = 0;
+  int indexForWriteSector = 0;
+    
+  //if the no. of sectors to write from the new file is more than 26, it will only copy the first 26 sectors
+    if (sectorsfromNewFile > 26){
       sectorsfromNewFile = 26;
     }
 
-    //get the sectors associated with old file up to the no. of sectors we actually need for new file
-    while(diskDir.entries[fileIndex].sectors[i] != 0x00 && i < sectorsfromNewFile) {
-      sector = diskDir.entries[fileIndex].sectors[i];
-      i++;
+    if(fileIndex!=-1){
+      //get the sectors associated with old file up to the no. of sectors we actually need for new file
+      while(diskDir.entries[fileIndex].sectors[i] != 0x00 && i < sectorsfromNewFile) {
+	sector = diskDir.entries[fileIndex].sectors[i];
+	i++;
 
-      sectorToOccupy[sectorsToOccupyIndex] = sector;
-      sectorsToOccupyIndex++;
-    }
+	sectorToOccupy[sectorsToOccupyIndex] = sector;
+	sectorsToOccupyIndex++;
+      }
 
-    //clear any remaining sectors associated with old file if not needed
-    while(diskDir.entries[fileIndex].sectors[i] != 0x00) {
-      sector = diskDir.entries[fileIndex].sectors[i];
-      diskDir.entries[fileIndex].sectors[i] = 0x00; //remove it from the disk directory
-      diskMap[sector] = 0x00; //and also mark it as free in diskMap
-      i++;
+      //clear any remaining sectors associated with old file if not needed
+      while(diskDir.entries[fileIndex].sectors[i] != 0x00) {
+	sector = diskDir.entries[fileIndex].sectors[i];
+	diskDir.entries[fileIndex].sectors[i] = 0x00; //remove it from the disk directory
+	diskMap[sector] = 0x00; //and also mark it as free in diskMap
+	i++;
+      }
     }
 
     //find new available space in diskMap if needed and add to the char array
@@ -295,23 +325,6 @@ int writeFile(char *fname, char *buffer, int sectors) {
       return -2;
     }
     return totalSectorsWritten;
-    
-  } else { //file not found
-    printString("no such file exists, we are now looking for a free entry space in the diskDir\0");
-    
-    //find an empty entry in the Disk Directory
-    while(i < 16) {
-      if (diskDir.entries[i].name[0] = 0x00) {//found a empty entry
-	return i;
-	break;
-      } else {//didn't find a new entry, so keep looking
-	i++;
-      }
-    }
-    
-    //no empty entries in the entire disk directory
-    return -1;
-  }
 }
 
 /*
@@ -622,6 +635,8 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     return terminate();
   }else if (ax == 0x07) {  //0x05 specifies that we need to terminate a user program (project 3)
     return  deleteFile(bx);
+  }else if (ax == 0x08) {  //0x05 specifies that we need to terminate a user program (project 3)
+    return  writeFile(bx,cx,dx);
   }else{
     return -1;
   }
