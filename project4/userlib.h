@@ -19,5 +19,11 @@ int executeProgram(char *name, int segment);
 //terminate
 void terminate();
 
+//deleteFile
+int deleteFile(char* filename);
+
+//writeFile
+int writeFile(char *filename, char *buffer, int sectors);
+
 #endif
   

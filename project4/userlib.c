@@ -31,3 +31,13 @@ int executeProgram(char *name, int segment) {
 void terminate() {
   return interrupt(0x21, 0x05, 0, 0, 0);
 }
+
+//deleteFile
+int deleteFile(char* filename){
+  return interrupt(0x21, 0x07, filename, 0, 0);
+}
+
+//writeFile
+int writeFile(char *filename, char *buffer, int sectors){
+  return interrupt(0x21, 0x08, filename, buffer, sectors);
+}
