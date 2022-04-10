@@ -286,7 +286,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
   
   if(fileIndex != -1){ //file found, we need to overwrite the sectors of the previous file
 
-    return writeFileHelper(&diskDir, &diskMap, &buffer, sectors, fileIndex);
+    return writeFileHelper(&diskDir, diskMap, buffer, sectors, fileIndex);	
   
   } else { //file not found
     
@@ -322,7 +322,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	printString("\r\n\0");
 	*/
 	
-	return writeFileHelper(&diskDir, &diskMap, &buffer, sectors, fileIndex);	
+	return writeFileHelper(&diskDir, diskMap, buffer, sectors, fileIndex);	
       } else {//didn't find a new entry, so keep looking
 	i++;
       }
