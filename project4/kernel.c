@@ -56,28 +56,23 @@ int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int 
 
 void main() {
   //tests for project 4
-  char buffer[13312]; // the maximum size of a file
-  makeInterrupt21();
-  //read the file into buffer
-  interrupt(0x21, 0x03, "happy1\0", buffer, 0);
-  //print out the file
-  interrupt(0x21, 0x00, buffer, 0, 0);
   
   //tests for "Writing a file"
-  //load the new file called happy.txt
-  /*
-  char buffer1[13312]; // the maximum size of a file
-  char buffer2[13312];
+  //load the new file called happy1.txt
+    char buffer[13312]; // the maximum size of a file
   makeInterrupt21();
-  //read the file into buffer1
-  interrupt(0x21, 0x03, "happy\0", buffer1, 0);
-  //print out the contents from buffer1
-  interrupt(0x21, 0x00, buffer1, 0, 0);
+  //read the happy1 file into buffer
+  interrupt(0x21, 0x03, "happy1\0", buffer, 0);
+  //print out the contents from happy1 file
+  interrupt(0x21, 0x00, "happy1 file says \0", 0, 0);
+  interrupt(0x21, 0x00, buffer, 0, 0);
+  interrupt(0x21, 0x00, "\r\n\0", 0, 0);
 
   //write the file to disk
   interrupt(0x21, 0x08, "happy2\0", buffer1, 1);
   printString("wrote the file to disk\r\n\0");
 
+  /*
    //read the file into buffer2
   interrupt(0x21, 0x03, "happy2\0", buffer2, 0);
   //print out the contents from buffer2
