@@ -58,6 +58,7 @@ void main() {
   //tests for project 4
   
   //tests for "Writing a file"
+  
   //load the new file called happy1.txt
   char buffer1[13312]; // the maximum size of a file
   char buffer2[13312]; // the maximum size of a file
@@ -65,21 +66,21 @@ void main() {
   //read the happy1 file into buffer
   interrupt(0x21, 0x03, "happy1\0", buffer1, 0);
   //print out the contents from happy1 file
-  interrupt(0x21, 0x00, "happy1 file says \0", 0, 0);
+  //interrupt(0x21, 0x00, "happy1 file says \0", 0, 0);
   interrupt(0x21, 0x00, buffer1, 0, 0);
   interrupt(0x21, 0x00, "\r\n\0", 0, 0);
-
-  /*
+  
+  
   //write the file to disk
   interrupt(0x21, 0x08, "happy2\0", buffer1, 1);
   printString("wrote the file to disk\r\n\0");
-  */
   
+  /*
    //read the file into buffer2
   interrupt(0x21, 0x03, "happy2\0", buffer2, 0);
   //print out the contents from buffer2
   interrupt(0x21, 0x00, buffer2, 0, 0);
-  
+  */
   
   //tests for "Deleting a File"
   /*
@@ -335,186 +336,6 @@ int writeFile(char *filename, char *buffer, int sectors) {
   }
 }
 */
-
-/*
- * Writing a File
- */
-int writeFile(char *filename, char *buffer, int sectors) {
-  int i = 0;
-  int fileIndex = -1;
-  int j = 0;
-  
-  struct directory diskDir;
-  char diskMap[512];
-
-  //variables from helper method
-  int sectorIndex = 0;
-  int totalSectorsWritten = 0;
-  int sector = 0;
-  int sectorsfromNewFile = sectors;
-  int availableSpaceIndex;
-  char* sectorsToOccupy;
-  int sectorsToOccupyIndex = 0;
-  int indexForWriteSector = 0;
-  //end here
-  
-  //read the file from disk sector
-  readSector(&diskMap,1);
-  readSector(&diskDir, 2);
-  
-  //helper method to find the file in disk
-  fileIndex = findFile(filename, &diskDir);
-
-  /*
-  printString("name of new file given = \0");
-  printString(filename);
-  printString("\r\n\0");
-
-  printString("buffer is \0");
-  printString(buffer);
-  printString("\r\n\0");
-
-  printString("no. of sectors = \0");
-  printInt(sectors);
-  printString("\r\n\0");
-  */
-
-  //parts from helper function
-  //if the no. of sectors to write from the new file is more than 26, it will only copy the first 26 sectors
-    if (sectorsfromNewFile > 26){
-      sectorsfromNewFile = 26;
-    }
-    //end here
-  
-  if(fileIndex != -1){ //file found, we need to overwrite the sectors of the previous file
-
-    //get the sectors associated with old file up to the no. of sectors we actually need for new file
-      while(diskDir.entries[fileIndex].sectors[sectorIndex] != 0x00 && sectorIndex < sectorsfromNewFile) {
-	sector = diskDir.entries[fileIndex].sectors[sectorIndex];
-	sectorIndex++;
-
-	sectorsToOccupy[sectorsToOccupyIndex] = sector;
-	sectorsToOccupyIndex++;
-      }
-
-      //clear any remaining sectors associated with old file if not needed
-      while(diskDir.entries[fileIndex].sectors[sectorIndex] != 0x00) {
-	sector = diskDir.entries[fileIndex].sectors[sectorIndex];
-	diskDir.entries[fileIndex].sectors[sectorIndex] = 0x00; //remove it from the disk directory
-	diskMap[sector] = 0x00; //and also mark it as free in diskMap
-	sectorIndex++;
-      }
-
-      //find new available space in diskMap if needed and add to the char array
-    while (sectorsToOccupyIndex < sectorsfromNewFile && availableSpace(diskMap) != -1){
-      availableSpaceIndex = availableSpace(diskMap);
-      sectorsToOccupy[sectorsToOccupyIndex] = availableSpaceIndex;
-      diskMap[availableSpaceIndex] = 0xFF;
-      sectorsToOccupyIndex++;
-    }
-
-    //write the file
-    while(indexForWriteSector<sectorsToOccupyIndex){
-      writeSector(&buffer[sectorIndex*512], sectorsToOccupy[sectorIndex]);
-      diskDir.entries[fileIndex].sectors[sectorIndex] = sectorsToOccupy[sectorIndex];
-      totalSectorsWritten++;
-    }
-
-    if(totalSectorsWritten < sectorsfromNewFile){
-      return -2;
-    }
-    return totalSectorsWritten;
-
-  
-  } else { //file not found
-    
-    printString("no such file exists, we are now looking for a free entry space in the diskDir\r\n\0");
-    
-    //find an empty entry in the Disk Directory
-    while(i < 16) {
-      /*
-      printString("checking if entry \0");
-      printInt(i);
-      printString(" is empty. The first char of this entry is \0");
-      printString(diskDir.entries[i].name[0]);
-      printString(".\r\n\0");
-      */
-      
-      if (diskDir.entries[i].name[0] == 0x00) {//found a empty entry
-	printString("found an empty entry\r\n\0");
-	
-	while (j < 6 && filename[j] != '\0') {
-	  diskDir.entries[i].name[j] = filename[j];
-	  j++;
-	}
-	
-	/*
-	printString("name of new file put in entry = \0");
-	printString(diskDir.entries[i].name);
-	printString("\r\n\0");
-	*/
-	fileIndex = i;
-	
-	printString("index of empty entry where we edited filename is \0");
-	printInt(i);
-	printString("\r\n\0");
-        
-
-	//find new available space in diskMap if needed and add to the char array
-	while (sectorsToOccupyIndex < sectorsfromNewFile && availableSpace(diskMap) != -1){
-	  printString("sectors to occupy array is not full and diskmap stll has available space\r\n\0");
-	  availableSpaceIndex = availableSpace(diskMap);
-	  printString("availableSpaceIndex is \0");
-	  printInt(availableSpaceIndex);
-	  printString("\r\n\0");
-	  sectorsToOccupy[sectorsToOccupyIndex] = availableSpaceIndex;
-	  diskMap[availableSpaceIndex] = 0xFF;
-	  printString("set the availableSpaceIndex to \0");
-	  printInt(diskMap[availableSpaceIndex]);
-	  printString("\r\n\0");
-	  sectorsToOccupyIndex++;
-	}
-
-	//write the file
-	while(indexForWriteSector<sectorsToOccupyIndex){
-	  writeSector(&buffer[indexForWriteSector*512], sectorsToOccupy[indexForWriteSector]);
-	  printString("wrote to sector in index\0");
-	  printInt(indexForWriteSector);
-	  printString("from sectorsToOccupy array. The address of the sector saved in this index is \0");
-	  printString(sectorsToOccupy[indexForWriteSector]);
-	  diskDir.entries[fileIndex].sectors[indexForWriteSector] = sectorsToOccupy[indexForWriteSector];
-	  printString("set the value for the sector in the entry as \0");
-	  printString(diskDir.entries[fileIndex].sectors[indexForWriteSector]);
-	  printString("\r\n\0");
-	  indexForWriteSector++;
-	  totalSectorsWritten++;
-	  printString("totalSectorsWritten so far = \0");
-	  printInt(totalSectorsWritten);
-	  printString("\r\n\0");
-	}
-
-	if(totalSectorsWritten < sectorsfromNewFile){
-	  printString("not enough sectors but copied as much as possible\0");
-	  printInt(totalSectorsWritten);
-	  printString("\r\n\0");
-	  return -2;
-	}
-	printString("successfully copied all sectors\0");
-	  printInt(totalSectorsWritten);
-	  printString("\r\n\0");
-	return totalSectorsWritten;
-
-      } else {//didn't find a new entry, so keep looking
-	i++;
-      }
-      
-    }
-
-    printString("couldn't find any empty entries\r\n\0");
-    //no empty entries in the entire disk directory
-    return -1;
-  }
-}
 
 int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int sectors, int fileIndex){
   int sectorIndex = 0;
