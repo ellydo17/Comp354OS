@@ -288,11 +288,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
     
     //find an empty entry in the Disk Directory
     while(i < 16) {
+      /*
       printString("checking if entry \0");
       printString(i);
       printString(" is empty. The first char of this entry is \0");
       printString(diskDir.entries[i].name[0]);
       printString(".\r\n\0");
+      */
       
       if (diskDir.entries[i].name[0] = 0x00) {//found a empty entry
 	printString("found an empty entry\r\n\0");
