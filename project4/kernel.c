@@ -60,6 +60,7 @@ void main() {
   //tests for "Writing a file"
   //load the new file called happy1.txt
   char buffer1[13312]; // the maximum size of a file
+  char buffer2[13312]; // the maximum size of a file
   makeInterrupt21();
   //read the happy1 file into buffer
   interrupt(0x21, 0x03, "happy1\0", buffer1, 0);
@@ -72,12 +73,12 @@ void main() {
   interrupt(0x21, 0x08, "happy2\0", buffer1, 1);
   printString("wrote the file to disk\r\n\0");
 
-  /*
+  
    //read the file into buffer2
   interrupt(0x21, 0x03, "happy2\0", buffer2, 0);
   //print out the contents from buffer2
   interrupt(0x21, 0x00, buffer2, 0, 0);
-  */
+  
   
   //tests for "Deleting a File"
   /*
@@ -293,11 +294,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
     
     //find an empty entry in the Disk Directory
     while(i < 16) {
+      /*
       printString("checking if entry \0");
       printInt(i);
       printString(" is empty. The first char of this entry is \0");
       printString(diskDir.entries[i].name[0]);
       printString(".\r\n\0");
+      */
       
       if (diskDir.entries[i].name[0] == 0x00) {//found a empty entry
 	printString("found an empty entry\r\n\0");
@@ -306,16 +309,18 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	  diskDir.entries[i].name[j] = filename[j];
 	  j++;
 	}
-
+	
+	/*
 	printString("name of new file put in entry = \0");
 	printString(diskDir.entries[i].name);
 	printString("\r\n\0");
-	
+	*/
 	fileIndex = i;
-	
+	/*
 	printString("index of empty entry where we edited filename is \0");
-	printString(i);
+	printInt(i);
 	printString("\r\n\0");
+	*/
 	
 	return writeFileHelper(&diskDir, &diskMap, &buffer, sectors, fileIndex);	
       } else {//didn't find a new entry, so keep looking
