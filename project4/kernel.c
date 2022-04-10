@@ -52,8 +52,6 @@ int writeFile(char *filename, char *buffer, int sectors);
 
 int availableSpace(char diskMap[]);
 
-int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int sectors);
-
 void main() {
   //tests for project 4
   
@@ -299,21 +297,32 @@ int writeFile(char *filename, char *buffer, int sectors) {
   if(fileIndex != -1){ //file found, we need to overwrite the sectors of the previous file
 
     while (availableSpace(diskMap) != -1 && sectorInEntry < sectors) {
+	  printString("we still need to fill in sectors and diskmap has space available\r\n\0");
+
 	  //find the availableSpace and set it to occupied in diskmap
 	  availableSpaceIndex = availableSpace(diskMap);
 	  diskMap[availableSpaceIndex] = 0xFF;
+
+	  printString("set the available space as occupied in diskMap\r\n\0");
+	  
 	  //get the previous occupied space and set it to free in diskmap
 	  prevOccupiedSector = diskDir.entries[fileIndex].sectors[sectorInEntry];
 	  diskMap[prevOccupiedSector] = 0x00;
+
+	  printString("set the previously occupied space as available in diskMap\r\n\0");
+	  
 	  //write the content to the new sector we chose (the recent available space)
 	  diskDir.entries[fileIndex].sectors[sectorInEntry] = availableSpaceIndex;
+	  
+	  printString("placed the available sector in the empty entry\r\n\0");
+	  
 	  writeSector(&buffer[sectorInEntry*512], availableSpaceIndex);
 	  sectorInEntry++;
 	  totalSectorsWritten++;
-	}
 
-	if (totalSectorsWritten != sectors) {
-	  return -2; //the disk map does not contain enough empty sectors 
+	  printString("wrote from the buffer to that available space. Now, the total secotrs written is \0");
+	  printInt(totalSectorsWritten);
+	  printString("\r\n\0");
 	}
 
 	for(remainingSectorsIndex = sectorInEntry; remainingSectorsIndex < 26; remainingSectorsIndex++) {
@@ -323,7 +332,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	writeSector(diskMap, 1);
 	writeSector(&diskDir, 2);
 
-	return totalSectorsWritten;	
+	if (totalSectorsWritten != sectors) {
+	  printString("the disk map does not contain enough empty sectors\r\n\0");
+	  return -2; //the disk map does not contain enough empty sectors 
+	}
+
+	return totalSectorsWritten;
+	
   
   } else { //file not found
     
@@ -363,21 +378,32 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	*/
 
 	while (availableSpace(diskMap) != -1 && sectorInEntry < sectors) {
+	  printString("we still need to fill in sectors and diskmap has space available\r\n\0");
+
 	  //find the availableSpace and set it to occupied in diskmap
 	  availableSpaceIndex = availableSpace(diskMap);
 	  diskMap[availableSpaceIndex] = 0xFF;
+
+	  printString("set the available space as occupied in diskMap\r\n\0");
+	  
 	  //get the previous occupied space and set it to free in diskmap
 	  prevOccupiedSector = diskDir.entries[fileIndex].sectors[sectorInEntry];
 	  diskMap[prevOccupiedSector] = 0x00;
+
+	  printString("set the previously occupied space as available in diskMap\r\n\0");
+	  
 	  //write the content to the new sector we chose (the recent available space)
 	  diskDir.entries[fileIndex].sectors[sectorInEntry] = availableSpaceIndex;
+	  
+	  printString("placed the available sector in the empty entry\r\n\0");
+	  
 	  writeSector(&buffer[sectorInEntry*512], availableSpaceIndex);
 	  sectorInEntry++;
 	  totalSectorsWritten++;
-	}
 
-	if (totalSectorsWritten != sectors) {
-	  return -2; //the disk map does not contain enough empty sectors 
+	  printString("wrote from the buffer to that available space. Now, the total secotrs written is \0");
+	  printInt(totalSectorsWritten);
+	  printString("\r\n\0");
 	}
 
 	for(remainingSectorsIndex = sectorInEntry; remainingSectorsIndex < 26; remainingSectorsIndex++) {
@@ -386,6 +412,11 @@ int writeFile(char *filename, char *buffer, int sectors) {
 
 	writeSector(diskMap, 1);
 	writeSector(&diskDir, 2);
+
+	if (totalSectorsWritten != sectors) {
+	  printString("the disk map does not contain enough empty sectors\r\n\0");
+	  return -2; //the disk map does not contain enough empty sectors 
+	}
 
 	return totalSectorsWritten;
       } else {//didn't find a new entry, so keep looking
@@ -409,7 +440,6 @@ int availableSpace(char diskMap[]) {
   while (addressAvail < 512) {
     if (diskMap[addressAvail] == 0x00) { //available space found
       return addressAvail;
-      break;
     } else {
       addressAvail++;
     }
