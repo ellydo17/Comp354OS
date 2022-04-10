@@ -59,13 +59,13 @@ void main() {
   
   //tests for "Writing a file"
   //load the new file called happy1.txt
-    char buffer[13312]; // the maximum size of a file
+  char buffer1[13312]; // the maximum size of a file
   makeInterrupt21();
   //read the happy1 file into buffer
-  interrupt(0x21, 0x03, "happy1\0", buffer, 0);
+  interrupt(0x21, 0x03, "happy1\0", buffer1, 0);
   //print out the contents from happy1 file
   interrupt(0x21, 0x00, "happy1 file says \0", 0, 0);
-  interrupt(0x21, 0x00, buffer, 0, 0);
+  interrupt(0x21, 0x00, buffer1, 0, 0);
   interrupt(0x21, 0x00, "\r\n\0", 0, 0);
 
   //write the file to disk
