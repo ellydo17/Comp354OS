@@ -58,7 +58,11 @@ void main() {
   //tests for project 4
   
   //tests for "Writing a file"
-  
+  char buffer[13312];
+  writeFile("testWF\0", "my writeFile is working", 3);
+  readfile("testWF\0", buffer);
+
+  /*
   //load the new file called happy1.txt
   char buffer1[13312]; // the maximum size of a file
   char buffer2[13312]; // the maximum size of a file
@@ -75,7 +79,7 @@ void main() {
   interrupt(0x21, 0x08, "happy2\0", buffer1, 1);
   printString("wrote the file to disk\r\n\0");
   
-  /*
+  
    //read the file into buffer2
   interrupt(0x21, 0x03, "happy2\0", buffer2, 0);
   //print out the contents from buffer2
