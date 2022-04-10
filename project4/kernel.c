@@ -56,9 +56,16 @@ int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int 
 
 void main() {
   //tests for project 4
+  char buffer[13312]; // the maximum size of a file
+  makeInterrupt21();
+  //read the file into buffer
+  interrupt(0x21, 0x03, "happy1\0", buffer, 0);
+  //print out the file
+  interrupt(0x21, 0x00, buffer, 0, 0);
   
   //tests for "Writing a file"
   //load the new file called happy.txt
+  /*
   char buffer1[13312]; // the maximum size of a file
   char buffer2[13312];
   makeInterrupt21();
@@ -75,6 +82,7 @@ void main() {
   interrupt(0x21, 0x03, "happy2\0", buffer2, 0);
   //print out the contents from buffer2
   interrupt(0x21, 0x00, buffer2, 0, 0);
+  */
   
   //tests for "Deleting a File"
   /*
@@ -275,7 +283,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
   printString("\r\n\0");
 
   printString("no. of sectors = \0");
-  printString(sectors);
+  printInt(sectors);
   printString("\r\n\0");
   
   if(fileIndex != -1){ //file found, we need to overwrite the sectors of the previous file
