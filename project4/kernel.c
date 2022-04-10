@@ -265,6 +265,18 @@ int writeFile(char *filename, char *buffer, int sectors) {
   
   //helper method to find the file in disk
   fileIndex = findFile(filename, &diskDir);
+
+  printString("name of new file given = \0");
+  printString(filename);
+  printString("\r\n\0");
+
+  printString("buffer is \0");
+  printString(buffer);
+  printString("\r\n\0");
+
+  printString("no. of sectors = \0");
+  printString(sectors);
+  printString("\r\n\0");
   
   if(fileIndex != -1){ //file found, we need to overwrite the sectors of the previous file
 
@@ -276,6 +288,11 @@ int writeFile(char *filename, char *buffer, int sectors) {
     
     //find an empty entry in the Disk Directory
     while(i < 16) {
+      printString("checking if entry \0");
+      printString(i);
+      printString(" is empty. The first char of this entry is \0");
+      printString(diskDir.entries[i].name[0]);
+      printString(".\r\n\0");
       
       if (diskDir.entries[i].name[0] = 0x00) {//found a empty entry
 	printString("found an empty entry\r\n\0");
@@ -284,8 +301,9 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	  diskDir.entries[i].name[j] = filename[j];
 	  j++;
 	}
-	printString("name of new file = \0");
-	printString(filename);
+
+	printString("name of new file put in entry = \0");
+	printString(diskDir.entries[i].name);
 	printString("\r\n\0");
 	
 	fileIndex = i;
@@ -300,7 +318,8 @@ int writeFile(char *filename, char *buffer, int sectors) {
       }
       
     }
-    
+
+    printString("couldn't find any empty entries\r\n\0");
     //no empty entries in the entire disk directory
     return -1;
   }
