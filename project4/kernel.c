@@ -344,7 +344,19 @@ int writeFileHelper(struct directory diskDir, char diskMap[], char *buffer, int 
   char* sectorsToOccupy;
   int sectorsToOccupyIndex = 0;
   int indexForWriteSector = 0;
-    
+
+  printString("buffer is \0");
+  printString(buffer);
+  printString("\r\n\0");
+
+  printString("no. of sectors = \0");
+  printInt(sectors);
+  printString("\r\n\0");
+
+  printString("fileIndex = \0");
+  printInt(fileIndex);
+  printString("\r\n\0");
+  
   //if the no. of sectors to write from the new file is more than 26, it will only copy the first 26 sectors
     if (sectorsfromNewFile > 26){
       sectorsfromNewFile = 26;
