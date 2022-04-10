@@ -69,10 +69,11 @@ void main() {
   interrupt(0x21, 0x00, buffer1, 0, 0);
   interrupt(0x21, 0x00, "\r\n\0", 0, 0);
 
+  /*
   //write the file to disk
   interrupt(0x21, 0x08, "happy2\0", buffer1, 1);
   printString("wrote the file to disk\r\n\0");
-
+  */
   
    //read the file into buffer2
   interrupt(0x21, 0x03, "happy2\0", buffer2, 0);
@@ -468,19 +469,39 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	  printString("\r\n\0");
 	  sectorsToOccupy[sectorsToOccupyIndex] = availableSpaceIndex;
 	  diskMap[availableSpaceIndex] = 0xFF;
+	  printString("set the availableSpaceIndex to \0");
+	  printInt(diskMap[availableSpaceIndex]);
+	  printString("\r\n\0");
 	  sectorsToOccupyIndex++;
 	}
 
 	//write the file
 	while(indexForWriteSector<sectorsToOccupyIndex){
-	  writeSector(&buffer[sectorIndex*512], sectorsToOccupy[sectorIndex]);
-	  diskDir.entries[fileIndex].sectors[sectorIndex] = sectorsToOccupy[sectorIndex];
+	  writeSector(&buffer[indexForWriteSector*512], sectorsToOccupy[indexForWriteSector]);
+	  printString("wrote to sector in index\0");
+	  printInt(indexForWriteSector);
+	  printString("from sectorsToOccupy array. The address of the sector saved in this index is \0");
+	  printString(sectorsToOccupy[indexForWriteSector]);
+	  diskDir.entries[fileIndex].sectors[indexForWriteSector] = sectorsToOccupy[indexForWriteSector];
+	  printString("set the value for the sector in the entry as \0");
+	  printString(diskDir.entries[fileIndex].sectors[indexForWriteSector]);
+	  printString("\r\n\0");
+	  indexForWriteSector++;
 	  totalSectorsWritten++;
+	  printString("totalSectorsWritten so far = \0");
+	  printInt(totalSectorsWritten);
+	  printString("\r\n\0");
 	}
 
 	if(totalSectorsWritten < sectorsfromNewFile){
+	  printString("not enough sectors but copied as much as possible\0");
+	  printInt(totalSectorsWritten);
+	  printString("\r\n\0");
 	  return -2;
 	}
+	printString("successfully copied all sectors\0");
+	  printInt(totalSectorsWritten);
+	  printString("\r\n\0");
 	return totalSectorsWritten;
 
       } else {//didn't find a new entry, so keep looking
