@@ -1,6 +1,13 @@
 #!/bin/bash
 
 source ../PathSetter.bash
+#############
+# assemble to install the bootloader
+nasm bootload.asm
+
+#copy the boatload program to sector 0 of the floppya.img disk image
+dd if=bootload of=floppya.img bs=512 count=1 conv=notrunc seek=0
+##############
 
 #complie the c file
 bcc -ansi -c -o kernel.o kernel.c
