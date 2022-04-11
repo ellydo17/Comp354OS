@@ -47,7 +47,24 @@ void main() {
       }
 
       //command is invalid 
-    } else { 
+    }
+    
+      //command is "delete"
+    else if (command[0] == 'd' && command[1] == 'e'&& command[2] == 'l' && command[3] == 'e' && command[4] == 't' && command[5] == 'e' && command[6] == ' ') {
+      printString("Command is delete.\r\n\0");
+
+      flag = deleteFile(command+7);
+
+      if (flag == -1) { //file was found
+	printString("Error: cannot delete file because file not found.\r\n\0");
+      } else {//file was found
+	printString("Successfully deleted file.\r\n\0");
+      }
+
+      //have to add write file here
+      
+      //command is invalid 
+    }else { 
       printString("Unrecognized command.\r\n\0");
     }
     
