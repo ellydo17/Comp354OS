@@ -56,9 +56,11 @@ void main() {
   //tests for project 4
   
   //tests for "Writing a file"
+  /*
   char buffer[13312];
   writeFile("testWF\0", "my writeFile is working", 3);
   readfile("testWF\0", buffer);
+  */
 
   /*
   //load the new file called happy1.txt
@@ -85,16 +87,17 @@ void main() {
   */
   
   //tests for "Deleting a File"
-  /*
+  
   //load new file first, will delete it later
   char buffer[13312]; // the maximum size of a file
   makeInterrupt21();
   //read the file into buffer
-  interrupt(0x21, 0x03, "fileTo\0", buffer, 0);
+  interrupt(0x21, 0x03, "delete\0", buffer, 0);
   //print out the file
   interrupt(0x21, 0x00, buffer, 0, 0);
 
   //delete the file "fileToDelete"
+  /*
   interrupt(0x21, 0x07, "fileToDelete\0", 0, 0);
   printString("deleted file\r\n\0");
   */
@@ -109,11 +112,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  /*
+  
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  */
+  
   
   //tests for "Terminating a User Program"
   /*

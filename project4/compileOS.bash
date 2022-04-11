@@ -36,7 +36,7 @@ gcc -o loadFile loadFile.c
 ./loadFile happy1.txt #for testing writeFile from project 4
 
 #Similarly, copy the contents of the fileToDelete.txt file to your disk image with this command
-./loadFile fileToDelete.txt
+./loadFile delete.txt
 
 #Loading and Executing a User Program
 
