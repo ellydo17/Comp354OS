@@ -325,33 +325,38 @@ int writeFile(char *filename, char *buffer, int sectors) {
   printString("need to write sectors, works for both file exists and new empty entry\r\n\0");
   while(diskMapIndex < 512 && sectorIndex < sectors) {
     if (diskMap[diskMapIndex] == 0x00) {
+      /*
       printString("found empty sector in diskMap.\r\n\0");
       printString("current sectorIndex is \0");
       printInt(sectorIndex);
       printString(".\r\n\0");
+      */
       //access the old sector space and mark it as free in the diskMap
       sector = diskDir.entries[fileIndex].sectors[sectorIndex];
       diskMap[sector] = 0x00;
-      printString("freed up old space in diskmap.\r\n\0");
+      //printString("freed up old space in diskmap.\r\n\0");
+      
       //mark the new sector space as occupied and assign it to the file
       diskMap[diskMapIndex] = 0xFF; 
       diskDir.entries[fileIndex].sectors[sectorIndex] = diskMapIndex;
-      printString("marked the new sector as occupied.\r\n\0");
+      //printString("marked the new sector as occupied.\r\n\0");
+      
       //write a portion of the buffer to the new sector space
       writeSector(buffer + sectorIndex * 512, diskMapIndex);
-      printString("wrote to the new sector.\r\n\0");
+      //printString("wrote to the new sector.\r\n\0");
       sectorIndex++;
       totalSectorsWritten++;
     }
     diskMapIndex++;
   }
-
+  printString("wrote to all sectors possible.\r\n\0");
+  
   //check if the diskMap had sufficient free sectors to use for the file
   if (totalSectorsWritten < sectors){
     printString("Insufficient free sectors in the diskMap\r\n\0");
     return -2;
   }
-  //printString("DiskMap had sufficient free sectors.\r\n\0");
+  printString("DiskMap had sufficient free sectors.\r\n\0");
   
   //set the remaining sectors (that are not needed for the file) as null
   while(sectorIndex < 26) {
@@ -365,13 +370,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
     sectorIndex++;
   }
 
-  //printString("freed up remaining sectors and set all of them to null.\r\n\0");
+  printString("freed up remaining sectors and set all of them to null.\r\n\0");
 
   //rewrite the diskMap and disk directory to the disk
   writeSector(diskMap, 1);
   writeSector(&diskDir, 2);
 
-  //printString("wrote the diskmap and disk directory to the disk.\r\n\0");
+  printString("wrote the diskmap and disk directory to the disk.\r\n\0");
 
   return totalSectorsWritten;
 }
