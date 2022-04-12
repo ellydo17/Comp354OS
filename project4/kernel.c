@@ -339,6 +339,42 @@ int writeFile(char *filename, char *buffer, int sectors) {
 }
 
 /*
+ * Deleting a File
+ */
+int deleteFile(char* filename){
+  int fileIndex = -1;
+  int i = 0;
+  int sector;
+  struct directory diskDir;
+  char diskMap[512];
+  //read the file from disk sector
+  readSector(&diskMap,1);
+  readSector(&diskDir, 2);
+  
+  //helper method to find the file in disk
+  fileIndex = findFile(filename, &diskDir);
+  //if file is found, all sectors allocated to the file must be marked as free and thee first char og the filename must also be set to 0x00
+  if(fileIndex != -1){ //file found
+    
+    while(diskDir.entries[fileIndex].sectors[i] != 0x00 && i < 26) {
+      sector = diskDir.entries[fileIndex].sectors[i];
+      i++;
+      //free up space for that particular sector
+      diskMap[sector] = 0x00;
+    }
+    
+    //replace first char of filename if file was found
+    diskDir.entries[fileIndex].name[0] = 0x00;
+    writeSector(diskMap, 1);
+    writeSector(&diskDir, 2);
+  }else{
+    printString("Error: file not found\0");
+    return -1;
+  }
+  return 1;
+}
+
+/*
  * Writing a Disk Sector
  */
 
