@@ -57,8 +57,9 @@ void main() {
   
   char buffer[13312];
   writeFile("testWF\0", "my writeFile is working", 3);
+  printString("completed the writefile method\r\n\0");
   readfile("testWF\0", buffer);
-  
+  printString(buffer);
 
   /*
   //load the new file called happy1.txt
