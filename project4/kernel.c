@@ -54,11 +54,17 @@ void main() {
   //tests for project 4
   
   //tests for "Writing a file"
-  
+  //if file does not exist
+  /*
   char buffer[13312];
   writeFile("testWF\0", "my writeFile is working", 3);
-  printString("completed the writefile method\r\n\0");
   readfile("testWF\0", buffer);
+  printString(buffer);
+  */
+  //if file exists, overwrite
+  char buffer[13312];
+  writeFile("happy1F\0", "overriding happy1 file, if this prints out, the file was successfully rewritten", 3);
+  readfile("happy1\0", buffer);
   printString(buffer);
 
   /*
