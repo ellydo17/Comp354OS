@@ -54,28 +54,41 @@ void main() {
   //tests for project 4
   
   //tests for "Writing a file"
+  /* For some reasons, if we do writeFile then readfile twice in a row, we cannot print out the message from the file using the second buffer. If we do each set one by one, the message is printed out"
+   */
   //if file does not exist
   /*
   char buffer[13312];
-  writeFile("testWF\0", "my writeFile is working", 3);
+  char buf[13312];
+  writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working", 3);
   readfile("testWF\0", buffer);
   printString(buffer);
+  readfile("testWF\0", buf);
+  printString(buf);
   */
+  
   //if file exists, overwrite
-  char buffer[13312];
-  writeFile("happy1\0", "overriding happy1 file, if this prints out, the file was successfully rewritten\0", 3);
+  //char buffer[13312];
+  char buffer2[13312];
+  char buffer3[13312];
+  /*
+  writeFile("happy1\0", "overriding happy1 file again, if this prints out, the file was successfully rewritten\0", 3);
   readfile("happy1\0", buffer);
   printString(buffer);
-
-  char buffer2[13312];
+  */
+  
   writeFile("fileNE\0", "creating a new file to test file doesnot exist\0" , 3);
+  /*
   readfile("fileNE\0", buffer2);
   printString(buffer2);
   printString("now we will change the content in the same file\0");
+  */
+  
   writeFile("fileNE\0", "overriding the same file to test if overriding part works\0" , 3);
-  readfile("fileNE\0", buffer2);
-  printString(buffer2);
-
+  readfile("fileNE\0", buffer3);
+  printString(buffer3);
+  
+  
   /*
   //load the new file called happy1.txt
   char buffer1[13312]; // the maximum size of a file
@@ -338,7 +351,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
     }
   }
 
-  printString("need to write sectors, works for both file exists and new empty entry\r\n\0");
+  //printString("need to write sectors, works for both file exists and new empty entry\r\n\0");
   while(diskMapIndex < 512 && sectorIndex < sectors) {
     if (diskMap[diskMapIndex] == 0x00) {
       /*
@@ -365,14 +378,14 @@ int writeFile(char *filename, char *buffer, int sectors) {
     }
     diskMapIndex++;
   }
-  printString("wrote to all sectors possible.\r\n\0");
+  //printString("wrote to all sectors possible.\r\n\0");
   
   //check if the diskMap had sufficient free sectors to use for the file
   if (totalSectorsWritten < sectors){
     printString("Insufficient free sectors in the diskMap\r\n\0");
     return -2;
   }
-  printString("DiskMap had sufficient free sectors.\r\n\0");
+  //printString("DiskMap had sufficient free sectors.\r\n\0");
   
   //set the remaining sectors (that are not needed for the file) as null
   while(sectorIndex < 26) {
@@ -386,13 +399,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
     sectorIndex++;
   }
 
-  printString("freed up remaining sectors and set all of them to null.\r\n\0");
+  //printString("freed up remaining sectors and set all of them to null.\r\n\0");
 
   //rewrite the diskMap and disk directory to the disk
   writeSector(diskMap, 1);
   writeSector(&diskDir, 2);
 
-  printString("wrote the diskmap and disk directory to the disk.\r\n\0");
+  //printString("wrote the diskmap and disk directory to the disk.\r\n\0");
 
   return totalSectorsWritten;
 }
@@ -506,9 +519,16 @@ int readfile(char *filename, char *buf){
   
   //read the file from disk sector
   readSector(&diskDir, 2);
+
+  //printString("running readFile method.\r\n\0");
   
   //helper method to find the file in disk
   fileIndex = findFile(filename, &diskDir);
+  /*
+  printString("The file index is \0");
+  printInt(fileIndex);
+  printString(".\r\n\0");
+  */
   
   //read contents from the file if file was found
   if(fileIndex != -1){ //file found
@@ -523,6 +543,10 @@ int readfile(char *filename, char *buf){
 
       //each sector has 512 bytes, so increment bufIndex by 512 bytes once a sector is read
       bufIndex = bufIndex + 512;
+      printString("Buf index is \0");
+      printInt(bufIndex);
+      printString(".\r\n\0");
+
     }
   }else{
     printString("Error: file not found\0");
