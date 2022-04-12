@@ -63,9 +63,18 @@ void main() {
   */
   //if file exists, overwrite
   char buffer[13312];
-  writeFile("happy1F\0", "overriding happy1 file, if this prints out, the file was successfully rewritten", 3);
+  writeFile("happy1\0", "overriding happy1 file, if this prints out, the file was successfully rewritten\0", 3);
   readfile("happy1\0", buffer);
   printString(buffer);
+
+  char buffer2[13312];
+  writeFile("fileNE\0", "creating a new file to test file doesnot exist\0" , 3);
+  readfile("fileNE\0", buffer2);
+  printString(buffer2);
+  printString("now we will change the content in the same file\0");
+  writeFile("fileNE\0", "overriding the same file to test if overriding part works\0" , 3);
+  readfile("fileNE\0", buffer2);
+  printString(buffer2);
 
   /*
   //load the new file called happy1.txt
