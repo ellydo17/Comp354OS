@@ -296,17 +296,21 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	fileIndex = entry;//set the value of this variable as the index of the empty entry
 	foundEmptyEntry = 1;
 
+	/*
 	printString("new fileIndex is \0");
 	printInt(fileIndex);
 	printString(".\r\n\0");
+	*/
 	
 	while(newFileNameIndex < 6) {
 	  diskDir.entries[fileIndex].name[newFileNameIndex] = filename[newFileNameIndex];
 	  newFileNameIndex++;
 	}
+	/*
 	printString("first char of the filename set in the new entry is \0");
 	printString(diskDir.entries[fileIndex].name[0]);
 	printString(".\r\n\0");
+	*/
 	break;
       }
       entry++;
@@ -318,16 +322,21 @@ int writeFile(char *filename, char *buffer, int sectors) {
     }
   }
 
+  printString("need to write sectors, works for both file exists and new empty entry\r\n\0");
   while(diskMapIndex < 512 && sectorIndex < sectors) {
     if (diskMap[diskMapIndex] == 0x00) {
+      printString("found empty sector in diskMap.\r\n\0");
       //access the old sector space and mark it as free in the diskMap
       sector = diskDir.entries[fileIndex].sectors[sectorIndex];
       diskMap[sector] = 0x00;
+      printString("freed up old space in diskmap.\r\n\0");
       //mark the new sector space as occupied and assign it to the file
       diskMap[diskMapIndex] = 0xFF; 
       diskDir.entries[fileIndex].sectors[sectorIndex] = diskMapIndex;
+      printString("marked the new sector as occupied.\r\n\0");
       //write a portion of the buffer to the new sector space
       writeSector(buffer + sectorIndex * 512, diskMapIndex);
+      printString("wrote to the new sector.\r\n\0");
       sector++;
       totalSectorsWritten++;
     }
