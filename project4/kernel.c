@@ -351,7 +351,8 @@ int writeFile(char *filename, char *buffer, int sectors) {
     printString("Insufficient free sectors in the diskMap\r\n\0");
     return -2;
   }
-
+  //printString("DiskMap had sufficient free sectors.\r\n\0");
+  
   //set the remaining sectors (that are not needed for the file) as null
   while(sectorIndex < 26) {
     //access the remaining sector spaces that were reserved for the file
@@ -364,9 +365,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
     sectorIndex++;
   }
 
+  //printString("freed up remaining sectors and set all of them to null.\r\n\0");
+
   //rewrite the diskMap and disk directory to the disk
   writeSector(diskMap, 1);
   writeSector(&diskDir, 2);
+
+  //printString("wrote the diskmap and disk directory to the disk.\r\n\0");
 
   return totalSectorsWritten;
 }
