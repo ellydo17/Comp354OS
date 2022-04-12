@@ -50,17 +50,15 @@ int deleteFile(char* filename);
 
 int writeFile(char *filename, char *buffer, int sectors);
 
-int availableSpace(char diskMap[]);
-
 void main() {
   //tests for project 4
   
   //tests for "Writing a file"
-  /*
+  
   char buffer[13312];
   writeFile("testWF\0", "my writeFile is working", 3);
   readfile("testWF\0", buffer);
-  */
+  
 
   /*
   //load the new file called happy1.txt
@@ -87,7 +85,7 @@ void main() {
   */
   
   //tests for "Deleting a File"
-  
+  /*
   //load new file first, will delete it later
   char buffer[13312]; // the maximum size of a file
   makeInterrupt21();
@@ -95,7 +93,7 @@ void main() {
   interrupt(0x21, 0x03, "delete\0", buffer, 0);
   //print out the file
   interrupt(0x21, 0x00, buffer, 0, 0);
-
+  */
   //delete the file "fileToDelete"
   /*
   interrupt(0x21, 0x07, "fileToDelete\0", 0, 0);
@@ -112,11 +110,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  
+  /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  
+  */
   
   //tests for "Terminating a User Program"
   /*
@@ -264,232 +262,80 @@ void main() {
  */
 
 int writeFile(char *filename, char *buffer, int sectors) {
-  int i = 0;
-  int fileIndex = -1;
-  int j = 0;
-  int sectorInEntry = 0;
-  int availableSpaceIndex = -1;
-  int prevOccupiedSector;
-  int totalSectorsWritten;
-  int remainingSectorsIndex;
-  
-  struct directory diskDir;
+  int entry, newFileNameIndex, diskMapIndex, totalSectorsWritten, sector;
+  int sectorIndex = 0;
+  int foundEmptyEntry = -1;
+
   char diskMap[512];
-  
-  //read the file from disk sector
-  readSector(&diskMap,1);
+  struct directory diskDir;
+
+  //read the file from disk directory and disk map 
   readSector(&diskDir, 2);
-  
+  readSector(&diskMap, 1);
+
   //helper method to find the file in disk
   fileIndex = findFile(filename, &diskDir);
 
-  /*
-  printString("name of new file given = \0");
-  printString(filename);
-  printString("\r\n\0");
-
-  printString("buffer is \0");
-  printString(buffer);
-  printString("\r\n\0");
-
-  printString("no. of sectors = \0");
-  printInt(sectors);
-  printString("\r\n\0");
-  */
-  
-  if(fileIndex != -1){ //file found, we need to overwrite the sectors of the previous file
-
-    while (availableSpace(diskMap) != -1 && sectorInEntry < sectors) {
-	  printString("we still need to fill in sectors and diskmap has space available\r\n\0");
-
-	  //find the availableSpace and set it to occupied in diskmap
-	  availableSpaceIndex = availableSpace(diskMap);
-	  diskMap[availableSpaceIndex] = 0xFF;
-
-	  printString("set the available space as occupied in diskMap\r\n\0");
-	  
-	  //get the previous occupied space and set it to free in diskmap
-	  prevOccupiedSector = diskDir.entries[fileIndex].sectors[sectorInEntry];
-	  diskMap[prevOccupiedSector] = 0x00;
-
-	  printString("set the previously occupied space as available in diskMap\r\n\0");
-	  
-	  //write the content to the new sector we chose (the recent available space)
-	  diskDir.entries[fileIndex].sectors[sectorInEntry] = availableSpaceIndex;
-	  
-	  printString("placed the available sector in the empty entry\r\n\0");
-	  
-	  writeSector(&buffer[sectorInEntry*512], availableSpaceIndex);
-	  sectorInEntry++;
-	  totalSectorsWritten++;
-
-	  printString("wrote from the buffer to that available space. Now, the total secotrs written is \0");
-	  printInt(totalSectorsWritten);
-	  printString("\r\n\0");
-	}
-
-	for(remainingSectorsIndex = sectorInEntry; remainingSectorsIndex < 26; remainingSectorsIndex++) {
-	   diskDir.entries[fileIndex].sectors[remainingSectorsIndex] = 0x00;
-	}
-
-	writeSector(diskMap, 1);
-	writeSector(&diskDir, 2);
-
-	if (totalSectorsWritten != sectors) {
-	  printString("the disk map does not contain enough empty sectors\r\n\0");
-	  return -2; //the disk map does not contain enough empty sectors 
-	}
-
-	return totalSectorsWritten;
+  if(fileIndex == -1){ //file not found
+    //look for an empty space in the directory to write the new file there
+    while(entry < 16) {
+      if(diskDir.entries[entry].name[0] == 0x00) {//found empty entry
+	fileIndex = entry;//set the value of this variable as the index of the empty entry
+	foundEmptyEntry = 1;
 	
-  
-  } else { //file not found
-    
-    printString("no such file exists, we are now looking for a free entry space in the diskDir\r\n\0");
-    
-    //find an empty entry in the Disk Directory
-    while(i < 16) {
-
-      /*
-      printString("checking if entry \0");
-      printInt(i);
-      printString(" is empty. The first char of this entry is \0");
-      printString(diskDir.entries[i].name[0]);
-      printString(".\r\n\0");
-      */
-      
-      if (diskDir.entries[i].name[0] == 0x00) {//found a empty entry
-	printString("found an empty entry\r\n\0");
-	
-	while (j < 6 && filename[j] != '\0') {
-	  diskDir.entries[i].name[j] = filename[j];
-	  j++;
+	while(newFileNameIndex < 6) {
+	  diskDir.entries[fileIndex].name[newFileNameIndex] = filename[newFileNameIndex];
 	}
-	
-	/*
-	printString("name of new file put in entry = \0");
-	printString(diskDir.entries[i].name);
-	printString("\r\n\0");
-	*/
-	
-	fileIndex = i;
-
-	/*
-	printString("index of empty entry where we edited filename is \0");
-	printInt(i);
-	printString("\r\n\0");
-	*/
-
-	while (availableSpace(diskMap) != -1 && sectorInEntry < sectors) {
-	  printString("we still need to fill in sectors and diskmap has space available\r\n\0");
-
-	  //find the availableSpace and set it to occupied in diskmap
-	  availableSpaceIndex = availableSpace(diskMap);
-	  diskMap[availableSpaceIndex] = 0xFF;
-
-	  printString("set the available space as occupied in diskMap\r\n\0");
-	  
-	  //get the previous occupied space and set it to free in diskmap
-	  prevOccupiedSector = diskDir.entries[fileIndex].sectors[sectorInEntry];
-	  diskMap[prevOccupiedSector] = 0x00;
-
-	  printString("set the previously occupied space as available in diskMap\r\n\0");
-	  
-	  //write the content to the new sector we chose (the recent available space)
-	  diskDir.entries[fileIndex].sectors[sectorInEntry] = availableSpaceIndex;
-	  
-	  printString("placed the available sector in the empty entry\r\n\0");
-	  
-	  writeSector(&buffer[sectorInEntry*512], availableSpaceIndex);
-	  sectorInEntry++;
-	  totalSectorsWritten++;
-
-	  printString("wrote from the buffer to that available space. Now, the total secotrs written is \0");
-	  printInt(totalSectorsWritten);
-	  printString("\r\n\0");
-	}
-
-	for(remainingSectorsIndex = sectorInEntry; remainingSectorsIndex < 26; remainingSectorsIndex++) {
-	   diskDir.entries[fileIndex].sectors[remainingSectorsIndex] = 0x00;
-	}
-
-	writeSector(diskMap, 1);
-	writeSector(&diskDir, 2);
-
-	if (totalSectorsWritten != sectors) {
-	  printString("the disk map does not contain enough empty sectors\r\n\0");
-	  return -2; //the disk map does not contain enough empty sectors 
-	}
-
-	return totalSectorsWritten;
-      } else {//didn't find a new entry, so keep looking
-	i++;
-      }     
+	break;
+      }
+      entry++;
     }
 
-    printString("couldn't find any empty entries\r\n\0");
-    //no empty entries in the entire disk directory
-    return -1;
-  }
-}
-
-/*
- * Return the index of the first available space in the Disk Map
- */
-
-int availableSpace(char diskMap[]) {
-  int addressAvail = 0;
-
-  while (addressAvail < 512) {
-    if (diskMap[addressAvail] == 0x00) { //available space found
-      return addressAvail;
-    } else {
-      addressAvail++;
+    if(foundEmptyEntry == -1){
+      printString("No empty space in the disk directory.\r\n\0");
+      return -1;
     }
   }
-  return -1;
-}
-  
-/*
- * Deleting a File
- */
-//kind of completed part 2 of the method (for diskDir), still need to do part 1 where we will be using diskmap
-int deleteFile(char* filename){
-  int fileIndex = -1;
-  int i = 0;
-  int sector;
 
-  struct directory diskDir;
-  char diskMap[512];
-  //read the file from disk sector
+  while(diskMapIndex < 512 && sectorIndex < sectors) {
+    if (diskMap[diskMapIndex] == 0x00) {
+      //access the old sector space and mark it as free in the diskMap
+      sector = diskDir.entries[fileIndex].sectors[sectorIndex];
+      diskMap[sector] = 0x00;
+      //mark the new sector space as occupied and assign it to the file
+      diskMap[diskMapIndex] = 0xFF; 
+      diskDir.entries[fileIndex].sectors[sectorIndex] = diskMapIndex;
+      //write a portion of the buffer to the new sector space
+      writeSector(buffer + sectorIndex * 512, diskMapIndex);
+      sector++;
+      totalSectorsWritten++;
+    }
+    diskMapIndex++;
+  }
 
-  readSector(&diskMap,1);
-  readSector(&diskDir, 2);
-  
-  //helper method to find the file in disk
-  fileIndex = findFile(filename, &diskDir);
+  //check if the diskMap had sufficient free sectors to use for the file
+  if (totalSectorsWritten < sectors){
+    printString("Insufficient free sectors in the diskMap\r\n\0");
+    return -2;
+  }
 
-  //if file is found, all sectors allocated to the file must be marked as free and thee first char og the filename must also be set to 0x00
-  if(fileIndex != -1){ //file found
-    
-    while(diskDir.entries[fileIndex].sectors[i] != 0x00 && i < 26) {
-      sector = diskDir.entries[fileIndex].sectors[i];
-      i++;
-
-      //free up space for that particular sector
+  //set the remaining sectors (that are not needed for the file) as null
+  while(sectorIndex < 26) {
+    //access the remaining sector spaces that were reserved for the file
+    //if there were any and set it as free in the diskMap
+    if(diskDir.entries[fileIndex].sectors[sectorIndex] != 0x00){
+      sector = diskDir.entries[fileIndex].sectors[sectorIndex];
       diskMap[sector] = 0x00;
     }
-    
-    //replace first char of filename if file was found
-    diskDir.entries[fileIndex].name[0] = 0x00;
-    writeSector(diskMap, 1);
-    writeSector(&diskDir, 2);
-  }else{
-    printString("Error: file not found\0");
-    return -1;
+    diskDir.entries[fileIndex].sectors[sectorIndex] = 0x00;
+    sectorIndex++;
   }
 
-  return 1;
+  //rewrite the diskMap and disk directory to the disk
+  writeSector(diskMap, 1);
+  writeSector(&diskDir, 2);
+
+  return totalSectorsWritten;
 }
 
 /*
