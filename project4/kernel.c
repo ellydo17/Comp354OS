@@ -262,7 +262,7 @@ void main() {
  */
 
 int writeFile(char *filename, char *buffer, int sectors) {
-  int entry, newFileNameIndex, diskMapIndex, totalSectorsWritten, sector;
+  int fileIndex, entry, newFileNameIndex, diskMapIndex, totalSectorsWritten, sector;
   int sectorIndex = 0;
   int foundEmptyEntry = -1;
 
