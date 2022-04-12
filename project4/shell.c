@@ -64,6 +64,22 @@ void main() {
       //have to add write file here
       
       //command is invalid 
+    }
+
+    //command is "copy"
+    else if (command[0] == 'c' && command[1] == 'o'&& command[2] == 'p' && command[3] == 'y' && command[4] == ' ') {
+      printString("Command is copy.\r\n\0");
+
+      //from index 5, iterate through the remaining characters until we find a space, say we found space at index n, src = command+5 to command+(n-1), dest = command+n+1
+      //read file (src)
+      //write file (dest)
+
+      //iif statements to recognize if it was successful or not
+      //readfile = -1 "file not found"
+      //writefile = -1 "Disk directory is full"
+      //writefile = -2 "Disk is full"
+      
+      //command is invalid 
     }else { 
       printString("Unrecognized command.\r\n\0");
     }
