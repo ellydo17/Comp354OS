@@ -275,21 +275,23 @@ int writeFile(char *filename, char *buffer, int sectors) {
   readSector(&diskDir, 2);
   readSector(&diskMap, 1);
 
-  printString("read the diskmap and disk directory.\r\n\0");
+  // printString("read the diskmap and disk directory.\r\n\0");
 
   //helper method to find the file in disk
   fileIndex = findFile(filename, &diskDir);
 
+  /*
   printString("checked the fileIndex. It is \0");
   printInt(fileIndex);
   printString(".\r\n\0");
+  */
 
   if(fileIndex == -1){ //file not found
-    printString("file not found, looking for an empty entry\r\n\0");
+    //printString("file not found, looking for an empty entry\r\n\0");
     //look for an empty space in the directory to write the new file there
     while(entry < 16) {
       if(diskDir.entries[entry].name[0] == 0x00) {//found empty entry
-	printString("found empty entry\r\n\0");
+	//printString("found empty entry\r\n\0");
 	
 	fileIndex = entry;//set the value of this variable as the index of the empty entry
 	foundEmptyEntry = 1;
@@ -300,6 +302,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	
 	while(newFileNameIndex < 6) {
 	  diskDir.entries[fileIndex].name[newFileNameIndex] = filename[newFileNameIndex];
+	  newFileNameIndex++;
 	}
 	printString("first char of the filename set in the new entry is \0");
 	printString(diskDir.entries[fileIndex].name[0]);
