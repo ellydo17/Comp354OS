@@ -17,6 +17,7 @@ void main() {
   int sectorsRead;
   int sectorsWritten;
   int j=0;
+  char buffer2[13312];//will delete later, testing
   
   while(1){
     //Print out shell command as "Shell> "
@@ -94,19 +95,24 @@ void main() {
       iCommand++;
 
       //print out the source filename
+      /*
       printString("originally, src is \0");
       printString(src);
       printString(".\r\n\0");
+      */
 
       //read the source file
       sectorsRead = readfile(src, buffer);
       printString("Readfile method has been called and sectors read.\r\n\0");
+      printString("buffer = \0");
+      printString(buffer);
+      printString(".\r\n\0");
 
       //if statements to recognize if file read was successful or not
       if (sectorsRead == -1) {
 	printString("File not found.\0");
       } else { //write the source file into the destination file
-	printString("source file was found.");
+	printString("Source file was found.\r\n\0");
 
 	//get the filename for the destination file
 	while(command[iCommand] != '\0') {
@@ -117,14 +123,22 @@ void main() {
 	dest[iDest] = 0x00;
 
 	//print out the destination filename
+	/*
 	printString("dest is \0");
 	printString(dest);
 	printString(".\r\n\0");
+	*/
 
 	//write to the destination file
 	sectorsWritten = writeFile(dest, buffer, sectorsRead);
 
-	printString("sectors written is \r\n\0");
+	//delete later, testing
+	readfile(src, buffer2);
+	printString("buffer2 = \0");
+	printString(buffer2);
+	printString(".\r\n\0");
+
+	printString("WriteFile method has been called and sectors have been written.\r\n\0");
 
 	//check if write file was possible
 	if (sectorsWritten == -1) {
