@@ -87,23 +87,23 @@ void main() {
       iDest = 0;
 
       for(j=0; j<6; j++){
-	src[j] = 0x00;
-	dest[j] = 0x00;
+	src[j] = '\0';
+	dest[j] = '\0';
       }
       
-      while(command[iCommand] != ' ' || iSrc < 6) {
+      while(command[iCommand] != ' ') {
 	src[iSrc] = command[iCommand];
 	iSrc++;
 	iCommand++;
       }
-      src[iSrc]=0x00;
+      src[iSrc]='\0';
       iCommand++;
 
       printString("originally, src is \0");
       printString(src);
       printString(".\r\n\0");
 
-      while(command[iCommand] != 0x00 || iDest < 6) {
+      while(command[iCommand] != '\0') {
 	dest[iDest] = command[iCommand];
 	iDest++;
 	iCommand++;
@@ -119,7 +119,7 @@ void main() {
 
       //read the source file
       sectorsRead = readfile(src, buffer);
-      printString("sectors read is \r\n\0");
+      printString("Readfile method has been called and sectors read.\r\n\0");
       
       //if statements to recognize if file read was successful or not
       if (sectorsRead == -1) {
