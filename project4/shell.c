@@ -93,6 +93,10 @@ void main() {
       src[iSrc]=0x00;
       iCommand++;
 
+      printString("originally, src is \0");
+      printString(src);
+      printString(".\r\n\0");
+
       while(command[iCommand] != 0x00) {
 	dest[iDest] = command[iCommand];
 	iDest++;
@@ -100,7 +104,7 @@ void main() {
       }
       dest[iDest]=0x00;
 
-      printString("src is \0");
+      printString("src after reading dest is \0");
       printString(src);
       printString(".\r\n\0");
       printString("dest is \0");
