@@ -12,10 +12,11 @@ void main() {
   int iCommand;
   int iSrc;
   int iDest;
-  char* src;
-  char* dest;
+  char src[6];
+  char dest[6];
   int sectorsRead;
   int sectorsWritten;
+  int j=0;
   
   while(1){
     //Print out shell command as "Shell> "
@@ -84,8 +85,13 @@ void main() {
       iCommand = 5;
       iSrc = 0;
       iDest = 0;
+
+      for(j=0; j<6; j++){
+	src[j] = 0x00;
+	dest[j] = 0x00;
+      }
       
-      while(command[iCommand] != ' ') {
+      while(command[iCommand] != ' ' || iSrc < 6) {
 	src[iSrc] = command[iCommand];
 	iSrc++;
 	iCommand++;
@@ -97,7 +103,7 @@ void main() {
       printString(src);
       printString(".\r\n\0");
 
-      while(command[iCommand] != 0x00) {
+      while(command[iCommand] != 0x00 || iDest < 6) {
 	dest[iDest] = command[iCommand];
 	iDest++;
 	iCommand++;
