@@ -109,9 +109,7 @@ void main() {
 
       //read the source file
       sectorsRead = readfile(src, buffer);
-      printString("sectors read is \0");
-      printInt(sectorsRead);
-      printString(".\r\n\0");
+      printString("sectors read is \r\n\0");
       
       //if statements to recognize if file read was successful or not
       if (sectorsRead == -1) {
@@ -120,9 +118,7 @@ void main() {
 	printString("source file was found.");
 	sectorsWritten = writeFile(dest, buffer, sectorsRead);
 
-	printString("sectors written is \0");
-	printInt(sectorsWritten);
-	printString(".\r\n\0");
+	printString("sectors written is \r\n\0");
 	
 	if (sectorsWritten == -1) {
 	  printString("Disk directory is full.\r\n\0");
