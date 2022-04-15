@@ -59,35 +59,11 @@ void main() {
   //if file does not exist
   /*
   char buffer[13312];
-  char buf[13312];
+  writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file", 3);
   writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working", 3);
   readfile("testWF\0", buffer);
   printString(buffer);
-  readfile("testWF\0", buf);
-  printString(buf);
   */
-  
-  //if file exists, overwrite
-  //char buffer[13312];
-  char buffer2[13312];
-  char buffer3[13312];
-  /*
-  writeFile("happy1\0", "overriding happy1 file again, if this prints out, the file was successfully rewritten\0", 3);
-  readfile("happy1\0", buffer);
-  printString(buffer);
-  */
-  
-  writeFile("fileNE\0", "creating a new file to test file doesnot exist\0" , 3);
-  /*
-  readfile("fileNE\0", buffer2);
-  printString(buffer2);
-  printString("now we will change the content in the same file\0");
-  */
-  
-  writeFile("fileNE\0", "overriding the same file to test if overriding part works\0" , 3);
-  readfile("fileNE\0", buffer3);
-  printString(buffer3);
-  
   
   /*
   //load the new file called happy1.txt
@@ -139,11 +115,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  /*
+  
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  */
+  
   
   //tests for "Terminating a User Program"
   /*
