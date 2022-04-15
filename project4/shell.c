@@ -103,6 +103,10 @@ void main() {
       printString(src);
       printString(".\r\n\0");
 
+      //read the source file
+      sectorsRead = readfile(src, buffer);
+      printString("Readfile method has been called and sectors read.\r\n\0");
+
       while(command[iCommand] != '\0') {
 	dest[iDest] = command[iCommand];
 	iDest++;
@@ -116,10 +120,6 @@ void main() {
       printString("dest is \0");
       printString(dest);
       printString(".\r\n\0");
-
-      //read the source file
-      sectorsRead = readfile(src, buffer);
-      printString("Readfile method has been called and sectors read.\r\n\0");
       
       //if statements to recognize if file read was successful or not
       if (sectorsRead == -1) {
