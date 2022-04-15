@@ -8,6 +8,14 @@ void main() {
   char command[80];
   char buffer[13312]; //buffer stores the contents from the file when file is read/program is executed
   int flag = 0; //true if file/program is found and can be executed
+
+  int iCommand;
+  int iSrc;
+  int iDest;
+  char* src;
+  char* dest;
+  int sectorsRead;
+  int sectorsWritten;
   
   while(1){
     //Print out shell command as "Shell> "
@@ -73,12 +81,57 @@ void main() {
       //from index 5, iterate through the remaining characters until we find a space, say we found space at index n, src = command+5 to command+(n-1), dest = command+n+1
       //read file (src)
       //write file (dest)
-
-      //iif statements to recognize if it was successful or not
-      //readfile = -1 "file not found"
-      //writefile = -1 "Disk directory is full"
-      //writefile = -2 "Disk is full"
+      iCommand = 5;
+      iSrc = 0;
+      iDest = 0;
       
+      while(command[iCommand] != ' ') {
+	src[iSrc] = command[iCommand];
+	iSrc++;
+	iCommand++;
+      }
+      src[iSrc]=0x00;
+      iCommand++;
+
+      while(command[iCommand] != 0x00) {
+	dest[iDest] = command[iCommand];
+	iDest++;
+	iCommand++;
+      }
+      dest[iDest]=0x00;
+
+      printString("src is \0");
+      printString(src);
+      printString(".\r\n\0");
+      printString("dest is \0");
+      printString(dest);
+      printString(".\r\n\0");
+
+      //read the source file
+      sectorsRead = readfile(src, buffer);
+      printString("sectors read is \0");
+      printInt(sectorsRead);
+      printString(".\r\n\0");
+      
+      //if statements to recognize if file read was successful or not
+      if (sectorsRead == -1) {
+	printString("File not found.\0");
+      } else { //write the source file into the destination file
+	printString("source file was found.");
+	sectorsWritten = writeFile(dest, buffer, sectorsRead);
+
+	printString("sectors written is \0");
+	printInt(sectorsWritten);
+	printString(".\r\n\0");
+	
+	if (sectorsWritten == -1) {
+	  printString("Disk directory is full.\r\n\0");
+	} else if (sectorsWritten == -2) {
+	  printString("Disk is full.\r\n\0");
+	}
+	
+	printString("Successfully copied source file to destination.\r\n\0");
+      }
       //command is invalid 
     }else { 
       printString("Unrecognized command.\r\n\0");
