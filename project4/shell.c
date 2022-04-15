@@ -54,8 +54,6 @@ void main() {
       } else {
 	printString("Program was executed.\r\n\0");
       }
-
-      //command is invalid 
     }
     
       //command is "delete"
@@ -69,10 +67,6 @@ void main() {
       } else {//file was found
 	printString("Successfully deleted file.\r\n\0");
       }
-
-      //have to add write file here
-      
-      //command is invalid 
     }
 
     //command is "copy"
@@ -80,25 +74,26 @@ void main() {
       printString("Command is copy.\r\n\0");
 
       //from index 5, iterate through the remaining characters until we find a space, say we found space at index n, src = command+5 to command+(n-1), dest = command+n+1
-      //read file (src)
-      //write file (dest)
       iCommand = 5;
       iSrc = 0;
       iDest = 0;
 
-      for(j=0; j<6; j++){
+      //initialize the source and destination filenames with null characters
+      for(j = 0; j < 6; j++){
 	src[j] = '\0';
 	dest[j] = '\0';
       }
-      
+
+      //get the filename for the source file
       while(command[iCommand] != ' ') {
 	src[iSrc] = command[iCommand];
 	iSrc++;
 	iCommand++;
       }
-      src[iSrc]='\0';
+      src[iSrc] = '\0';
       iCommand++;
 
+      //print out the source filename
       printString("originally, src is \0");
       printString(src);
       printString(".\r\n\0");
@@ -107,29 +102,31 @@ void main() {
       sectorsRead = readfile(src, buffer);
       printString("Readfile method has been called and sectors read.\r\n\0");
 
-      while(command[iCommand] != '\0') {
-	dest[iDest] = command[iCommand];
-	iDest++;
-	iCommand++;
-      }
-      dest[iDest]=0x00;
-
-      printString("src after reading dest is \0");
-      printString(src);
-      printString(".\r\n\0");
-      printString("dest is \0");
-      printString(dest);
-      printString(".\r\n\0");
-      
       //if statements to recognize if file read was successful or not
       if (sectorsRead == -1) {
 	printString("File not found.\0");
       } else { //write the source file into the destination file
 	printString("source file was found.");
+
+	//get the filename for the destination file
+	while(command[iCommand] != '\0') {
+	  dest[iDest] = command[iCommand];
+	  iDest++;
+	  iCommand++;
+	}
+	dest[iDest] = 0x00;
+
+	//print out the destination filename
+	printString("dest is \0");
+	printString(dest);
+	printString(".\r\n\0");
+
+	//write to the destination file
 	sectorsWritten = writeFile(dest, buffer, sectorsRead);
 
 	printString("sectors written is \r\n\0");
-	
+
+	//check if write file was possible
 	if (sectorsWritten == -1) {
 	  printString("Disk directory is full.\r\n\0");
 	} else if (sectorsWritten == -2) {
@@ -138,8 +135,9 @@ void main() {
 	
 	printString("Successfully copied source file to destination.\r\n\0");
       }
-      //command is invalid 
-    }else { 
+ 
+    //command is invalid 
+    } else {
       printString("Unrecognized command.\r\n\0");
     }
     
