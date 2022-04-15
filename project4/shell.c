@@ -120,7 +120,7 @@ void main() {
 	  iDest++;
 	  iCommand++;
 	}
-	dest[iDest] = 0x00;
+	dest[iDest] = '\0';
 
 	//print out the destination filename
 	/*
@@ -132,8 +132,12 @@ void main() {
 	//write to the destination file
 	sectorsWritten = writeFile(dest, buffer, sectorsRead);
 
+	printString("dest is \0");
+	printString(dest);
+	printString(".\r\n\0");
+	
 	//delete later, testing
-	readfile(src, buffer2);
+	readfile(dest, buffer2);
 	printString("buffer2 = \0");
 	printString(buffer2);
 	printString(".\r\n\0");

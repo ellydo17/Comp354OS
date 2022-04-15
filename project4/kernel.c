@@ -56,7 +56,16 @@ void main() {
   //tests for "Writing a file"
   /* For some reasons, if we do writeFile then readfile twice in a row, we cannot print out the message from the file using the second buffer. If we do each set one by one, the message is printed out"
    */
-  //if file does not exist
+  /*
+  char buffer[13312];
+  char buffer2[13312];
+  readfile("happy1\0", buffer);
+  printString(buffer);
+  writeFile("happy2\0", buffer, 3);
+  readfile("happy2\0", buffer2);
+  printString(buffer2);
+  */
+
   /*
   char buffer[13312];
   writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file", 3);
