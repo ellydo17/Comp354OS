@@ -4,20 +4,21 @@ char* getcommand(char* line);
 char* getfilename(char* line);
 int compareCommand(char* cmd1, char* cmd2);
 
+typedef char byte;
+
+struct dirEntry{
+  char name[6];
+  byte sectors[26];
+};
+
+struct directory{
+  struct dirEntry entries[16];
+};
+
 void main() {
   char command[80];
   char buffer[13312]; //buffer stores the contents from the file when file is read/program is executed
   int flag = 0; //true if file/program is found and can be executed
-
-  int iCommand;
-  int iSrc;
-  int iDest;
-  char src[6];
-  char dest[6];
-  int sectorsRead;
-  int sectorsWritten;
-  int j=0;
-  char buffer2[13312];//will delete later, testing
   
   while(1){
     //Print out shell command as "Shell> "
@@ -72,6 +73,16 @@ void main() {
 
     //command is "copy"
     else if (command[0] == 'c' && command[1] == 'o'&& command[2] == 'p' && command[3] == 'y' && command[4] == ' ') {
+      int iCommand;
+      int iSrc;
+      int iDest;
+      char src[6];
+      char dest[6];
+      int sectorsRead;
+      int sectorsWritten;
+      int j=0;
+      char buffer2[13312];//will delete later, testing
+      
       printString("Command is copy.\r\n\0");
 
       //from index 5, iterate through the remaining characters until we find a space, say we found space at index n, src = command+5 to command+(n-1), dest = command+n+1
@@ -153,11 +164,25 @@ void main() {
 	
 	printString("Successfully copied source file to destination.\r\n\0");
       }
- 
+    } else if (command[0] == 'd' && command[1] == 'i'&& command[2] == 'r' && command[3] == '\0') {
+      int iDir;
+      struct directory diskDir;
+      char* buffer;
+      
+      readSector(&dir, 2);
+
+      while(iDir < 16) {
+	if (diskDir.entries[iDir].name[0] != '\0') {
+	  buffer = dir.entries[iDir].name;
+	  buffer[6] = '\0';
+	  printString(buf);
+	  printString("\r\n\0");
+	}
+	iDir++;
+      }
     //command is invalid 
     } else {
       printString("Unrecognized command.\r\n\0");
-    }
-    
+    }  
   }
 }
