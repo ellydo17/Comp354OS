@@ -52,6 +52,11 @@ int writeFile(char *filename, char *buffer, int sectors);
 
 void main() {
   //tests for project 4
+  /*
+  char buffer[13312];
+  readfile("apple\0", buffer);
+  printString(buffer);
+  */
   
   //tests for "Writing a file"
   /* For some reasons, if we do writeFile then readfile twice in a row, we cannot print out the message from the file using the second buffer. If we do each set one by one, the message is printed out"
