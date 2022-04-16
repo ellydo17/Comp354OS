@@ -174,11 +174,7 @@ void main() {
       readSector(&diskDir, 2);
 
       while(iDir < 16) {
-	printString("cur dir index = \0");
-	printInt(iDir);
-	printString(".\r\n\0");
 	if (diskDir.entries[iDir].name[0] != '\0') {
-	  printString("this dir index is not empty.\r\n\0");
 	  buffer = diskDir.entries[iDir].name;
 	  buffer[6] = '\0';
 	  printString(buffer);
