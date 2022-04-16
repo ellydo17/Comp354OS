@@ -701,6 +701,8 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     return 1;
   }else if (ax == 0x01) { //0x01 specifies that we need to read a string (read characters until ENTER is pressed)
     return readString(bx);
+  }else if (ax == 0x02) { //0x02 specifies that we need to read a sector
+    return readSector(bx,cx);
   }else if (ax == 0x03) { //0x03 specifies that we need to read the contents of a file into a buffer (project 3)
     return readfile(bx,cx);
   }else if (ax == 0x04) { //0x04 specifies that we need to load a program into memory annd execute it (project 3)

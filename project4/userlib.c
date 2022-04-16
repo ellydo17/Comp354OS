@@ -22,6 +22,11 @@ int readfile(char *filename, char *buf) {
   return interrupt(0x21, 0x03, filename, buf, 0);
 }
 
+//readSector
+int readSector(char *buf, int absSector){
+  return interrupt(0x21, 0x02, buf, absSector, 0);
+}
+
 //executeProgram
 int executeProgram(char *name, int segment) {
   return interrupt(0x21, 0x04, name, segment, 0);

@@ -13,6 +13,9 @@ int readString(char *buf);
 //readfile
 int readfile(char *filename, char *buf);
 
+//readSector
+int readSector(char *buf, int absSector);
+
 //executeProgram
 int executeProgram(char *name, int segment);
 
