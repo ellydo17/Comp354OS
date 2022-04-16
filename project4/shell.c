@@ -175,7 +175,7 @@ void main() {
 
       while(iDir < 16) {
 	printString("cur dir index = \0");
-	printString(iDir);
+	printInt(iDir);
 	printString(".\r\n\0");
 	if (diskDir.entries[iDir].name[0] != '\0') {
 	  printString("this dir index is not empty.\r\n\0");

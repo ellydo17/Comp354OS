@@ -46,3 +46,8 @@ int deleteFile(char* filename){
 int writeFile(char *filename, char *buffer, int sectors){
   return interrupt(0x21, 0x08, filename, buffer, sectors);
 }
+
+//printInt
+int printInt(int num){
+  return interrupt(0x21, 0x15, num, 0, 0);
+}

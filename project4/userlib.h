@@ -28,5 +28,8 @@ int deleteFile(char* filename);
 //writeFile
 int writeFile(char *filename, char *buffer, int sectors);
 
+//printInt
+int printInt(int num);
+
 #endif
   
