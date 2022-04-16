@@ -547,10 +547,11 @@ int readfile(char *filename, char *buf){
 
       //each sector has 512 bytes, so increment bufIndex by 512 bytes once a sector is read
       bufIndex = bufIndex + 512;
+      /*
       printString("Buf index is \0");
       printInt(bufIndex);
       printString(".\r\n\0");
-
+      */
     }
   }else{
     printString("Error: file not found\0");
