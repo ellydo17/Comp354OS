@@ -330,26 +330,11 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	printString("new fileIndex is \0");
 	printInt(fileIndex);
 	printString(".\r\n\0");
-	/*
-	//get the length of the new filename
-	while(filename[newFileNameLength]!="\0" && newFileNameLength < 6){
-	  newFileNameLength++;
-	}
-	
-	for (newFileNameIndex=0; newFileNameIndex<newFileNameLength; newFileNameIndex++) {
-	  //testBuf[newFileNameIndex]=filename[newFileNameIndex];
-	  diskDir.entries[fileIndex].name[newFileNameIndex] = filename[newFileNameIndex];
-	  newFileNameIndex++;
-	}
 
-	if(newFileNameLength<6){
-	  for(newFileNameIndex=newFileNameLength; newFileNameIndex < 6; newFileNameIndex++){
-	    //testBuf[newFileNameIndex]=0x00;
-	     diskDir.entries[fileIndex].name[newFileNameIndex] = '\0';
-	     newFileNameIndex++;
-	  }
-	}
-	*/
+	//------>get filename length
+	//if filename length > 6, reduce filename length to 6
+	//while filenameindex < filnameLength
+	
 	while(newFileNameIndex<6){
 	  diskDir.entries[fileIndex].name[newFileNameIndex] = filename[newFileNameIndex];
 	  newFileNameIndex++;
