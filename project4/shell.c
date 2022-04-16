@@ -165,14 +165,20 @@ void main() {
 	printString("Successfully copied source file to destination.\r\n\0");
       }
     } else if (command[0] == 'd' && command[1] == 'i'&& command[2] == 'r' && command[3] == '\0') {
-      int iDir;
+      int iDir = 0;
       struct directory diskDir;
       char* buffer;
+
+      printString("Command is dir.\r\n\0");
       
       readSector(&diskDir, 2);
 
       while(iDir < 16) {
+	printString("cur dir index = \0");
+	printString(iDir);
+	printString(".\r\n\0");
 	if (diskDir.entries[iDir].name[0] != '\0') {
+	  printString("this dir index is not empty.\r\n\0");
 	  buffer = diskDir.entries[iDir].name;
 	  buffer[6] = '\0';
 	  printString(buffer);
