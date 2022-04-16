@@ -169,13 +169,13 @@ void main() {
       struct directory diskDir;
       char* buffer;
       
-      readSector(&dir, 2);
+      readSector(&diskDir, 2);
 
       while(iDir < 16) {
 	if (diskDir.entries[iDir].name[0] != '\0') {
-	  buffer = dir.entries[iDir].name;
+	  buffer = diskDir.entries[iDir].name;
 	  buffer[6] = '\0';
-	  printString(buf);
+	  printString(buffer);
 	  printString("\r\n\0");
 	}
 	iDir++;
