@@ -293,7 +293,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
 
   //read the file from disk directory and disk map 
   readSector(&diskDir, 2);
-  readSector(&diskMap, 1);
+  readSector(diskMap, 1);
 
   // printString("read the diskmap and disk directory.\r\n\0");
 
