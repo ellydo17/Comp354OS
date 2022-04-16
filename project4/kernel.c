@@ -279,6 +279,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
   int fileIndex, entry, newFileNameIndex, diskMapIndex, totalSectorsWritten, sector;
   int sectorIndex = 0;
   int foundEmptyEntry = -1;
+  int newFileNameLength = 0;
 
   char diskMap[512];
   struct directory diskDir;
@@ -315,11 +316,24 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	printInt(fileIndex);
 	printString(".\r\n\0");
 	*/
+	//get the length of the new filename
+	while(filename[newFileNameLength]!="\0" && newFileNameLength <= 6){
+	  newFileNameLength++;
+	}
 	
-	while(newFileNameIndex < 6) {
+	for (newFileNameIndex=0; newFileNameIndex<newFileNameLength; newFileNameIndex++) {
 	  diskDir.entries[fileIndex].name[newFileNameIndex] = filename[newFileNameIndex];
 	  newFileNameIndex++;
 	}
+
+	if(newFileNameLength<6){
+	  for(newFileNameIndex=newFileNameLength; newFileNameIndex < 6; newFileNameIndex++){
+	     diskDir.entries[fileIndex].name[newFileNameIndex] = 0x00;
+	     newFileNameIndex++;
+	  }
+	}
+
+	
 	/*
 	printString("first char of the filename set in the new entry is \0");
 	printString(diskDir.entries[fileIndex].name[0]);
@@ -557,7 +571,7 @@ int findFile(char *filename, struct directory* diskDir){
 	break;
       }
       if(j==5){ //found file
-      return i; // index of the file in the disk sector
+	return i; // index of the file in the disk sector
       }
     }
   }
