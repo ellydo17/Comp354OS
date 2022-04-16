@@ -53,6 +53,10 @@ int writeFile(char *filename, char *buffer, int sectors);
 void main() {
   //tests for project 4
   /*
+  interrupt(0x21, 0x07, "apple.\0", 0, 0);
+  printString("deleted file\r\n\0");
+  */
+  /*
   char buffer[13312];
   readfile("apple\0", buffer);
   printString(buffer);
@@ -66,8 +70,8 @@ void main() {
   char buffer2[13312];
   readfile("happy1\0", buffer);
   printString(buffer);
-  writeFile("happy2\0", buffer, 3);
-  readfile("happy2\0", buffer2);
+  writeFile("happyT\0", buffer, 3);
+  readfile("happyT\0", buffer2);
   printString(buffer2);
   */
 
@@ -115,7 +119,7 @@ void main() {
   */
   //delete the file "fileToDelete"
   /*
-  interrupt(0x21, 0x07, "fileToDelete\0", 0, 0);
+  interrupt(0x21, 0x07, "happy1\0", 0, 0);
   printString("deleted file\r\n\0");
   */
   
@@ -289,7 +293,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
   char diskMap[512];
   struct directory diskDir;
 
+  char* testBuf;
+  
   printString("running the writefile method.\r\n\0");
+
+  printString("name of file to be written is \0");
+  printString(filename);
+  printString(".\r\n\0");
 
   //read the file from disk directory and disk map 
   readSector(&diskDir, 2);
@@ -307,7 +317,7 @@ int writeFile(char *filename, char *buffer, int sectors) {
   */
 
   if(fileIndex == -1){ //file not found
-    //printString("file not found, looking for an empty entry\r\n\0");
+    printString("file not found, looking for an empty entry\r\n\0");
     //look for an empty space in the directory to write the new file there
     while(entry < 16) {
       if(diskDir.entries[entry].name[0] == 0x00) {//found empty entry
@@ -316,28 +326,39 @@ int writeFile(char *filename, char *buffer, int sectors) {
 	fileIndex = entry;//set the value of this variable as the index of the empty entry
 	foundEmptyEntry = 1;
 
-	/*
+	
 	printString("new fileIndex is \0");
 	printInt(fileIndex);
 	printString(".\r\n\0");
-	*/
+	/*
 	//get the length of the new filename
-	while(filename[newFileNameLength]!="\0" && newFileNameLength <= 6){
+	while(filename[newFileNameLength]!="\0" && newFileNameLength < 6){
 	  newFileNameLength++;
 	}
 	
 	for (newFileNameIndex=0; newFileNameIndex<newFileNameLength; newFileNameIndex++) {
+	  //testBuf[newFileNameIndex]=filename[newFileNameIndex];
 	  diskDir.entries[fileIndex].name[newFileNameIndex] = filename[newFileNameIndex];
 	  newFileNameIndex++;
 	}
 
 	if(newFileNameLength<6){
 	  for(newFileNameIndex=newFileNameLength; newFileNameIndex < 6; newFileNameIndex++){
-	     diskDir.entries[fileIndex].name[newFileNameIndex] = 0x00;
+	    //testBuf[newFileNameIndex]=0x00;
+	     diskDir.entries[fileIndex].name[newFileNameIndex] = '\0';
 	     newFileNameIndex++;
 	  }
 	}
-
+	*/
+	while(newFileNameIndex<6){
+	  diskDir.entries[fileIndex].name[newFileNameIndex] = filename[newFileNameIndex];
+	  newFileNameIndex++;
+	}
+	  
+	testBuf = diskDir.entries[fileIndex].name;
+	printString("testBuf is \0");
+	printString(testBuf+5);
+	printString(".\r\n\0");
 	
 	/*
 	printString("first char of the filename set in the new entry is \0");

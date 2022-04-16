@@ -38,6 +38,7 @@ void main() {
 
       if (flag != -1) { //file was found
 	printString(buffer);
+	printString("\r\n\0");
       } else { //file not found, display error
 	printString("Error: file not found\r\n\0");
       }
