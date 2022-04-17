@@ -26,8 +26,7 @@ void terminate();
 int deleteFile(char* filename);
 
 //writeFile
-//int writeFile(char *filename, char *buffer, int sectors);
-int writeFile(char * fname, char * buffer, int sectors);
+int writeFile(char *filename, char *buffer, int sectors);
 
 //printInt
 int printInt(int num);

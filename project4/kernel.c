@@ -48,8 +48,7 @@ int writeSector(char *buf, int absSector);
 
 int deleteFile(char* filename);
 
-//int writeFile(char *filename, char *buffer, int sectors);
-int writeFile(char * fname, char * buffer, int sectors);
+int writeFile(char *filename, char *buffer, int sectors);
 
 void main() {
   //tests for project 4
@@ -301,15 +300,16 @@ void main() {
  * Writing a File - John's code for debugging/testing
  */
 
-int writeFile(char * fname, char * buffer, int sectors){
+int writeFile(char * filename, char * buffer, int sectors){
 
-  char map[512];
+  char diskMap[512];
   struct directory diskDir;
 
   int directoryEntry, i,j,k,idx, residue;
   int fileNameLength = 0;
 
   int sectorNum;
+  int oldSector;
 
   char helperFileBuffer[512];
   char subBuffer[512];
@@ -318,11 +318,15 @@ int writeFile(char * fname, char * buffer, int sectors){
 
   int val;
 
+  if(sectors > 26){
+    sectors = 26;
+  }
+
   /*if there exists a filename with "fname" already, then we will overwrite*/
-  deleteFile(fname);
+  deleteFile(filename);
   
   /*Read the Map & Directory from Sectors*/
-  readSector(map,1);
+  readSector(diskMap,1);
   readSector(&diskDir,2);
   
  /*Find a free directory entry*/
@@ -341,13 +345,13 @@ int writeFile(char * fname, char * buffer, int sectors){
   }
 
   /*Count the length of the filename*/
-  while(fname[fileNameLength] != '\0' && fname[fileNameLength] != 0x00){
+  while(filename[fileNameLength] != '\0' && filename[fileNameLength] != 0x00){
     fileNameLength++;
   }
 
   /*Assign the filename into the directory free entry*/
   for(j = 0; j < fileNameLength; j++){
-    diskDir.entries[directoryEntry].name[j] = fname[j];
+    diskDir.entries[directoryEntry].name[j] = filename[j];
   }
 
   if(fileNameLength < 6){
@@ -363,18 +367,24 @@ int writeFile(char * fname, char * buffer, int sectors){
   for(k = 0; k < sectors; k++){
     sectorNum = 0;
 
-    while(map[sectorNum] != 0x00){
+    //find an empty space in diskMap, the empty space index = sectorNum
+    while(diskMap[sectorNum] != 0x00){
       sectorNum++;
     }
 
-    //No free sectors to write the file
-    if(sectorNum == 26){
-      printString("Not enough space in the directory!\0");
+    //if there is no available space in the diskMap, return -2
+    if(sectorNum >= 512){
+      printString("Disk Map contains fewer sectors than requested!\0");
       return -2;
     }
 
-    map[sectorNum] = 0xFF;
+    //free up old used space
+    oldSector = diskDir.entries[directoryEntry].sectors[k];
+    diskMap[oldSector] = 0x00;
 
+    //mark new space as occupied
+    diskMap[sectorNum] = 0xFF;
+    //save the new space used for the file in the file's sector structure
     diskDir.entries[directoryEntry].sectors[k] = sectorNum;
 
     /*Store the file sectors that the buffer is holding*/
@@ -387,7 +397,7 @@ int writeFile(char * fname, char * buffer, int sectors){
   }
 
   /*Write the Map and Directory to the disk*/
-  writeSector(map,1);
+  writeSector(diskMap,1);
   writeSector(&diskDir,2);
 
   //return the number of sectors to be written
