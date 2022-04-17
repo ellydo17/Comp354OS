@@ -58,6 +58,12 @@ bcc -ansi -c -o uprog2.o uprog2.c
 ld86 -o uprog2 -d uprog2.o lib.o
 ./loadfile uprog2
 
+#compile textEditor.c with bcc, link the textEditor.o and lib.o files into the executable kernel file,
+#and use loadFile to copy the contents of the textEditor file to the disk image
+bcc -ansi -c -o textEditor.o textEditor.c
+ld86 -o textEditor -d textEditor.o userlib.o lib.o
+./loadfile textEditor
+
 #Command line shell, Improvements - creating a user library
 
 #compile userlib.c with bcc
