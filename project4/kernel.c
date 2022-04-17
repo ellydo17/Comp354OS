@@ -86,7 +86,7 @@ void main() {
 
   
   //char buffer[13312];
-  writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file.", 3);
+  writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file.", 5);
   //writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working.", 3);
   readfile("testWF\0", buffer);
   printString(buffer);
