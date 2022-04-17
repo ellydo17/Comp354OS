@@ -305,8 +305,8 @@ int writeFile(char * filename, char * buffer, int sectors){
   char diskMap[512];
   struct directory diskDir;
 
-  int directoryEntry, i,j,k,idx, residue;
-  int fileNameLength = 0;
+  int dirEntry, i,j,k,idx, residue;
+  int fileNameLen = 0;
 
   int sectorNum;
   int oldSector;
@@ -318,48 +318,46 @@ int writeFile(char * filename, char * buffer, int sectors){
 
   int val;
 
-  if(sectors > 26){
+  if (sectors > 26) {
     sectors = 26;
   }
 
-  /*if there exists a filename with "fname" already, then we will overwrite*/
+  //performing overwriting if the file already exists. 
   deleteFile(filename);
   
-  /*Read the Map & Directory from Sectors*/
   readSector(diskMap,1);
   readSector(&diskDir,2);
   
- /*Find a free directory entry*/
-  for(directoryEntry = 0; directoryEntry < 16; directoryEntry++){
-    //Found the free entry
-    if(diskDir.entries[directoryEntry].name[0] == 0x00){
+  //finding an empty entry in the Disk Directory
+  for(dirEntry = 0; dirEntry < 16; dirEntry++){
+    if(diskDir.entries[dirEntry].name[0] == 0x00){
       flag = 1;
       break;
     }
   }
 
-  /*If there is no free directory*/
+  //there is no empty entry found
   if(flag == -1){
-    printString("No Empty location available for the file!\0");
+    printString("There is no Disk Directory entry available for the new file.\0");
     return -1;
   }
 
-  /*Count the length of the filename*/
-  while(filename[fileNameLength] != '\0' && filename[fileNameLength] != 0x00){
-    fileNameLength++;
+  //get the length of the file name
+  while(filename[fileNameLen] != '\0' && filename[fileNameLen] != 0x00){
+    fileNameLen++;
   }
 
   /*Assign the filename into the directory free entry*/
-  for(j = 0; j < fileNameLength; j++){
+  for(j = 0; j < fileNameLen; j++){
     diskDir.entries[directoryEntry].name[j] = filename[j];
   }
 
-  if(fileNameLength < 6){
-    residue = 6 - fileNameLength;
+  if(fileNameLen < 6){
+    residue = 6 - fileNameLen;
 
     for(j = 0; j < residue; j++){
       //fill the residues with 0x00
-      diskDir.entries[directoryEntry].name[j+fileNameLength] = 0x00; 
+      diskDir.entries[directoryEntry].name[j+fileNameLen] = 0x00; 
     }
   }
 
@@ -396,11 +394,9 @@ int writeFile(char * filename, char * buffer, int sectors){
     writeSector(helperFileBuffer, sectorNum);
   }
 
-  /*Write the Map and Directory to the disk*/
   writeSector(diskMap,1);
   writeSector(&diskDir,2);
 
-  //return the number of sectors to be written
   return sectorNum;
 }
 
