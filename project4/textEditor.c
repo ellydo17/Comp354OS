@@ -21,17 +21,22 @@ void main(){
 
   fileBufferCursor = 0;
   printString("initial value of fileBufferCursor is: \0");
-  printInt(fileBufferCursor);
+  //printInt(fileBufferCursor);
   printString(".\r\n\0");
 
   while (fileBufferCursor < 13312) {
-    ch = readChar();
-    if (ch == 0x04){
+    printString("reading char \0");
+    ch = readString(fileBuffer, 80);
+    if (ch == 'q'){
       printString("User hit Ctrl-D and return.\r\n\0");
       break;
     }
     fileBuffer[fileBufferCursor] = ch;
     fileBufferCursor++;
+    printString("Current fileBuffer Cursor is: \0");
+    printInt(fileBufferCursor);
+    printString(".\r\n\0");
+  
     if(mod(fileBufferCursor+1, 512) == 0){
       sectors++;
     }
