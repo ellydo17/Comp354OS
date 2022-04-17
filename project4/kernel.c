@@ -61,10 +61,13 @@ void main() {
   */
   
   //tests for "Writing a file" - debugging
-  char buffer[13312];
+  //char buffer[13312];
+  //makeInterrupt21();
   //interrupt(0x21, 0x07, "happy1\0", 0, 0);
+  /*
   deleteFile("happy1\0");
   printString("deleted file\r\n\0");
+  */
   
   /*
   char buffer[13312];
@@ -87,12 +90,13 @@ void main() {
 
   
   //char buffer[13312];
+  /*
   writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file.", 5);
   //writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working.", 3);
   readfile("testWF\0", buffer);
   printString(buffer);
   printString("Done.\0");
-  
+  */
   
   /*
   //load the new file called happy1.txt
@@ -144,11 +148,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  /*
+  
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  */
+  
   
   //tests for "Terminating a User Program"
   /*
