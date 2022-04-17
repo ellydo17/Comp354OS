@@ -54,9 +54,11 @@ void main() {
   //tests for project 4
 
   //tests for "TextEditor"
+  /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "textEditor\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+  */
   
   //tests for "Writing a file" - debugging
   /*
@@ -140,11 +142,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  /*
+  
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  */
+  
   
   //tests for "Terminating a User Program"
   /*

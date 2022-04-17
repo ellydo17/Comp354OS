@@ -32,15 +32,16 @@ void main(){
     
     numCharRead = readString(line, 80); //read the string typed in by the user line by line
     
-    if (fileBuffer[0] == 0x04){
+    if (line[0] == 0x04){
       printString("User hit Ctrl-D and return.\r\n\0");
       break;
     }
 
-    while(fileBufferCursor < numCharRead){
+    while(numCharRead>0){
       fileBuffer[fileBufferCursor] = line[lineIndex];
       fileBufferCursor++;
       lineIndex++;
+      numCharRead--;
     }
 
     fileBuffer[fileBufferCursor] = ' '; //adding space after each line to show continuity in the text
@@ -59,7 +60,7 @@ void main(){
   printString("Current fileBuffer Cursor is: \0");
   printInt(fileBufferCursor);
   printString(" meaning that there are \0");
-  printInt(fileBufferCursor+1);
+  printInt(fileBufferCursor);
   printString("characters in the file.\r\n\0");
   
   while (fileBufferCursor < 13312){  

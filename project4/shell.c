@@ -16,7 +16,7 @@ struct directory{
 };
 
 void main() {
-  char command[80];
+  char command[30];
   char buffer[13312]; //buffer stores the contents from the file when file is read/program is executed
   int flag = 0; //true if file/program is found and can be executed
   
@@ -25,7 +25,7 @@ void main() {
     printString("Shell> \0");
 
     //get the command
-    readString(command);
+    readString(command, 30);
     printString("\r\n\0");
 
     //compare command and execute it accordingly
