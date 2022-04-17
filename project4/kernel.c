@@ -62,7 +62,8 @@ void main() {
   
   //tests for "Writing a file" - debugging
   char buffer[13312];
-  interrupt(0x21, 0x07, "happy1\0", 0, 0);
+  //interrupt(0x21, 0x07, "happy1\0", 0, 0);
+  deleteFile("happy1\0");
   printString("deleted file\r\n\0");
   
   /*
@@ -90,7 +91,8 @@ void main() {
   //writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working.", 3);
   readfile("testWF\0", buffer);
   printString(buffer);
-  printString("Done.\0");;
+  printString("Done.\0");
+  
   
   /*
   //load the new file called happy1.txt
@@ -465,8 +467,11 @@ int deleteFile(char* filename){
   int sector;
   struct directory diskDir;
   char diskMap[512];
+
+  printString("running delete method\r\n\0");
+  
   //read the file from disk sector
-  readSector(&diskMap,1);
+  readSector(diskMap,1);
   readSector(&diskDir, 2);
   
   //helper method to find the file in disk
