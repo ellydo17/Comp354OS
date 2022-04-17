@@ -62,7 +62,7 @@ void main() {
   
   //tests for "Writing a file" - debugging
   char buffer[13312];
-  interrupt(0x21, 0x07, "apple\0", 0, 0);
+  interrupt(0x21, 0x07, "happy1\0", 0, 0);
   printString("deleted file\r\n\0");
   
   /*
