@@ -11,7 +11,7 @@ int printString(char *str);
 
 int readChar();
 
-int readString(char *buf);
+int readString(char *buf, int maxChar);
 
 int readSector(char *buf, int absSector);
 
@@ -52,6 +52,13 @@ int writeFile(char *filename, char *buffer, int sectors);
 
 void main() {
   //tests for project 4
+
+  //tests for "TextEditor"
+  makeInterrupt21();
+  interrupt(0x21, 0x04, "textEditor\0", 0x2000, 0);
+  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+  
+  //tests for "Writing a file" - debugging
   /*
   interrupt(0x21, 0x07, "apple.\0", 0, 0);
   printString("deleted file\r\n\0");
@@ -133,11 +140,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  
+  /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  
+  */
   
   //tests for "Terminating a User Program"
   /*
@@ -193,6 +200,7 @@ void main() {
   interrupt(0x21, 0x11, ch, 0, 0);
   line[0] = ch[0];
   line[1] = 0x00;
+
   interrupt(0x21, 0x00, line, 0, 0);
   */
   
@@ -218,7 +226,7 @@ void main() {
   printString("\n\r\0");
   */
 
-  //for readString()
+  //for readString() - original
   /*
   char line[20];
   printString("Enter a line: \0");
@@ -707,7 +715,7 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     buf[0] = ch;
     return 1;
   }else if (ax == 0x01) { //0x01 specifies that we need to read a string (read characters until ENTER is pressed)
-    return readString(bx);
+    return readString(bx, cx);
   }else if (ax == 0x02) { //0x02 specifies that we need to read a sector
     return readSector(bx,cx);
   }else if (ax == 0x03) { //0x03 specifies that we need to read the contents of a file into a buffer (project 3)

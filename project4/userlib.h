@@ -8,7 +8,7 @@ int printString(char *str);
 int readChar();
 
 //readString
-int readString(char *buf);
+int readString(char *buf, int maxChar);
 
 //readfile
 int readfile(char *filename, char *buf);
@@ -33,6 +33,12 @@ int printInt(int num);
 
 //clearBuffer
 void clearBuffer(char* buffer);
+
+//modulus operator
+int mod(int dividend, int divisor);
+
+//printInt
+int printInt(int num);
 
 #endif
   

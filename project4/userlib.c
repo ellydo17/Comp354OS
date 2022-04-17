@@ -13,8 +13,8 @@ int readChar() {
 }
 
 //readString
-int readString(char *buf) {
-  return interrupt(0x21, 0x01, buf, 0, 0);
+int readString(char *buf, int maxChar) {
+  return interrupt(0x21, 0x01, buf, maxChar, 0);
 }
 
 //readfile
@@ -59,4 +59,27 @@ void clearBuffer(char* buffer){
     buffer[i] = 0x00;
     i++;
   }
+}
+
+//modulus operator
+int mod(int dividend, int divisor) {
+  while (dividend >= divisor) {
+    dividend = dividend - divisor;
+  }
+  return dividend;
+}
+
+//print an integer value
+int printInt(int num){
+  //get the number of digits
+  int numDigits = getNumDigits(num);
+  
+  //convert the integer to string
+  char *str = itoa(num, numDigits);
+  
+  //print out the string
+  printString(str);
+   
+  //return the numbers of digits printed out
+  return numDigits;
 }
