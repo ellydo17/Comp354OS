@@ -62,7 +62,7 @@ void main() {
   
   //tests for "Writing a file" - debugging
   /*
-  interrupt(0x21, 0x07, "apple.\0", 0, 0);
+  interrupt(0x21, 0x07, "apple\0", 0, 0);
   printString("deleted file\r\n\0");
   */
   /*
@@ -84,13 +84,13 @@ void main() {
   printString(buffer2);
   */
 
-  /*
+  
   char buffer[13312];
-  writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file", 3);
-  writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working", 3);
+  writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file.", 3);
+  //writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working.", 3);
   readfile("testWF\0", buffer);
   printString(buffer);
-  */
+  printString("Done.\0");;
   
   /*
   //load the new file called happy1.txt
@@ -142,11 +142,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  
+  /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  
+  */
   
   //tests for "Terminating a User Program"
   /*
@@ -304,6 +304,9 @@ int writeFile(char *filename, char *buffer, int sectors) {
   struct directory diskDir;
 
   char* testBuf;
+   int secIndex = 0;
+  char ch[2];
+  ch[1] = '\0';
   
   printString("running the writefile method.\r\n\0");
 
@@ -320,6 +323,12 @@ int writeFile(char *filename, char *buffer, int sectors) {
   //helper method to find the file in disk
   fileIndex = findFile(filename, &diskDir);
 
+  /*
+  printString("the first char of our new filename in diskDir is: \0");
+  ch[0] = diskDir.entries[9].name[5];
+  printString(ch);
+  printString(".\r\n\0");
+  */
   /*
   printString("checked the fileIndex. It is \0");
   printInt(fileIndex);
@@ -374,6 +383,9 @@ int writeFile(char *filename, char *buffer, int sectors) {
   //printString("need to write sectors, works for both file exists and new empty entry\r\n\0");
   while(diskMapIndex < 512 && sectorIndex < sectors) {
     if (diskMap[diskMapIndex] == 0x00) {
+      printString("the available space in diskmap is at index: \0");
+      printInt(diskMapIndex);
+      printString(".\r\n\0");
       /*
       printString("found empty sector in diskMap.\r\n\0");
       printString("current sectorIndex is \0");
@@ -389,6 +401,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
       diskMap[diskMapIndex] = 0xFF; 
       diskDir.entries[fileIndex].sectors[sectorIndex] = diskMapIndex;
       //printString("marked the new sector as occupied.\r\n\0");
+
+      printString("the address of sector at index \0");
+      printInt(sectorIndex);
+      printString(" of the entry is index \0");
+      secIndex = diskDir.entries[fileIndex].sectors[sectorIndex];
+      printInt(secIndex);
+      printString(" of the diskMap.\r\n\0");
       
       //write a portion of the buffer to the new sector space
       writeSector(buffer + sectorIndex * 512, diskMapIndex);
@@ -424,6 +443,13 @@ int writeFile(char *filename, char *buffer, int sectors) {
   //rewrite the diskMap and disk directory to the disk
   writeSector(diskMap, 1);
   writeSector(&diskDir, 2);
+
+  /*
+  printString("the first char of our new filename in diskDir is: \0");
+  ch[0] = diskDir.entries[9].name[5];
+  printString(ch);
+  printString(".\r\n\0");
+  */
 
   //printString("wrote the diskmap and disk directory to the disk.\r\n\0");
 
