@@ -301,9 +301,9 @@ int writeFile(char *filename, char *buffer, int sectors) {
   printString(filename);
   printString(".\r\n\0");
 
-  //read the file from disk directory and disk map 
-  readSector(&diskDir, 2);
+  //read the file from disk directory and disk map
   readSector(diskMap, 1);
+  readSector(&diskDir, 2);
 
   // printString("read the diskmap and disk directory.\r\n\0");
 

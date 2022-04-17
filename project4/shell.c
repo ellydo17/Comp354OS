@@ -164,25 +164,27 @@ void main() {
 	}
 	
 	printString("Successfully copied source file to destination.\r\n\0");
+	clearBuffer(buffer);
       }
     } else if (command[0] == 'd' && command[1] == 'i'&& command[2] == 'r' && command[3] == '\0') {
       int iDir = 0;
       struct directory diskDir;
-      char* buffer;
+      char* buffer3;
 
       printString("Command is dir.\r\n\0");
       
       readSector(&diskDir, 2);
 
       while(iDir < 16) {
-	if (diskDir.entries[iDir].name[0] != '\0') {
-	  buffer = diskDir.entries[iDir].name;
-	  buffer[6] = '\0';
-	  printString(buffer);
+	if (diskDir.entries[iDir].name[0] != 0x00) {
+	  buffer3 = diskDir.entries[iDir].name;
+	  buffer3[6] = '\0';
+	  printString(buffer3);
 	  printString("\r\n\0");
 	}
 	iDir++;
       }
+      clearBuffer(buffer3);
     //command is invalid 
     } else {
       printString("Unrecognized command.\r\n\0");

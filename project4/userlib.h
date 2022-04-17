@@ -31,5 +31,8 @@ int writeFile(char *filename, char *buffer, int sectors);
 //printInt
 int printInt(int num);
 
+//clearBuffer
+void clearBuffer(char* buffer);
+
 #endif
   

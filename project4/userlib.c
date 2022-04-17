@@ -51,3 +51,12 @@ int writeFile(char *filename, char *buffer, int sectors){
 int printInt(int num){
   return interrupt(0x21, 0x15, num, 0, 0);
 }
+
+//clearBuffer
+void clearBuffer(char* buffer){
+  int i = 0;
+  while (i < 13312 && buffer[i] != '\0') {
+    buffer[i] = 0x00;
+    i++;
+  }
+}
