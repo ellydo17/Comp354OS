@@ -43,8 +43,10 @@ int deleteFile(char* filename){
 }
 
 //writeFile
-int writeFile(char *filename, char *buffer, int sectors){
-  return interrupt(0x21, 0x08, filename, buffer, sectors);
+//int writeFile(char *filename, char *buffer, int sectors){
+int writeFile(char * fname, char * buffer, int sectors){
+  return interrupt(0x21, 0x08, fname, buffer, sectors);
+  //return interrupt(0x21, 0x08, filename, buffer, sectors);
 }
 
 //clearBuffer
