@@ -49,7 +49,7 @@ int writeSector(char *buf, int absSector);
 int deleteFile(char* filename);
 
 //int writeFile(char *filename, char *buffer, int sectors);
-int writeFile(char * fname, char * buffer, int sectors)
+int writeFile(char * fname, char * buffer, int sectors);
 
 void main() {
   //tests for project 4
