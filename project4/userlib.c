@@ -47,11 +47,6 @@ int writeFile(char *filename, char *buffer, int sectors){
   return interrupt(0x21, 0x08, filename, buffer, sectors);
 }
 
-//printInt
-int printInt(int num){
-  return interrupt(0x21, 0x15, num, 0, 0);
-}
-
 //clearBuffer
 void clearBuffer(char* buffer){
   int i = 0;
@@ -82,4 +77,83 @@ int printInt(int num){
    
   //return the numbers of digits printed out
   return numDigits;
+}
+
+/*
+ * Helper method for printInt function
+ * It returns the number of digits that make up the integer value num
+ */
+
+int getNumDigits(int num){
+  int length = 0;
+  if (num < 0) {
+    length = 1;
+  }
+  while (num != 0) {
+    length++;
+    num = num/10;
+  }
+  return length;
+}
+
+/*
+ * Helper method for printInt function
+ * It returns the string representation of the integer num
+ */
+
+char* itoa(int num){
+  int i = 0;
+  char* resultStr = "";
+  int isNeg = 0; //false
+  char readChar[2];
+  char* numList = "0 1 2 3 4 5 6 7 8 9\0";
+
+  //set the first character as the null terminator
+  resultStr[i] = '\0';
+  i++;
+    
+  if (num == 0){
+    resultStr[i] = '0';
+    i++;
+    return resultStr;
+  }
+ 
+  if (num < 0){
+    isNeg = 1; //true
+    num = -num;
+  }
+  
+  while (num != 0) {
+    int rem = mod(num, 10);
+    readChar[0] = numList[rem*2];
+    resultStr[i] = readChar[0];
+    i++;
+    num = num/10;
+  }
+  
+  if (isNeg==1){
+    resultStr[i] = '-';
+    i++;
+  }
+    
+  reverse(resultStr, i);
+  return resultStr;
+}
+
+/*
+ * Helper method for printInt function
+ * It returns the reversed version of the string numStr
+ */
+
+void reverse(char* numStr, int numDigits) {
+  int begin = 0;
+  int terminate = numDigits - 1;
+  while (begin < terminate) {
+    int temp = numStr[begin];
+    numStr[begin] = numStr[terminate];
+    numStr[terminate] = temp;
+    
+    begin++;
+    terminate--;
+  }
 }

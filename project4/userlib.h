@@ -40,5 +40,14 @@ int mod(int dividend, int divisor);
 //printInt
 int printInt(int num);
 
+//getNumDigits
+int getNumDigits(int num);
+
+//itoa
+char* itoa(int num);
+
+//reverse
+void reverse(char* numStr, int numDigits);
+
 #endif
   

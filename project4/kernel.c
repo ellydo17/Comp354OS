@@ -728,8 +728,6 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     return  deleteFile(bx);
   }else if (ax == 0x08) {  //0x05 specifies that we need to terminate a user program (project 3)
     return  writeFile(bx,cx,dx);
-  }else if (ax == 0x15) {  //0x05 specifies that we need to terminate a user program (project 3)
-    return  printInt(bx);
   }else{
     return -1;
   }
