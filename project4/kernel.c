@@ -61,10 +61,10 @@ void main() {
   */
   
   //tests for "Writing a file" - debugging
-  /*
+  char buffer[13312];
   interrupt(0x21, 0x07, "apple\0", 0, 0);
   printString("deleted file\r\n\0");
-  */
+  
   /*
   char buffer[13312];
   readfile("apple\0", buffer);
@@ -85,7 +85,7 @@ void main() {
   */
 
   
-  char buffer[13312];
+  //char buffer[13312];
   writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file.", 3);
   //writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working.", 3);
   readfile("testWF\0", buffer);
