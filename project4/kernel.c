@@ -305,14 +305,14 @@ int writeFile(char * filename, char * buffer, int sectors){
   char diskMap[512];
   struct directory diskDir;
 
-  int dirEntry, i,j,idx, residue;
-  int sectorCounter = 0;//index of sector in the entry
+  int dirEntry, i,j,idx, remaining;
+  int sectorCounter = 0;//index for sectors in the entry
   int fileNameLen = 0;
 
-  int sectorNum;
-  int oldSector;
+  int sectorIndexDisk; //index for sectors in disk
+  int oldSector;//previous sectors used by the file
 
-  char sectorBuffer[512];
+  char sectorBuffer[512];//buffer for each sector so that it can be easily copied into the assigned sector
 
   int flag = -1; // to see if it found the free entry
 
@@ -349,54 +349,54 @@ int writeFile(char * filename, char * buffer, int sectors){
 
   /*Assign the filename into the directory free entry*/
   for(j = 0; j < fileNameLen; j++){
-    diskDir.entries[directoryEntry].name[j] = filename[j];
+    diskDir.entries[dirEntry].name[j] = filename[j];
   }
 
   if(fileNameLen < 6){
-    residue = 6 - fileNameLen;
+    remaining = 6 - fileNameLen;
 
-    for(j = 0; j < residue; j++){
-      //fill the residues with 0x00
-      diskDir.entries[directoryEntry].name[j+fileNameLen] = 0x00; 
+    for(j = 0; j < remaining; j++){
+      //fill the remaining filename characters with 0x00
+      diskDir.entries[dirEntry].name[j+fileNameLen] = 0x00; 
     }
   }
 
   /*Write the file contents into the sectors consisting of the file*/
   for(sectorCounter = 0; sectorCounter < sectors; sectorCounter++){
-    sectorNum = 0;
+    sectorIndexDisk = 0;
 
     //find an empty space in diskMap, the empty space index = sectorNum
-    while(diskMap[sectorNum] != 0x00){
-      sectorNum++;
+    while(diskMap[sectorIndexDisk] != 0x00){
+      sectorIndexDisk++;
     }
 
     //if there is no available space in the diskMap, return -2
-    if(sectorNum >= 512){
+    if(sectorIndexDisk >= 512){
       printString("Disk Map contains fewer sectors than requested!\0");
       return -2;
     }
 
     //free up old used space
-    oldSector = diskDir.entries[directoryEntry].sectors[sectorCounter];
+    oldSector = diskDir.entries[dirEntry].sectors[sectorCounter];
     diskMap[oldSector] = 0x00;
 
     //mark new space as occupied
-    diskMap[sectorNum] = 0xFF;
+    diskMap[sectorIndexDisk] = 0xFF;
     //save the new space used for the file in the file's sector structure
-    diskDir.entries[directoryEntry].sectors[sectorCounter] = sectorNum;
+    diskDir.entries[dirEntry].sectors[sectorCounter] = sectorIndexDisk;
  
     for(j = 0; j < 512; j++){
       sectorBuffer[j] = buffer[bufferIndex];
       bufferIndex++;
     }
 
-    writeSector(sectorBuffer, sectorNum);
+    writeSector(sectorBuffer, sectorIndexDisk);
   }
 
   writeSector(diskMap,1);
   writeSector(&diskDir,2);
 
-  return sectorNum;
+  return sectorIndexDisk;
 }
 
 /*
