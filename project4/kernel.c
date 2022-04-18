@@ -53,6 +53,11 @@ int writeFile(char *filename, char *buffer, int sectors);
 void main() {
   //tests for project 4
 
+  //running the shell program
+  makeInterrupt21();
+  interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
+  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+
   //tests for "TextEditor"
   /*
   makeInterrupt21();
@@ -60,67 +65,24 @@ void main() {
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
   */
   
-  //tests for "Writing a file" - debugging
-  //char buffer[13312];
-  //makeInterrupt21();
-  //interrupt(0x21, 0x07, "happy1\0", 0, 0);
-  /*
-  deleteFile("happy1\0");
-  printString("deleted file\r\n\0");
-  */
-  
-  /*
-  char buffer[13312];
-  readfile("apple\0", buffer);
-  printString(buffer);
-  */
-  
   //tests for "Writing a file"
-  /* For some reasons, if we do writeFile then readfile twice in a row, we cannot print out the message from the file using the second buffer. If we do each set one by one, the message is printed out"
-   */
   /*
   char buffer[13312];
-  char buffer2[13312];
-  readfile("happy1\0", buffer);
-  printString(buffer);
-  writeFile("happyT\0", buffer, 3);
-  readfile("happyT\0", buffer2);
-  printString(buffer2);
-  */
-
-  
-  //char buffer[13312];
-  /*
   writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file.", 5);
   //writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working.", 3);
   readfile("testWF\0", buffer);
   printString(buffer);
   printString("Done.\0");
   */
-  
+
   /*
-  //load the new file called happy1.txt
-  char buffer1[13312]; // the maximum size of a file
-  char buffer2[13312]; // the maximum size of a file
-  makeInterrupt21();
-  //read the happy1 file into buffer
-  interrupt(0x21, 0x03, "happy1\0", buffer1, 0);
-  //print out the contents from happy1 file
-  //interrupt(0x21, 0x00, "happy1 file says \0", 0, 0);
-  interrupt(0x21, 0x00, buffer1, 0, 0);
-  interrupt(0x21, 0x00, "\r\n\0", 0, 0);
-  
-  
-  //write the file to disk
-  interrupt(0x21, 0x08, "happy2\0", buffer1, 1);
-  printString("wrote the file to disk\r\n\0");
-  
-  
-   //read the file into buffer2
-  interrupt(0x21, 0x03, "happy2\0", buffer2, 0);
-  //print out the contents from buffer2
-  interrupt(0x21, 0x00, buffer2, 0, 0);
+  char buffer[13312];
+  writeFile("testNE\0", "This part is testing if we can write to a file that does not exist. If this prints out, it means that the writefile method works for a file that does not exist.", 3);
+  readfile("testNE\0", buffer);
+  printString(buffer);
+  printString("Done.\0");
   */
+  
   
   //tests for "Deleting a File"
   /*
@@ -148,11 +110,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  
+  /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  
+  */
   
   //tests for "Terminating a User Program"
   /*
@@ -314,7 +276,7 @@ int writeFile(char * filename, char * buffer, int sectors){
 
   char sectorBuffer[512];//buffer for each sector so that it can be easily copied into the assigned sector
 
-  int flag = -1; // to see if it found the free entry
+  int foundEmptyEntry = -1; //check if there is an empty entry in the diskmap, default is false
 
   int bufferIndex = 0;;
 
@@ -322,50 +284,51 @@ int writeFile(char * filename, char * buffer, int sectors){
     sectors = 26;
   }
 
-  //performing overwriting if the file already exists. 
+  //delete the file if file already exists, will rewrite the file as though it never existed. 
   deleteFile(filename);
-  
+
+  //read the diskmap and disk directory
   readSector(diskMap,1);
   readSector(&diskDir,2);
   
   //finding an empty entry in the Disk Directory
   for(dirEntry = 0; dirEntry < 16; dirEntry++){
     if(diskDir.entries[dirEntry].name[0] == 0x00){
-      flag = 1;
+      foundEmptyEntry = 1;
       break;
     }
   }
 
-  //there is no empty entry found
-  if(flag == -1){
+  //if there is no empty entry in the diskmap, return -1
+  if(foundEmptyEntry == -1){
     printString("There is no Disk Directory entry available for the new file.\0");
     return -1;
   }
 
-  //get the length of the file name
+  //get the length of filename
   while(filename[fileNameLen] != '\0' && filename[fileNameLen] != 0x00){
     fileNameLen++;
   }
 
-  /*Assign the filename into the directory free entry*/
+  //store the filename into the disk directory at the index of the empty entry we found earlier
   for(j = 0; j < fileNameLen; j++){
     diskDir.entries[dirEntry].name[j] = filename[j];
   }
 
+  //if file name is fewer than 6 characters, fill the remaining characters with 0x00
   if(fileNameLen < 6){
     remaining = 6 - fileNameLen;
 
     for(j = 0; j < remaining; j++){
-      //fill the remaining filename characters with 0x00
       diskDir.entries[dirEntry].name[j+fileNameLen] = 0x00; 
     }
   }
 
-  /*Write the file contents into the sectors consisting of the file*/
+  //write the given content into the sectors assigned to the new file
   for(sectorCounter = 0; sectorCounter < sectors; sectorCounter++){
     sectorIndexDisk = 0;
 
-    //find an empty space in diskMap, the empty space index = sectorNum
+    //find an empty sector in diskMap, the empty sector index = sectorNum
     while(diskMap[sectorIndexDisk] != 0x00){
       sectorIndexDisk++;
     }
@@ -384,7 +347,8 @@ int writeFile(char * filename, char * buffer, int sectors){
     diskMap[sectorIndexDisk] = 0xFF;
     //save the new space used for the file in the file's sector structure
     diskDir.entries[dirEntry].sectors[sectorCounter] = sectorIndexDisk;
- 
+
+    //copy parts of the buffer into the sectorBuffer which is a buffer specified for that particular sector
     for(j = 0; j < 512; j++){
       sectorBuffer[j] = buffer[bufferIndex];
       bufferIndex++;
@@ -396,7 +360,7 @@ int writeFile(char * filename, char * buffer, int sectors){
   writeSector(diskMap,1);
   writeSector(&diskDir,2);
 
-  return sectorIndexDisk;
+  return sectors;
 }
 
 /*

@@ -84,7 +84,7 @@ void main() {
       int j=0;
       char buffer2[13312];//will delete later, testing
       
-      printString("Command is copy.\r\n\0");
+      //printString("Command is copy.\r\n\0");
 
       //from index 5, iterate through the remaining characters until we find a space, say we found space at index n, src = command+5 to command+(n-1), dest = command+n+1
       iCommand = 5;
@@ -106,25 +106,13 @@ void main() {
       src[iSrc] = '\0';
       iCommand++;
 
-      //print out the source filename
-      /*
-      printString("originally, src is \0");
-      printString(src);
-      printString(".\r\n\0");
-      */
-
       //read the source file
       sectorsRead = readfile(src, buffer);
-      printString("Readfile method has been called and sectors read.\r\n\0");
-      printString("buffer = \0");
-      printString(buffer);
-      printString(".\r\n\0");
 
       //if statements to recognize if file read was successful or not
       if (sectorsRead == -1) {
 	printString("File not found.\0");
       } else { //write the source file into the destination file
-	printString("Source file was found.\r\n\0");
 
 	//get the filename for the destination file
 	while(command[iCommand] != '\0') {
@@ -134,27 +122,8 @@ void main() {
 	}
 	dest[iDest] = '\0';
 
-	//print out the destination filename
-	/*
-	printString("dest is \0");
-	printString(dest);
-	printString(".\r\n\0");
-	*/
-
 	//write to the destination file
 	sectorsWritten = writeFile(dest, buffer, sectorsRead);
-
-	printString("dest is \0");
-	printString(dest);
-	printString(".\r\n\0");
-	
-	//delete later, testing
-	readfile(dest, buffer2);
-	printString("buffer2 = \0");
-	printString(buffer2);
-	printString(".\r\n\0");
-
-	printString("WriteFile method has been called and sectors have been written.\r\n\0");
 
 	//check if write file was possible
 	if (sectorsWritten == -1) {
@@ -163,7 +132,7 @@ void main() {
 	  printString("Disk is full.\r\n\0");
 	}
 	
-	printString("Successfully copied source file to destination.\r\n\0");
+	//printString("Successfully copied source file to destination.\r\n\0");
 	clearBuffer(buffer);
       }
     } else if (command[0] == 'd' && command[1] == 'i'&& command[2] == 'r' && command[3] == '\0') {
@@ -185,6 +154,7 @@ void main() {
 	iDir++;
       }
       clearBuffer(buffer3);
+      
     //command is invalid 
     } else {
       printString("Unrecognized command.\r\n\0");
