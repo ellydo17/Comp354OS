@@ -297,7 +297,7 @@ void main() {
 /* Functions for project 4 */
 
 /*
- * Writing a File - John's code for debugging/testing
+ * Writing a File
  */
 
 int writeFile(char * filename, char * buffer, int sectors){
@@ -305,18 +305,18 @@ int writeFile(char * filename, char * buffer, int sectors){
   char diskMap[512];
   struct directory diskDir;
 
-  int dirEntry, i,j,k,idx, residue;
+  int dirEntry, i,j,idx, residue;
+  int sectorCounter = 0;//index of sector in the entry
   int fileNameLen = 0;
 
   int sectorNum;
   int oldSector;
 
-  char helperFileBuffer[512];
-  char subBuffer[512];
+  char sectorBuffer[512];
 
   int flag = -1; // to see if it found the free entry
 
-  int val;
+  int bufferIndex = 0;;
 
   if (sectors > 26) {
     sectors = 26;
@@ -362,7 +362,7 @@ int writeFile(char * filename, char * buffer, int sectors){
   }
 
   /*Write the file contents into the sectors consisting of the file*/
-  for(k = 0; k < sectors; k++){
+  for(sectorCounter = 0; sectorCounter < sectors; sectorCounter++){
     sectorNum = 0;
 
     //find an empty space in diskMap, the empty space index = sectorNum
@@ -377,21 +377,20 @@ int writeFile(char * filename, char * buffer, int sectors){
     }
 
     //free up old used space
-    oldSector = diskDir.entries[directoryEntry].sectors[k];
+    oldSector = diskDir.entries[directoryEntry].sectors[sectorCounter];
     diskMap[oldSector] = 0x00;
 
     //mark new space as occupied
     diskMap[sectorNum] = 0xFF;
     //save the new space used for the file in the file's sector structure
-    diskDir.entries[directoryEntry].sectors[k] = sectorNum;
-
-    /*Store the file sectors that the buffer is holding*/
+    diskDir.entries[directoryEntry].sectors[sectorCounter] = sectorNum;
+ 
     for(j = 0; j < 512; j++){
-      val = k+1;
-      helperFileBuffer[j] = buffer[j*val];
+      sectorBuffer[j] = buffer[bufferIndex];
+      bufferIndex++;
     }
 
-    writeSector(helperFileBuffer, sectorNum);
+    writeSector(sectorBuffer, sectorNum);
   }
 
   writeSector(diskMap,1);
