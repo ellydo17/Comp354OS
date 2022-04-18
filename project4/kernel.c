@@ -54,9 +54,11 @@ void main() {
   //tests for project 4
 
   //running the shell program
+  
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+  
 
   //tests for "TextEditor"
   /*
@@ -68,11 +70,9 @@ void main() {
   //tests for "Writing a file"
   /*
   char buffer[13312];
-  writeFile("testWF\0", "writing to testWF file, if this prints out, it means that the text was successfully written into the file.", 5);
-  //writeFile("testWF\0", "overriding testWF file, if this prints out, overriding is working.", 3);
-  readfile("testWF\0", buffer);
+  writeFile("apple\0", "writing to a file that already exists, if this prints out, it means that the text was successfully written into the file.", 3);
+  readfile("apple\0", buffer);
   printString(buffer);
-  printString("Done.\0");
   */
 
   /*
@@ -80,7 +80,6 @@ void main() {
   writeFile("testNE\0", "This part is testing if we can write to a file that does not exist. If this prints out, it means that the writefile method works for a file that does not exist.", 3);
   readfile("testNE\0", buffer);
   printString(buffer);
-  printString("Done.\0");
   */
   
   
@@ -372,8 +371,6 @@ int deleteFile(char* filename){
   int sector;
   struct directory diskDir;
   char diskMap[512];
-
-  printString("running delete method\r\n\0");
   
   //read the file from disk sector
   readSector(diskMap,1);
@@ -396,7 +393,7 @@ int deleteFile(char* filename){
     writeSector(diskMap, 1);
     writeSector(&diskDir, 2);
   }else{
-    printString("Error: file not found\0");
+    //printString("Error: file doesn't exist.\0");
     return -1;
   }
   return 1;

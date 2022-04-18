@@ -42,6 +42,7 @@ void main() {
       } else { //file not found, display error
 	printString("Error: file not found\r\n\0");
       }
+      clearBuffer(buffer);
     }
     
       //command is "execute"

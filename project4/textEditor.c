@@ -27,7 +27,8 @@ void main(){
   while (fileBufferCursor < 13312) {
 
     //read the string typed in by the user line by line
-    numCharRead = readString(line, 80); 
+    numCharRead = readString(line, 70);
+    printString("\r\n");
     
     if (line[0] == 0x04){
       break;
