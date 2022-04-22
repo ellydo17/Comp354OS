@@ -57,7 +57,7 @@ void main() {
   //running the shell program
   
   makeInterrupt21();
-  interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
+  interrupt(0x21, 0x04, "shell\0", 0, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
   
 
