@@ -24,6 +24,7 @@ void main() {
     //Print out shell command as "Shell> "
     printString("Shell> \0");
 
+    /*
     //get the command
     readString(command, 30);
     printString("\r\n\0");
@@ -160,5 +161,6 @@ void main() {
     } else {
       printString("Unrecognized command.\r\n\0");
     }  
+    */
   }
 }
