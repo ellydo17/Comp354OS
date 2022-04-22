@@ -50,15 +50,21 @@ int deleteFile(char* filename);
 
 int writeFile(char *filename, char *buffer, int sectors);
 
-void main() {
-  //tests for project 4
+void handleTimerInterrupt(int segment, int stackPointer);
 
+void main() {
+  //tests for project 5
   //running the shell program
   
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
   
+
+  //to call the timer interrupt method, use this
+  makeTimerInterrupt();
+  
+  //tests for project 4
 
   //tests for "TextEditor"
   /*
@@ -253,6 +259,17 @@ void main() {
   while(1) {
   /*infinite loop*/
   }
+}
+
+/* Functions for project 5 */
+
+/*
+ * Timer Interrupt
+ */
+
+void handleTimerInterrupt(int segment, int stackPointer){
+  printString("tic\r\n\0");
+  //returnFromTimer(
 }
 
 /* Functions for project 4 */
