@@ -1,7 +1,10 @@
 /*
- * @author Elly Do, Sweta Tamrakar
- * @date February 15, 2022
+ * @author Elly Do, Sweta Tamrakar, Amelia Dao
+ * @date April 24, 2022
  */
+#define MAIN
+
+#include "proc.h"
 
 void putStr(int col, int row, char character[], char color);
 
@@ -56,7 +59,7 @@ void main() {
   //tests for project 5
 
   //tests for timer interrupts
- 
+  initializeProcStructures();
   makeInterrupt21();
   handleInterrupt21(0x04,"shell\0",0,0);
   makeTimerInterrupt();
