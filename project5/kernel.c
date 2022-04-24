@@ -54,14 +54,11 @@ void handleTimerInterrupt(int segment, int stackPointer);
 
 void main() {
   //tests for project 5
-  //running the shell program
-  
-  makeInterrupt21();
-  interrupt(0x21, 0x04, "shell\0", 0, 0);
-  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  
 
-  //to call the timer interrupt method, use this
+  //tests for timer interrupts
+ 
+  makeInterrupt21();
+  handleInterrupt21(0x04,"shell\0",0,0);
   makeTimerInterrupt();
   
   //tests for project 4
@@ -93,11 +90,11 @@ void main() {
   /*
   //load new file first, will delete it later
   char buffer[13312]; // the maximum size of a file
-  makeInterrupt21();
+//  makeInterrupt21();
   //read the file into buffer
-  interrupt(0x21, 0x03, "delete\0", buffer, 0);
+ // interrupt(0x21, 0x03, "delete\0", buffer, 0);
   //print out the file
-  interrupt(0x21, 0x00, buffer, 0, 0);
+ // interrupt(0x21, 0x00, buffer, 0, 0);
   */
   //delete the file "fileToDelete"
   /*
@@ -264,12 +261,14 @@ void main() {
 /* Functions for project 5 */
 
 /*
- * Timer Interrupt
+ * Timer Interrupts
+ * The timer_ISR function will pass the memory segment (e.g. 0x3000 or 0x5000) and 
+ * stack pointer of the interrupted process to your handleTimerInterrupt function.
  */
 
-void handleTimerInterrupt(int segment, int stackPointer){
-  printString("tic\r\n\0");
-  //returnFromTimer(
+void handleTimerInterrupt(int segment, int stackPointer) {
+  printString("tic\0");
+  returnFromTimer(segment,stackPointer);
 }
 
 /* Functions for project 4 */
