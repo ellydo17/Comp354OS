@@ -59,10 +59,11 @@ void main() {
   //tests for project 5
 
   //tests for timer interrupts
-  initializeProcStructures();
   makeInterrupt21();
   handleInterrupt21(0x04,"shell\0",0,0);
   makeTimerInterrupt();
+
+  initializeProcStructures();
   
   //tests for project 4
 
