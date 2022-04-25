@@ -50,7 +50,7 @@ void main() {
     else if (command[0] == 'e' && command[1] == 'x'&& command[2] == 'e' && command[3] == 'c' && command[4] == 'u' && command[5] == 't' && command[6] == 'e' && command[7] == ' ') {
       //printString("Command is execute.\r\n\0");
 
-      flag = executeProgram(command+8, 0x2000);
+      flag = executeProgram(command+8);
 
       if (flag == -1) { //file was found
 	printString("Error: cannot execute file.\r\n\0");

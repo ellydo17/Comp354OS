@@ -48,7 +48,7 @@ struct directory{
 
 void terminate();
 
-int executeProgram(char *name, int segment);
+int executeProgram(char *name);
 
 int writeSector(char *buf, int absSector);
 
@@ -338,24 +338,26 @@ void terminate() {
   printString("I'm back!\r\n\0");
 
   //Run the shell program again
-  executeProgram("shell\0", 0x2000);
+  executeProgram("shell\0");
 }
 
 /*
  * Loading and executing a program
  */
 
-int executeProgram(char *name, int segment){
+int executeProgram(char *name){
   char buffer[13312];
   int i = 0;
   int totalSectorsRead = readfile(name, buffer);
+  int segment;
   
   if (totalSectorsRead == -1) { //if program/file not found
     return -1;
   }else{  //if program/file found
-    //check for invalid segment, if segment is invalid, return -2
-    if (mod(segment, 0x1000) != 0 || segment == 0x0000 || segment == 0x1000 || segment >= 0xA000) {
-      printString("Invalid segment\0");
+    //get the free memory segment
+    segment = getFreeMemorySegment();
+    if (segment == -1) { //couldn't find a free memory segment
+      printString("No free segments.\0");
       return -2;
     } else { //segment is valid
       //iterate through the buffer and place each element from the buffer into the memory segment
@@ -568,7 +570,7 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
   }else if (ax == 0x03) { //0x03 specifies that we need to read the contents of a file into a buffer (project 3)
     return readfile(bx,cx);
   }else if (ax == 0x04) { //0x04 specifies that we need to load a program into memory annd execute it (project 3)
-    return executeProgram(bx, cx);
+    return executeProgram(bx);
   } else if (ax == 0x05) {  //0x05 specifies that we need to terminate a user program (project 3)
     return terminate();
   }else if (ax == 0x07) {  //0x05 specifies that we need to terminate a user program (project 3)
