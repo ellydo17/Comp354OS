@@ -1,4 +1,5 @@
 #include "proc.h"
+#include "userlib.h"
 
 /*
  * This function initializes all of the global variables and 
@@ -49,9 +50,13 @@ void initializeProcStructures(){
 int getFreeMemorySegment(){
   int j=0;
   int foundMemory = -1;
+  printString("Running getFree... method\r\n\0");
+  printString("print this line\r\n\0");
   while(j<8 && foundMemory == -1){
+    printString("ONE\r\n\0");
     if(memoryMap[j] == FREE){
       foundMemory = j;
+      printString("Found the free memory\r\n\0");
     }
     j++;
   }

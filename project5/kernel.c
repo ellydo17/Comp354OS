@@ -163,7 +163,7 @@ void main() {
  */
 
 void handleTimerInterrupt(int segment, int stackPointer) {
-  printString("tic\0");
+  //printString("tic\0");
   returnFromTimer(segment,stackPointer);
 }
 
@@ -361,6 +361,7 @@ int executeProgram(char *name){
       return -2;
     } else { //segment is valid
       //iterate through the buffer and place each element from the buffer into the memory segment
+      printString("found valid segment in kernel\r\n\0");
       while (i < (totalSectorsRead*512)) {
 	putInMemory(segment, i, buffer[i]);
 	i++;

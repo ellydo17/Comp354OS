@@ -78,7 +78,7 @@ ld86 -o shell -d shell.o userlib.o lib.o
 #compile proc.c with bcc, link the proc.o and lib.o files into the executable kernel file,
 #and use loadfile to copy the contents of the proc file to the disk image
 bcc -ansi -c -o proc.o proc.c
-ld86 -o kernel -d kernel.o proc.o kernel_asm.o
+ld86 -o kernel -d kernel.o proc.o userlib.o kernel_asm.o
 ./loadfile proc
 
 #run bochs to allow the bootloader to load the kernel
