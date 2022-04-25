@@ -1,10 +1,13 @@
+#define MAIN
+
+#include "proc.h"
+
 /*
  * @author Elly Do, Sweta Tamrakar, Amelia Dao
  * @date April 24, 2022
  */
-#define MAIN
 
-#include "proc.h"
+
 
 void putStr(int col, int row, char character[], char color);
 
