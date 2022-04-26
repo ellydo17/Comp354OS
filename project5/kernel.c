@@ -62,13 +62,11 @@ void main() {
   //tests for project 5
 
   //tests for timer interrupts
-  /*
+  
   makeInterrupt21();
+  initializeProcStructures();
   handleInterrupt21(0x04,"shell\0",0,0);
   makeTimerInterrupt();
-
-  initializeProcStructures();
-  */
   
   //tests for project 4
 
@@ -121,11 +119,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  
+  /*
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  
+  */
   
   //tests for "Terminating a User Program"
   /*
@@ -165,7 +163,7 @@ void main() {
  */
 
 void handleTimerInterrupt(int segment, int stackPointer) {
-  //printString("tic\0");
+  printString("tic\0");
   returnFromTimer(segment,stackPointer);
 }
 

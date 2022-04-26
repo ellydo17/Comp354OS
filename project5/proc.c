@@ -10,7 +10,7 @@ void initializeProcStructures(){
   //All entries in the memory map should be marked as FREE.
   for(i=0; i<8; i++){
     //memoryMap[i] = FREE;
-    memoryMap[i] = 0;
+    memoryMap[i] = FREE;
   }
 
   //All of the PCBs in the pcbPool should have the first character of their 
@@ -56,13 +56,16 @@ int getFreeMemorySegment(){
   while(j<8 && foundMemory == -1){
     //printString("ONE\r\n\0");
     //if(memoryMap[j] == FREE){
-    if(memoryMap[j] == 0){
+    if(memoryMap[j] == FREE){
       foundMemory = j;
       //printString("Found the free memory\r\n\0");
     }
     j++;
   }
   memoryMap[foundMemory] = USED;
+  if (foundMemory == -1) {
+    printString("Error\0");
+  }
   return foundMemory;
 }
 
