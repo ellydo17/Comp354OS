@@ -62,11 +62,13 @@ void main() {
   //tests for project 5
 
   //tests for timer interrupts
+  /*
   makeInterrupt21();
   handleInterrupt21(0x04,"shell\0",0,0);
   makeTimerInterrupt();
 
   initializeProcStructures();
+  */
   
   //tests for project 4
 
@@ -119,11 +121,11 @@ void main() {
   //tests for project 3
 
   //tests for "Command line shell"
-  /*
+  
   makeInterrupt21();
   interrupt(0x21, 0x04, "shell\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
-  */
+  
   
   //tests for "Terminating a User Program"
   /*
@@ -362,6 +364,8 @@ int executeProgram(char *name){
     } else { //segment is valid
       //iterate through the buffer and place each element from the buffer into the memory segment
       printString("found valid segment in kernel\r\n\0");
+      printInt(segment);
+      printString("end of sentence\r\n\0");
       while (i < (totalSectorsRead*512)) {
 	putInMemory(segment, i, buffer[i]);
 	i++;
