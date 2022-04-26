@@ -30,8 +30,30 @@ void testInit() {
 	assert(idleProc.stackPointer == 0x0000); 
 }
 
+void testFreeMemorySegmentTrue() {	
+	initializeProcStructures();
+
+	int i=0;
+	int segment = -1;
+	for (i=0; i<5; i++) {
+		memoryMap[i] = USED;
+	}
+	memoryMap[i] = FREE;
+	for (i=6; i<8; i++) {
+		memoryMap[i] = USED;
+	}
+	segment = getFreeMemorySegment();
+	printf("free memory segment is %d\n", segment);
+	assert(segment == 5);
+}
+
 int main() {
+  /*
 	printf("Testing initializeProcStructures\n");
 	testInit();
-	printf("done\n");	
+	printf("done\n");
+  */
+  printf("Testing free memory segment\n");
+	testFreeMemorySegmentTrue();
+	printf("done\n");
 }
