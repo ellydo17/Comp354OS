@@ -9,7 +9,6 @@ void initializeProcStructures(){
   int i=0;
   //All entries in the memory map should be marked as FREE.
   for(i=0; i<8; i++){
-    //memoryMap[i] = FREE;
     memoryMap[i] = FREE;
   }
 
@@ -52,10 +51,7 @@ int getFreeMemorySegment(){
   int j=0;
   int foundMemory = -1;
   //printString("Running getFree... method\r\n\0");
-  //printString("print this line\r\n\0");
   while(j<8 && foundMemory == -1){
-    //printString("ONE\r\n\0");
-    //if(memoryMap[j] == FREE){
     if(memoryMap[j] == FREE){
       foundMemory = j;
       //printString("Found the free memory\r\n\0");
@@ -64,7 +60,7 @@ int getFreeMemorySegment(){
   }
   memoryMap[foundMemory] = USED;
   if (foundMemory == -1) {
-    printString("Error\0");
+    printString("Error\r\n\0");
   }
   return foundMemory;
 }
@@ -79,6 +75,10 @@ void releaseMemorySegment(int seg){
   memoryMap[segIndex] = FREE;
 }
 
+/*
+ * can use mod to simplify this method
+ * index = mod(seg, 0x2000) - 2
+ */
 int memorySegmentHelper(int seg){
   if (seg == 0x2000) {
     return 0;

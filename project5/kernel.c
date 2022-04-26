@@ -64,8 +64,11 @@ void main() {
   //tests for timer interrupts
   
   makeInterrupt21();
+  
   initializeProcStructures();
+  
   handleInterrupt21(0x04,"shell\0",0,0);
+  
   makeTimerInterrupt();
   
   //tests for project 4
@@ -163,7 +166,7 @@ void main() {
  */
 
 void handleTimerInterrupt(int segment, int stackPointer) {
-  printString("tic\0");
+  printString("tic \0");
   returnFromTimer(segment,stackPointer);
 }
 
@@ -363,10 +366,8 @@ int executeProgram(char *name){
     } else { //segment is valid
       //iterate through the buffer and place each element from the buffer into the memory segment
       printString("found valid segment in kernel\r\n\0");
-      printInt(segmentIndex);
-      printString("end of sentence\r\n\0");
 
-      segment = executeProgramSegmentHelper(segmentIndex);
+      segment = 0x2000 + (segmentIndex * 0x1000);
       while (i < (totalSectorsRead*512)) {
 	putInMemory(segment, i, buffer[i]);
 	i++;
@@ -374,27 +375,7 @@ int executeProgram(char *name){
     }
   }
   
-  launchProgram(segment);
-}
-
-int executeProgramSegmentHelper(int seg){
-  if (seg == 0) {
-    return 0x2000;
-  } else if (seg == 1) {
-    return 0x3000;
-  }  else if (seg == 2) {
-    return 0x4000;
-  } else if (seg == 3) {
-    return 0x5000;
-  } else if (seg == 4) {
-    return  0x6000;
-  } else if (seg == 5) {
-    return 0x7000;
-  } else if (seg == 6) {
-    return 0x8000;
-  } else {
-    return 0x9000;
-  }
+  //launchProgram(segment);
 }
 
 /*
