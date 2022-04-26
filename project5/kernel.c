@@ -351,21 +351,24 @@ int executeProgram(char *name){
   char buffer[13312];
   int i = 0;
   int totalSectorsRead = readfile(name, buffer);
+  int segmentIndex;
   int segment;
   
   if (totalSectorsRead == -1) { //if program/file not found
     return -1;
   }else{  //if program/file found
     //get the free memory segment
-    segment = getFreeMemorySegment();
-    if (segment == -1) { //couldn't find a free memory segment
+    segmentIndex = getFreeMemorySegment();
+    if (segmentIndex == -1) { //couldn't find a free memory segment
       printString("No free segments.\0");
       return -2;
     } else { //segment is valid
       //iterate through the buffer and place each element from the buffer into the memory segment
       printString("found valid segment in kernel\r\n\0");
-      printInt(segment);
+      printInt(segmentIndex);
       printString("end of sentence\r\n\0");
+
+      segment = executeProgramSegmentHelper(segmentIndex);
       while (i < (totalSectorsRead*512)) {
 	putInMemory(segment, i, buffer[i]);
 	i++;
@@ -374,6 +377,26 @@ int executeProgram(char *name){
   }
   
   launchProgram(segment);
+}
+
+int executeProgramSegmentHelper(int seg){
+  if (seg == 0) {
+    return 0x2000;
+  } else if (seg == 1) {
+    return 0x3000;
+  }  else if (seg == 2) {
+    return 0x4000;
+  } else if (seg == 3) {
+    return 0x5000;
+  } else if (seg == 4) {
+    return  0x6000;
+  } else if (seg == 5) {
+    return 0x7000;
+  } else if (seg == 6) {
+    return 0x8000;
+  } else {
+    return 0x9000;
+  }
 }
 
 /*
