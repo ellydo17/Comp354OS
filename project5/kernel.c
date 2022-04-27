@@ -354,6 +354,8 @@ int executeProgram(char *name){
   int totalSectorsRead = readfile(name, buffer);
   int segmentIndex;
   int segment;
+  struct PCB *pcBlock;
+  int nameIndex=0;
   
   if (totalSectorsRead == -1) { //if program/file not found
     return -1;
@@ -363,11 +365,27 @@ int executeProgram(char *name){
     if (segmentIndex == -1) { //couldn't find a free memory segment
       printString("No free segments.\0");
       return -2;
-    } else { //segment is valid
-      //iterate through the buffer and place each element from the buffer into the memory segment
+    } else { //segment found
       printString("found valid segment in kernel\r\n\0");
 
+      //convert the segment index to actual segment
       segment = 0x2000 + (segmentIndex * 0x1000);
+      
+      //obtain a PCB for the process, initialize it and add to ready queue
+      pcBlock = getFreePCB();
+      addToReady(pcBlock);
+      
+      //set the name of process to the name of file given in the parameter
+      while(name[nameIndex] != '\0'){
+	pcBlock->name[nameIndex] = name[nameIndex];
+      }
+      //set the state of process and segment
+      pcBlock->state = STARTING;
+      pcBlock->segment = segment; //segment where the process is loaded
+      pcBlock->stackPointer = 0xFF00;
+      
+      //iterate through the buffer and place each element from the
+      //buffer into the memory segment
       while (i < (totalSectorsRead*512)) {
 	putInMemory(segment, i, buffer[i]);
 	i++;
@@ -376,6 +394,9 @@ int executeProgram(char *name){
   }
   
   //launchProgram(segment);
+  initializeProgram(segment);
+  printString("completed execute program method\r\n\0");
+  return 1;
 }
 
 /*

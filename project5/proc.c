@@ -94,8 +94,10 @@ int memorySegmentHelper(int seg){
     return 5;
   } else if (seg == 0x8000) {
     return 6;
-  } else {
+  } else if (seg == 0x9000) {
     return 7;
+  }else {
+    return -1;
   }
 }
 
