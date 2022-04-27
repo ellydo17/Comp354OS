@@ -366,7 +366,7 @@ int executeProgram(char *name){
       printString("No free segments.\0");
       return -2;
     } else { //segment found
-      printString("found valid segment in kernel\r\n\0");
+      printString("Found valid segment in kernel.\r\n\0");
 
       //convert the segment index to actual segment
       segment = 0x2000 + (segmentIndex * 0x1000);
