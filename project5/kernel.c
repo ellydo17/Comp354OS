@@ -406,27 +406,37 @@ int executeProgram(char *name){
     //get the free memory segment
     segmentIndex = getFreeMemorySegment();
     if (segmentIndex == -1) { //couldn't find a free memory segment
-      printString("No free segments.\0");
+      //printString("No free segments.\0");
       return -2;
     } else { //segment found
-      printString("Found valid segment in kernel.\r\n\0");
+      //printString("Found valid segment in kernel.\r\n\0");
 
       //convert the segment index to actual segment
       segment = 0x2000 + (segmentIndex * 0x1000);
-
+      //printString("converted the segment index to actual segment.\r\n\0");
       
       //obtain a PCB for the process, initialize it and add to ready queue
       pcBlock = getFreePCB();
       addToReady(pcBlock);
+      //printString("obtained a PCB for the process\r\n\0");
       
       //set the name of process to the name of file given in the parameter
       while(name[nameIndex] != '\0'){
+	/*
+	printString("The name is \0");
+	printString(nameIndex);
+	printString("\r\n\0");
+	*/
 	pcBlock->name[nameIndex] = name[nameIndex];
+	nameIndex++;
       }
+      //printString("set the name of process to the name of file\r\n\0");
+      
       //set the state of process and segment
       pcBlock->state = STARTING;
       pcBlock->segment = segment; //segment where the process is loaded
       pcBlock->stackPointer = 0xFF00;
+      //printString("set the state of process and segment\r\n\0");
       
       //iterate through the buffer and place each element from the
       //buffer into the memory segment
