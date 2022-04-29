@@ -166,8 +166,39 @@ void main() {
  */
 
 void handleTimerInterrupt(int segment, int stackPointer) {
+  struct PCB* removedPCB;
+  
+  /*
   printString("tic \0");
-  returnFromTimer(segment,stackPointer);
+  */
+  //if the running process is terminated but there is nothing in the ready queue
+  if (running->state == DEFUNCT && readyHead == NULL) {
+    idleProc->state = RUNNING;
+      running = idleProc;
+  
+  }else{
+    //if the running process is not terminated, save its details
+    if (running->state != DEFUNCT){
+      //save the stack pointer into the PCB of the running process
+      running->stackPointer = stackPointer;
+      //mark that process as READY
+      running->state = READY;
+      //add it to the tail of the ready queue
+      addToReady(running);
+    }
+
+    //get a new process from the ready queue
+    
+    //remove the PCB from the head of the ready queue
+    removedPCB = removeFromReady();
+    //mark it as RUNNING
+    removedPCB->state = RUNNING;
+    //set the running variable to point to it
+    running = removedPCB;
+  }
+
+  //invoke the returnFromTimer method with the segment and stack pointer of the new running process.
+  returnFromTimer(running->segment, running->stackPointer);
 }
 
 /* Functions for project 4 */
@@ -338,10 +369,20 @@ int writeSector(char *buf, int absSector){
 void terminate() {
   //reset the segment registers and stack pointer to the memory segment containing the kernel
   resetSegments();
-  printString("I'm back!\r\n\0");
+  //printString("I'm back!\r\n\0");
 
   //Run the shell program again
-  executeProgram("shell\0");
+  //executeProgram("shell\0");
+
+  //free the memory segment that it is using, free the PCB that it is using
+  releaseMemorySegment(running);
+  releasePCB(running);
+
+  //set its state to DEFUNCT
+  running->state = DEFUNCT;
+
+  //enter an infinite while loop
+  while(1);
 }
 
 /*
