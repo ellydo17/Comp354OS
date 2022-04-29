@@ -67,7 +67,7 @@ void main() {
   
   initializeProcStructures();
   
-  handleInterrupt21(0x04,"shell\0",0,0);
+  handleInterrupt21(0x04,"shell\0",0x2000,0);
   
   makeTimerInterrupt();
   
@@ -168,13 +168,14 @@ void main() {
 void handleTimerInterrupt(int segment, int stackPointer) {
   struct PCB* removedPCB;
   
-  /*
+  
   printString("tic \0");
-  */
+  returnFromTimer(segment, stackPointer);
+  /*
   //if the running process is terminated but there is nothing in the ready queue
   if (running->state == DEFUNCT && readyHead == NULL) {
-    idleProc->state = RUNNING;
-      running = idleProc;
+    idleProc.state = RUNNING;
+      running = &idleProc;
   
   }else{
     //if the running process is not terminated, save its details
@@ -196,9 +197,10 @@ void handleTimerInterrupt(int segment, int stackPointer) {
     //set the running variable to point to it
     running = removedPCB;
   }
-
+  
   //invoke the returnFromTimer method with the segment and stack pointer of the new running process.
   returnFromTimer(running->segment, running->stackPointer);
+  */
 }
 
 /* Functions for project 4 */
@@ -411,6 +413,7 @@ int executeProgram(char *name){
 
       //convert the segment index to actual segment
       segment = 0x2000 + (segmentIndex * 0x1000);
+
       
       //obtain a PCB for the process, initialize it and add to ready queue
       pcBlock = getFreePCB();
