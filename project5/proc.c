@@ -59,9 +59,11 @@ int getFreeMemorySegment(){
     j++;
   }
   memoryMap[foundMemory] = USED;
+  /*
   if (foundMemory == -1) {
     printString("Error\r\n\0");
   }
+  */
   return foundMemory;
 }
 
