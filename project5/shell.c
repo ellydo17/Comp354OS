@@ -20,6 +20,8 @@ void main() {
   char buffer[13312]; //buffer stores the contents from the file when file is read/program is executed
   int flag = 0; //true if file/program is found and can be executed
   
+  enableInterrupts();
+ 
   while(1){
     //Print out shell command as "Shell> "
     printString("Shell> \0");

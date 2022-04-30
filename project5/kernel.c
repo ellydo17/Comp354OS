@@ -183,13 +183,10 @@ void kStrCopy(char *src, char *dest, int len) {
 
 void handleTimerInterrupt(int segment, int stackPointer) {
   struct PCB* removedPCB;
-  
   /*
   printString("tic \0");
   returnFromTimer(segment, stackPointer);
   */
-
-    setKernelDataSegment();
   
   //if the running process is terminated but there is nothing in the ready queue
   if (running->state == DEFUNCT && readyHead == NULL) {
@@ -206,7 +203,9 @@ void handleTimerInterrupt(int segment, int stackPointer) {
       running->state = READY;
       
       //add it to the tail of the ready queue (global structure)
+      setKernelDataSegment();
       addToReady(running);
+      restoreDataSegment();
     }
 
     //get a new process from the ready queue
@@ -222,8 +221,6 @@ void handleTimerInterrupt(int segment, int stackPointer) {
     //set the running variable to point to it
     running = removedPCB;
   }
-
-  restoreDataSegment();
   
   //invoke the returnFromTimer method with the segment and stack pointer of the new running process.
   returnFromTimer(running->segment, running->stackPointer);
@@ -399,17 +396,16 @@ void terminate() {
   //reset the segment registers and stack pointer to the memory segment containing the kernel
   resetSegments();
 
-  setKernelDataSegment();
-
   //free the memory segment that it is using, free the PCB that it is using
-  
+  setKernelDataSegment();
   releaseMemorySegment(running);
-  releasePCB(running);
+  restoreDataSegment();
 
+  setKernelDataSegment();
+  releasePCB(running);
+  restoreDataSegment();
   //set its state to DEFUNCT
   running->state = DEFUNCT;
-
-  restoreDataSegment();
 
   //enter an infinite while loop
   while(1);
@@ -427,14 +423,14 @@ int executeProgram(char *name){
   int segment;
   struct PCB *pcBlock;
   int nameIndex=0;
-
-  setKernelDataSegment();
   
   if (totalSectorsRead == -1) { //if program/file not found
     return -1;
   }else{  //if program/file found
     //get the free memory segment (global structure)
+    setKernelDataSegment();
     segmentIndex = getFreeMemorySegment();
+    restoreDataSegment();
     
     if (segmentIndex == -1) { //couldn't find a free memory segment
       return -2;
@@ -443,8 +439,13 @@ int executeProgram(char *name){
       segment = 0x2000 + (segmentIndex * 0x1000);
       
       //obtain a PCB for the process, initialize it and add to ready queue
+      setKernelDataSegment();
       pcBlock = getFreePCB();
+      restoreDataSegment();
+      
+      setKernelDataSegment();
       addToReady(pcBlock);
+      restoreDataSegment();
       
       //set the name of process to the name of file given in the parameter
       kStrCopy(name, pcBlock->name, 7);
@@ -462,10 +463,8 @@ int executeProgram(char *name){
       }
     }
   }
-  
-  restoreDataSegment();
-  
-  //launchProgram(segment);
+ 
+  launchProgram(segment);
   //initializeProgram(segment);
   printString("completed execute program method\r\n\0");
   return 1;

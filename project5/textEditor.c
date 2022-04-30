@@ -10,6 +10,8 @@ void main(){
   char ch;
   int sectors = 1;
 
+  enableInterrupts();
+
   //get the file name from the user
   printString("Enter a filename: \0");
   readString(filename, 6);
