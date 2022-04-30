@@ -58,6 +58,8 @@ int writeFile(char *filename, char *buffer, int sectors);
 
 void handleTimerInterrupt(int segment, int stackPointer);
 
+void kStrCopy(char *src, char *dest, int len);
+
 void main() {
   //tests for project 5
 
@@ -158,6 +160,20 @@ void main() {
 }
 
 /* Functions for project 5 */
+
+/* kStrCopy(char *src, char *dest, int len) copy at most len
+* characters from src which is addressed relative to the current * data segment into dest which is addressed relative to the
+* kernel's data segment (0x1000).
+*/
+void kStrCopy(char *src, char *dest, int len) {
+  int i=0;
+  for (i=0; i<len; i++) {
+    putInMemory(0x1000, dest+i, src[i]);
+    if (src[i] == 0x00) {
+      return;
+    }
+  }
+}
 
 /*
  * Timer Interrupts
@@ -406,14 +422,10 @@ int executeProgram(char *name){
     //get the free memory segment
     segmentIndex = getFreeMemorySegment();
     if (segmentIndex == -1) { //couldn't find a free memory segment
-      //printString("No free segments.\0");
       return -2;
     } else { //segment found
-      //printString("Found valid segment in kernel.\r\n\0");
-
       //convert the segment index to actual segment
       segment = 0x2000 + (segmentIndex * 0x1000);
-      //printString("converted the segment index to actual segment.\r\n\0");
       
       //obtain a PCB for the process, initialize it and add to ready queue
       pcBlock = getFreePCB();
@@ -421,15 +433,14 @@ int executeProgram(char *name){
       //printString("obtained a PCB for the process\r\n\0");
       
       //set the name of process to the name of file given in the parameter
+      /*
       while(name[nameIndex] != '\0'){
-	/*
-	printString("The name is \0");
-	printString(nameIndex);
-	printString("\r\n\0");
-	*/
 	pcBlock->name[nameIndex] = name[nameIndex];
 	nameIndex++;
       }
+      */
+      kStrCopy(name, pcBlock->name, 7);
+	       
       //printString("set the name of process to the name of file\r\n\0");
       
       //set the state of process and segment
