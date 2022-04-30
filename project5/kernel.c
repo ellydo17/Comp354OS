@@ -217,6 +217,7 @@ void handleTimerInterrupt(int segment, int stackPointer) {
   
   //invoke the returnFromTimer method with the segment and stack pointer of the new running process.
   returnFromTimer(running->segment, running->stackPointer);
+  
 }
 
 /* Functions for project 4 */
@@ -458,7 +459,7 @@ int executeProgram(char *name){
     }
   }
   
-  launchProgram(segment);
+  //launchProgram(segment);
   //initializeProgram(segment);
   printString("completed execute program method\r\n\0");
   return 1;
