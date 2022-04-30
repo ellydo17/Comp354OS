@@ -64,6 +64,12 @@ bcc -ansi -c -o textEditor.o textEditor.c
 ld86 -o textEditor -d textEditor.o userlib.o lib.o
 ./loadfile textEditor
 
+#compile hello.c with bcc, link the hello.o and lib.o files into the executable kernel file,
+#and use loadFile to copy the contents of the hello file to the disk image
+bcc -ansi -c -o hello.o hello.c
+ld86 -o hello -d hello.o userlib.o lib.o
+./loadfile hello
+
 #Command line shell, Improvements - creating a user library
 
 #compile userlib.c with bcc
