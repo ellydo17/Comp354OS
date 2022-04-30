@@ -168,10 +168,11 @@ void main() {
 void handleTimerInterrupt(int segment, int stackPointer) {
   struct PCB* removedPCB;
   
-  
+  /*
   printString("tic \0");
   returnFromTimer(segment, stackPointer);
-  /*
+  */
+  
   //if the running process is terminated but there is nothing in the ready queue
   if (running->state == DEFUNCT && readyHead == NULL) {
     idleProc.state = RUNNING;
@@ -200,7 +201,6 @@ void handleTimerInterrupt(int segment, int stackPointer) {
   
   //invoke the returnFromTimer method with the segment and stack pointer of the new running process.
   returnFromTimer(running->segment, running->stackPointer);
-  */
 }
 
 /* Functions for project 4 */
@@ -447,8 +447,8 @@ int executeProgram(char *name){
     }
   }
   
-  //launchProgram(segment);
-  initializeProgram(segment);
+  launchProgram(segment);
+  //initializeProgram(segment);
   printString("completed execute program method\r\n\0");
   return 1;
 }
