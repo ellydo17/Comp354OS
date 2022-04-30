@@ -188,6 +188,8 @@ void handleTimerInterrupt(int segment, int stackPointer) {
   printString("tic \0");
   returnFromTimer(segment, stackPointer);
   */
+
+    setKernelDataSegment();
   
   //if the running process is terminated but there is nothing in the ready queue
   if (running->state == DEFUNCT && readyHead == NULL) {
@@ -199,21 +201,29 @@ void handleTimerInterrupt(int segment, int stackPointer) {
     if (running->state != DEFUNCT){
       //save the stack pointer into the PCB of the running process
       running->stackPointer = stackPointer;
+      
       //mark that process as READY
       running->state = READY;
-      //add it to the tail of the ready queue
+      
+      //add it to the tail of the ready queue (global structure)
       addToReady(running);
     }
 
     //get a new process from the ready queue
     
-    //remove the PCB from the head of the ready queue
+    //remove the PCB from the head of the ready queue (global structure)
+    setKernelDataSegment();
     removedPCB = removeFromReady();
+    restoreDataSegment();
+    
     //mark it as RUNNING
     removedPCB->state = RUNNING;
+    
     //set the running variable to point to it
     running = removedPCB;
   }
+
+  restoreDataSegment();
   
   //invoke the returnFromTimer method with the segment and stack pointer of the new running process.
   returnFromTimer(running->segment, running->stackPointer);
@@ -388,17 +398,18 @@ int writeSector(char *buf, int absSector){
 void terminate() {
   //reset the segment registers and stack pointer to the memory segment containing the kernel
   resetSegments();
-  //printString("I'm back!\r\n\0");
 
-  //Run the shell program again
-  //executeProgram("shell\0");
+  setKernelDataSegment();
 
   //free the memory segment that it is using, free the PCB that it is using
+  
   releaseMemorySegment(running);
   releasePCB(running);
 
   //set its state to DEFUNCT
   running->state = DEFUNCT;
+
+  restoreDataSegment();
 
   //enter an infinite while loop
   while(1);
@@ -416,12 +427,15 @@ int executeProgram(char *name){
   int segment;
   struct PCB *pcBlock;
   int nameIndex=0;
+
+  setKernelDataSegment();
   
   if (totalSectorsRead == -1) { //if program/file not found
     return -1;
   }else{  //if program/file found
-    //get the free memory segment
+    //get the free memory segment (global structure)
     segmentIndex = getFreeMemorySegment();
+    
     if (segmentIndex == -1) { //couldn't find a free memory segment
       return -2;
     } else { //segment found
@@ -431,24 +445,14 @@ int executeProgram(char *name){
       //obtain a PCB for the process, initialize it and add to ready queue
       pcBlock = getFreePCB();
       addToReady(pcBlock);
-      //printString("obtained a PCB for the process\r\n\0");
       
       //set the name of process to the name of file given in the parameter
-      /*
-      while(name[nameIndex] != '\0'){
-	pcBlock->name[nameIndex] = name[nameIndex];
-	nameIndex++;
-      }
-      */
       kStrCopy(name, pcBlock->name, 7);
-	       
-      //printString("set the name of process to the name of file\r\n\0");
       
       //set the state of process and segment
       pcBlock->state = STARTING;
       pcBlock->segment = segment; //segment where the process is loaded
       pcBlock->stackPointer = 0xFF00;
-      //printString("set the state of process and segment\r\n\0");
       
       //iterate through the buffer and place each element from the
       //buffer into the memory segment
@@ -458,6 +462,8 @@ int executeProgram(char *name){
       }
     }
   }
+  
+  restoreDataSegment();
   
   //launchProgram(segment);
   //initializeProgram(segment);
