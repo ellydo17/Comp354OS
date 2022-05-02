@@ -142,10 +142,15 @@ void releasePCB(struct PCB *pcb){
  * Add the provided PCB to the tail of the ready queue.
  */
 void addToReady(struct PCB *pcb){
-  pcb->prev = readyTail;
-  readyTail->next = pcb;
-  readyTail = pcb;
-  readyTail->next = NULL;
+  if (readyHead == NULL) {
+    readyHead = pcb;
+    readyHead->next = readyTail;
+  } else {
+    pcb->prev = readyTail;
+    readyTail->next = pcb;
+    readyTail = pcb;
+    readyTail->next = NULL;
+  }
 }
 
 /*
@@ -154,8 +159,13 @@ void addToReady(struct PCB *pcb){
  */
 struct PCB *removeFromReady(){
   struct PCB *removedPCB;
-  removedPCB = readyHead;
-  readyHead = readyHead->next;
-  readyHead->prev = NULL;
+
+  if (readyHead == NULL) {
+    removedPCB = NULL;
+  } else {
+    removedPCB = readyHead;
+    readyHead = readyHead->next;
+    readyHead->prev = NULL;
+  }
   return removedPCB;
 }
