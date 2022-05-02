@@ -73,34 +73,8 @@ int getFreeMemorySegment(){
  */
 void releaseMemorySegment(int seg){
   int segIndex;
-  segIndex = memorySegmentHelper(seg);
+  segIndex = (seg/0x1000) - 2;
   memoryMap[segIndex] = FREE;
-}
-
-/*
- * can use mod to simplify this method
- * index = mod(seg, 0x2000) - 2
- */
-int memorySegmentHelper(int seg){
-  if (seg == 0x2000) {
-    return 0;
-  } else if (seg == 0x3000) {
-    return 1;
-  }  else if (seg == 0x4000) {
-    return 2;
-  } else if (seg == 0x5000) {
-    return 3;
-  } else if (seg == 0x6000) {
-    return 4;
-  } else if (seg == 0x7000) {
-    return 5;
-  } else if (seg == 0x8000) {
-    return 6;
-  } else if (seg == 0x9000) {
-    return 7;
-  }else {
-    return -1;
-  }
 }
 
 /*
@@ -144,12 +118,14 @@ void releasePCB(struct PCB *pcb){
 void addToReady(struct PCB *pcb){
   if (readyHead == NULL) {
     readyHead = pcb;
-    readyHead->next = readyTail;
+    readyTail = pcb;
+    pcb->next = NULL;
+    pcb->prev = NULL;
   } else {
     pcb->prev = readyTail;
     readyTail->next = pcb;
     readyTail = pcb;
-    readyTail->next = NULL;
+    pcb->next = NULL;
   }
 }
 

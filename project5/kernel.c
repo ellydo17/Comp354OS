@@ -441,19 +441,15 @@ int executeProgram(char *name){
       //obtain a PCB for the process, initialize it and add to ready queue
       setKernelDataSegment();
       pcBlock = getFreePCB();
-      restoreDataSegment();
-      
-      setKernelDataSegment();
-      addToReady(pcBlock);
-      restoreDataSegment();
-      
-      //set the name of process to the name of file given in the parameter
-      kStrCopy(name, pcBlock->name, 7);
-      
+     
       //set the state of process and segment
-      pcBlock->state = STARTING;
+      pcBlock->state = READY; 
       pcBlock->segment = segment; //segment where the process is loaded
       pcBlock->stackPointer = 0xFF00;
+
+      addToReady(pcBlock);
+
+      restoreDataSegment();
       
       //iterate through the buffer and place each element from the
       //buffer into the memory segment
@@ -463,9 +459,12 @@ int executeProgram(char *name){
       }
     }
   }
+        
+  //set the name of process to the name of file given in the parameter
+  kStrCopy(name, pcBlock->name, 7);
  
-  launchProgram(segment);
-  //initializeProgram(segment);
+  //launchProgram(segment);
+  initializeProgram(segment);
   printString("completed execute program method\r\n\0");
   return 1;
 }
