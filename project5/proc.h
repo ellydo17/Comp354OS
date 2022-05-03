@@ -97,11 +97,6 @@ int getFreeMemorySegment();
 void releaseMemorySegment(int seg);
 
 /*
- * Release the memory segment helper
- */
-int memorySegmentHelper(int seg);
-
-/*
  * Return a pointer to an available PCB from the PCB pool.  All of the
  * available PCBs should be marked as DEFUNCT.  The returned PCB should
  * be marked as STARTING. Return NULL if there are no PCBs available.

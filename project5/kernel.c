@@ -60,6 +60,12 @@ void handleTimerInterrupt(int segment, int stackPointer);
 
 void kStrCopy(char *src, char *dest, int len);
 
+void yield();
+
+void showProcesses();
+
+int kill(int segment);
+
 void main() {
   //tests for project 5
 
@@ -159,10 +165,31 @@ void main() {
 
 /* Functions for project 5 */
 
+/*
+ * This function should kill the process that is executing in the segment with the specified index.
+ */
+int kill(int segment){
+  return -1;
+}
+
+/*
+ * This function should display a list of the names and memory segment indices of all of the currently executing processes.
+ */
+void showProcesses(){
+}
+
+/*
+ * This function causes the executing process to give up the remainder of its time slice and be put back into the ready queue.
+ */
+void yield(){
+  interrupt(0x21, 0x0C, 0, 0, 0);
+}
+
 /* kStrCopy(char *src, char *dest, int len) copy at most len
-* characters from src which is addressed relative to the current * data segment into dest which is addressed relative to the
-* kernel's data segment (0x1000).
-*/
+ * characters from src which is addressed relative to the current 
+ * data segment into dest which is addressed relative to the
+ * kernel's data segment (0x1000).
+ */
 void kStrCopy(char *src, char *dest, int len) {
   int i=0;
   for (i=0; i<len; i++) {
@@ -658,6 +685,14 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     return  deleteFile(bx);
   }else if (ax == 0x08) {  //0x05 specifies that we need to terminate a user program (project 3)
     return  writeFile(bx,cx,dx);
+  }else if (ax == 0x09) {  //0x05 specifies that we need to terminate a user program (project 3)
+    return  yield();
+  }else if (ax == 0x0A) {  //0x0A specifies that we need to display all data of processes (project 5)
+    return  showProcesses();
+  }else if (ax == 0x0B) {  //0x0B specifies that we need to kill the process at index bx (project 5)
+    return  kill(bx);
+  }else if (ax == 0x0C) {  //0x0B specifies that we need to kill the process at index bx (project 5)
+    return interrupt(0x08,0,0,0);
   }else{
     return -1;
   }
