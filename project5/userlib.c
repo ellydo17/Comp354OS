@@ -63,3 +63,15 @@ int mod(int dividend, int divisor) {
   }
   return dividend;
 }
+
+//yield
+void yield(){
+  return interrupt(0x21, 0x09, 0, 0, 0);
+}
+
+//show processes
+void showProcesses(){
+  return interrupt(0x21, 0x0A, 0, 0, 0);
+}
+
+

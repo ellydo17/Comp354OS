@@ -37,5 +37,11 @@ void clearBuffer(char* buffer);
 //modulus operator
 int mod(int dividend, int divisor);
 
+//yield
+void yield();
+
+//show processes
+void showProcesses();
+
 #endif
   

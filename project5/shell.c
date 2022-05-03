@@ -158,9 +158,18 @@ void main() {
 	iDir++;
       }
       clearBuffer(buffer3);
+
+     //command is "ps"
+    } else if (command[0] == 'p' && command[1] == 's'&& command[2] == '\0') {
+      printString("Command is ps.\r\n\0");
+
+      showProcesses();
+
+      printString("ps is finished.\r\n\0");
+    }
       
     //command is invalid 
-    } else {
+    else {
       printString("Unrecognized command.\r\n\0");
     }  
     

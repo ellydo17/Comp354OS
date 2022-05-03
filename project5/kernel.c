@@ -176,6 +176,21 @@ int kill(int segment){
  * This function should display a list of the names and memory segment indices of all of the currently executing processes.
  */
 void showProcesses(){
+  struct PCB* curPCB;
+  int seg;
+  curPCB = readyHead;
+  while(curPCB != NULL){
+    seg = curPCB->segment;
+    seg = seg/0x1000-2;
+
+    printString("name = \0");
+    printString(curPCB->name);
+    printString(", segment index = \0");
+    printInt(seg);
+    printString("\r\n\0");
+    
+    curPCB = curPCB->next;
+  }
 }
 
 /*
