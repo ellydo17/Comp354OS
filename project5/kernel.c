@@ -178,6 +178,17 @@ int kill(int segment){
 void showProcesses(){
   struct PCB* curPCB;
   int seg;
+
+  //print out running process first
+  printString("name = \0");
+  printString(running->name);
+  seg = running->segment;
+  seg = seg/0x1000-2;
+  printString(", segment index = \0");
+  printInt(seg);
+  printString("\r\n\0");
+  
+  //print out processes in the ready queue
   curPCB = readyHead;
   while(curPCB != NULL){
     seg = curPCB->segment;
