@@ -64,13 +64,11 @@ void main() {
   //tests for project 5
 
   //tests for timer interrupts
-  
-  makeInterrupt21();
-  
+
   initializeProcStructures();
   
+  makeInterrupt21();
   handleInterrupt21(0x04,"shell\0",0x2000,0);
-  
   makeTimerInterrupt();
   
   //tests for project 4
@@ -183,12 +181,15 @@ void kStrCopy(char *src, char *dest, int len) {
 
 void handleTimerInterrupt(int segment, int stackPointer) {
   struct PCB* removedPCB;
+  int newSegment;
+  int newStackPointer;
   /*
   printString("tic \0");
   returnFromTimer(segment, stackPointer);
   */
   
   //if the running process is terminated but there is nothing in the ready queue
+  /*
   if (running->state == DEFUNCT && readyHead == NULL) {
     idleProc.state = RUNNING;
       running = &idleProc;
@@ -208,22 +209,41 @@ void handleTimerInterrupt(int segment, int stackPointer) {
       restoreDataSegment();
     }
 
-    //get a new process from the ready queue
+    
     
     //remove the PCB from the head of the ready queue (global structure)
     setKernelDataSegment();
     removedPCB = removeFromReady();
     restoreDataSegment();
     
-    //mark it as RUNNING
-    removedPCB->state = RUNNING;
     
-    //set the running variable to point to it
-    running = removedPCB;
   }
+  */
+
+  setKernelDataSegment();
+  
+  //save the stack pointer into the PCB of the running process
+  running->stackPointer = stackPointer;
+
+  if(*running != idleProc){
+    addToReady(running);
+  }
+
+  //get a new process from the ready queue
+  removedPCB = removeFromReady();
+  newSegment = removedPCB->segment;
+  newStackPointer = removedPCB->stackPointer;
+
+  //mark it as RUNNING
+  removedPCB->state = RUNNING;
+    
+  //set the running variable to point to it
+  running = removedPCB;
+
+  restoreDataSegment();
   
   //invoke the returnFromTimer method with the segment and stack pointer of the new running process.
-  returnFromTimer(running->segment, running->stackPointer);
+  returnFromTimer(newSegment, newStackPointer);
   
 }
 
