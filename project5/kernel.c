@@ -179,6 +179,8 @@ void showProcesses(){
   struct PCB* curPCB;
   int seg;
 
+  printString("showProssess is running\r\n\0");
+  
   //print out running process first
   printString("name = \0");
   printString(running->name);
