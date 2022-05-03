@@ -183,49 +183,13 @@ void handleTimerInterrupt(int segment, int stackPointer) {
   struct PCB* removedPCB;
   int newSegment;
   int newStackPointer;
-  /*
-  printString("tic \0");
-  returnFromTimer(segment, stackPointer);
-  */
-  
-  //if the running process is terminated but there is nothing in the ready queue
-  /*
-  if (running->state == DEFUNCT && readyHead == NULL) {
-    idleProc.state = RUNNING;
-      running = &idleProc;
-  
-  }else{
-    //if the running process is not terminated, save its details
-    if (running->state != DEFUNCT){
-      //save the stack pointer into the PCB of the running process
-      running->stackPointer = stackPointer;
-      
-      //mark that process as READY
-      running->state = READY;
-      
-      //add it to the tail of the ready queue (global structure)
-      setKernelDataSegment();
-      addToReady(running);
-      restoreDataSegment();
-    }
-
-    
-    
-    //remove the PCB from the head of the ready queue (global structure)
-    setKernelDataSegment();
-    removedPCB = removeFromReady();
-    restoreDataSegment();
-    
-    
-  }
-  */
 
   setKernelDataSegment();
   
   //save the stack pointer into the PCB of the running process
   running->stackPointer = stackPointer;
 
-  if(*running != idleProc){
+  if(running->name != idleProc.name){
     addToReady(running);
   }
 
@@ -244,7 +208,6 @@ void handleTimerInterrupt(int segment, int stackPointer) {
   
   //invoke the returnFromTimer method with the segment and stack pointer of the new running process.
   returnFromTimer(newSegment, newStackPointer);
-  
 }
 
 /* Functions for project 4 */
