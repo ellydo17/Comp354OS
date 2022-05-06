@@ -178,10 +178,18 @@ int kill(int segment){
 void showProcesses(){
   struct PCB* curPCB;
   int seg;
+  int memoryMapIndex = 0; 
 
   printString("showProssess is running\r\n\0");
+
+  for(memoryMapIndex = 0; memoryMapIndex < 8; memoryMapIndex++) {
+    if (memoryMap[memoryMapIndex] == USED) {
+      curPCB = pcbPool[memoryMapIndex];
+    }
+  }
   
   //print out running process first
+  /*
   printString("name = \0");
   printString(running->name);
   seg = running->segment;
@@ -203,6 +211,7 @@ void showProcesses(){
     printString("\r\n\0");
     
     curPCB = curPCB->next;
+  */
   }
 }
 
