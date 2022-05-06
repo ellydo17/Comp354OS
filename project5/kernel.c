@@ -70,13 +70,11 @@ void main() {
   //tests for project 5
 
   //tests for timer interrupts
-
+  
   initializeProcStructures();
-
   makeInterrupt21();
   handleInterrupt21(0x04,"shell\0",0x2000,0);
   makeTimerInterrupt();
-
   
   //tests for project 4
 
@@ -178,24 +176,30 @@ int kill(int segment){
  */
 void showProcesses(){
   struct PCB* curPCB;
-  int seg;
+  int segIndex;
   int memory;
   int memoryMapIndex; 
 
-  printString("showProssess is running\r\n\0");
-
   setKernelDataSegment();
+  printString("showProssess is running\r\n\0");
+  
   for(memoryMapIndex = 0; memoryMapIndex < 8; memoryMapIndex++) {
     memory = memoryMap[memoryMapIndex];
     if (memory == USED) {
       curPCB = &pcbPool[memoryMapIndex+1];
+      segIndex = curPCB->segment;
+      //segIndex = (curPCB->segment/0x1000) - 2;
 
       //print out executing process's name and segment index first
-  
       printString("name = \0");
       printString(curPCB->name);
       printString(", segment index = \0");
-      printInt(curPCB->segment);
+      //printInt(segIndex);
+      if (memoryMapIndex == 0) {
+	printString("0\0");
+      } else {
+        printInt(memoryMapIndex);
+      }
       printString("\r\n\0");
     }
   }
@@ -592,7 +596,7 @@ int printInt(int num){
   int numDigits = getNumDigits(num);
   
   //convert the integer to string
-  char *str = itoa(num, numDigits);
+  char *str = itoa(num);
   
   //print out the string
   printString(str);

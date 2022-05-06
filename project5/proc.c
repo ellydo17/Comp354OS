@@ -102,7 +102,7 @@ struct PCB *getFreePCB(){
 
 /*
  * Release the provided PCB by setting its state to DEFUNCT, setting
- * its next and prev pointers to NULL and setting the first character
+ * its next and prev pointers to NULL and se tting the first character
  * of its name to 0x00.
  */
 void releasePCB(struct PCB *pcb){
