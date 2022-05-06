@@ -160,7 +160,7 @@ void main() {
       clearBuffer(buffer3);
 
      //command is "ps"
-    } else if (command[0] == 'p' && command[1] == 's'&& command[2] == '\0') {
+    } else if (command[0] == 'p' && command[1] == 's' && command[2] == '\0') {
       printString("Command is ps.\r\n\0");
 
       showProcesses();

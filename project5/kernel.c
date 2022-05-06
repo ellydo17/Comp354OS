@@ -72,10 +72,11 @@ void main() {
   //tests for timer interrupts
 
   initializeProcStructures();
-  
+
   makeInterrupt21();
   handleInterrupt21(0x04,"shell\0",0x2000,0);
   makeTimerInterrupt();
+
   
   //tests for project 4
 
@@ -178,41 +179,27 @@ int kill(int segment){
 void showProcesses(){
   struct PCB* curPCB;
   int seg;
-  int memoryMapIndex = 0; 
+  int memory;
+  int memoryMapIndex; 
 
   printString("showProssess is running\r\n\0");
 
+  setKernelDataSegment();
   for(memoryMapIndex = 0; memoryMapIndex < 8; memoryMapIndex++) {
-    if (memoryMap[memoryMapIndex] == USED) {
-      curPCB = pcbPool[memoryMapIndex];
+    memory = memoryMap[memoryMapIndex];
+    if (memory == USED) {
+      curPCB = &pcbPool[memoryMapIndex+1];
+
+      //print out executing process's name and segment index first
+  
+      printString("name = \0");
+      printString(curPCB->name);
+      printString(", segment index = \0");
+      printInt(curPCB->segment);
+      printString("\r\n\0");
     }
   }
-  
-  //print out running process first
-  /*
-  printString("name = \0");
-  printString(running->name);
-  seg = running->segment;
-  seg = seg/0x1000-2;
-  printString(", segment index = \0");
-  printInt(seg);
-  printString("\r\n\0");
-  
-  //print out processes in the ready queue
-  curPCB = readyHead;
-  while(curPCB != NULL){
-    seg = curPCB->segment;
-    seg = seg/0x1000-2;
-
-    printString("name = \0");
-    printString(curPCB->name);
-    printString(", segment index = \0");
-    printInt(seg);
-    printString("\r\n\0");
-    
-    curPCB = curPCB->next;
-  */
-  }
+  restoreDataSegment();
 }
 
 /*
