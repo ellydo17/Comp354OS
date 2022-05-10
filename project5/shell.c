@@ -168,15 +168,51 @@ void main() {
       printString("ps is finished.\r\n\0");
 
       //command is "kill"
-    } else if (command[0] == 'k' && command[1] == 'i' && command[2] == 'l' && command[3] == 'l' && command[4] == ' ') {  
+    } else if (command[0] == 'k' && command[1] == 'i' && command[2] == 'l' && command[3] == 'l' && command[4] == ' ') {
+      int segIndex;
+      char seg = command[5];
+      
       printString("Command is kill.\r\n\0");
 
-      flag = kill(command+5);
+      
+      printString("Segment to kill is \0");
+      printString(seg);
+      printString(".\r\n\0");
 
-      if (flag == 1) { //the process was killed
-	printString("The process was successfully killed.\r\n\0");
-      } else { //no process was running in the segment with the specified index
-	printString("There is no process currently running in the segment with the specified index.\r\n\0");
+      if (seg == '0') {
+	segIndex = 0;
+      } else if (seg == '1') {
+	segIndex = 1;
+      } else if (seg == '2') {
+	segIndex = 2;
+      } else if (seg == '3') {
+	segIndex = 3;
+      } else if (seg == '4') {
+	segIndex = 4;
+      } else if (seg == '5') {
+	segIndex = 5;
+      } else if (seg == '6') {
+	segIndex = 6;
+      } else if (seg == '7') {
+	segIndex = 7;
+      } else {
+	segIndex = -1;
+      }
+
+      if (segIndex != -1) {	
+	flag = kill(command+5);
+
+	printString("Value of flag is \0");
+	printInt(flag);
+	printString(".\r\n\0");
+
+	if (flag == 1) { //the process was killed
+	  printString("Shell: The process was successfully killed.\r\n\0");
+	} else { //no process was running in the segment with the specified index
+	  printString("Shell: There is no process currently running in the segment with the specified index.\r\n\0");
+	} 
+      } else {
+	printString("invalid segment index\r\n\0");
       }
       
       printString("kill is finished.\r\n\0");
