@@ -603,10 +603,12 @@ int findFile(char *filename, struct directory* diskDir){
   int i = 0;
   int j = 0;
 
+  /*
   printString("findFile is running\r\n\0");
   printString("filename is \0");
-  printstring(filename);
+  printString(filename);
   printString("./r/n/0");
+  */
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
       if(diskDir->entries[i].name[j] != filename[j]){

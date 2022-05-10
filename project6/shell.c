@@ -51,6 +51,7 @@ void main() {
       printString("Type the name of file you want to read: \0");
 
       readString(filename, 6);
+      printString("\r\n\0");
       
       flag = readfile(filename, buffer);
 
