@@ -176,41 +176,53 @@ void main() {
 
       
       printString("Segment to kill is \0");
-      printString(seg);
-      printString(".\r\n\0");
 
       if (seg == '0') {
 	segIndex = 0;
+	printString("0\0");
       } else if (seg == '1') {
 	segIndex = 1;
+	printString("1\0");
       } else if (seg == '2') {
 	segIndex = 2;
+	printString("2\0");
       } else if (seg == '3') {
 	segIndex = 3;
+	printString("3\0");
       } else if (seg == '4') {
 	segIndex = 4;
+	printString("4\0");
       } else if (seg == '5') {
 	segIndex = 5;
+	printString("5\0");
       } else if (seg == '6') {
 	segIndex = 6;
+	printString("6\0");
       } else if (seg == '7') {
 	segIndex = 7;
+	printString("7\0");
       } else {
 	segIndex = -1;
+	printString("-1\0");
       }
 
+      printString(".\r\n\0");
+
       if (segIndex != -1) {	
-	flag = kill(command+5);
+	flag = kill(seg);
 
 	printString("Value of flag is \0");
-	printInt(flag);
-	printString(".\r\n\0");
+	if (flag == 1) {
+	  printString("1\r\n\0");
+	} else {
+	  printString("-1\r\n\0");
+        }
 
 	if (flag == 1) { //the process was killed
 	  printString("Shell: The process was successfully killed.\r\n\0");
 	} else { //no process was running in the segment with the specified index
 	  printString("Shell: There is no process currently running in the segment with the specified index.\r\n\0");
-	} 
+	}
       } else {
 	printString("invalid segment index\r\n\0");
       }
