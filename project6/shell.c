@@ -19,19 +19,52 @@ void main() {
   char command[30];
   char buffer[13312]; //buffer stores the contents from the file when file is read/program is executed
   int flag = 0; //true if file/program is found and can be executed
+  char filename[6];
   
   enableInterrupts();
- 
-  while(1){
-    //Print out shell command as "Shell> "
-    printString("Shell> \0");
 
-    
+  printString("OS: Main Menu\r\n\0");
+  printString("-------------\r\n\0");
+  printString("\r\n\0");
+  printString("This is the OS main menu interface, where you can select which function you want the OS to perform. You have the following options:\r\n\0");
+  printString("\r\n\0");
+  
+  while(1){
+    printString("1. Read a file\r\n\0");
+    printString("2. Execute a program\r\n\0");
+    printString("3. Delete a file\r\n\0");
+    printString("4. Copy a file\r\n\0");
+    printString("5. View all files in directory\r\n\0");
+    printString("6. View all processes running currently\r\n\0");
+    printString("7. Kill a process\r\n\0");
+    printString("8. Find a file\r\n\0");
+    printString("\r\n\0");
+    printString("Please choose one: \0");
+  
+    //Print out shell command as "Shell> "
+    //printString("Shell> \0");
+
     //get the command
+    readString(command, 2);
+    if(command[0] == '1' && command[1] == '\0'){
+      printString("\r\n\0");
+      printString("Type the name of file you want to read: \0");
+
+      readString(filename, 6);
+      
+      flag = readfile(filename, buffer);
+
+      if (flag != -1) { //file was found
+	printString(buffer);
+	printString("\r\n\0");
+      } else { //file not found, display error
+	printString("Error: file not found\r\n\0");
+      }
+      clearBuffer(buffer);
+    }
+     /*
     readString(command, 30);
     printString("\r\n\0");
-
-    //compare command and execute it accordingly
     
     //command is "type"
     if (command[0] == 't' && command[1] == 'y' && command[2] == 'p' && command[3] == 'e' && command[4] == ' ') {
@@ -47,6 +80,7 @@ void main() {
       }
       clearBuffer(buffer);
     }
+     */
     
       //command is "execute"
     else if (command[0] == 'e' && command[1] == 'x'&& command[2] == 'e' && command[3] == 'c' && command[4] == 'u' && command[5] == 't' && command[6] == 'e' && command[7] == ' ') {
