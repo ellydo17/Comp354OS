@@ -174,6 +174,7 @@ int kill(int segment){
   int i;
   int segUsedflag = -1;
   struct PCB* curPCB;
+  int curPCBSeg;
 
   setKernelDataSegment();
   printString("kill is in progress\r\n\0");
@@ -182,7 +183,8 @@ int kill(int segment){
   
   for(i=0; i<8; i++){
     curPCB = &pcbPool[i];
-    if(curPCB->segment == actualSeg){
+    curPCBSeg = curPCB->segment;
+    if(curPCBSeg == actualSeg){
       releasePCB(curPCB);
       segUsedflag = 1;
     }
