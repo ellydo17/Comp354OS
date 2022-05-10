@@ -46,5 +46,8 @@ void showProcesses();
 //kill
 int kill(int segment);
 
+//findFile
+int findFile(char *filename);
+
 #endif
   

@@ -35,6 +35,8 @@ int readfile(char *filename, char *buf);
 
 int findFile(char *filename, struct directory *diskSector);
 
+int findFile(char *filename);
+
 typedef char byte;
 
 struct dirEntry{
@@ -615,6 +617,23 @@ int findFile(char *filename, struct directory* diskDir){
   return -1;
 }
 
+/*
+ * Bonus feature: project 6
+ * This is the find file method with only one parameter
+ * It calls on the find file method with two paramaters
+ */
+
+int findFile(char *filename){
+  struct directory* diskDir;
+
+  //read the file from disk sector
+  readSector(&diskDir, 2);
+  
+  return findFile(filename, &diskDir);
+}
+
+
+
 /* Functions for project 2 */
 
 /*
@@ -740,18 +759,20 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
     return executeProgram(bx);
   } else if (ax == 0x05) {  //0x05 specifies that we need to terminate a user program (project 3)
     return terminate();
-  }else if (ax == 0x07) {  //0x05 specifies that we need to terminate a user program (project 3)
+  }else if (ax == 0x07) {  //0x07 specifies that we need to delete a file
     return  deleteFile(bx);
-  }else if (ax == 0x08) {  //0x05 specifies that we need to terminate a user program (project 3)
+  }else if (ax == 0x08) {  //0x08 specifies that we need to write to a file
     return  writeFile(bx,cx,dx);
-  }else if (ax == 0x09) {  //0x05 specifies that we need to terminate a user program (project 3)
+  }else if (ax == 0x09) {  //0x09 specifies that thee running process needs to yield
     return  yield();
   }else if (ax == 0x0A) {  //0x0A specifies that we need to display all data of processes (project 5)
     return  showProcesses();
   }else if (ax == 0x0B) {  //0x0B specifies that we need to kill the process at index bx (project 5)
     return  kill(bx);
-  }else if (ax == 0x0C) {  //0x0B specifies that we need to kill the process at index bx (project 5)
+  }else if (ax == 0x0C) {  //0x0C has something to do with yield
     return interrupt(0x08,0,0,0);
+  }else if (ax == 0x0F) {  //0x0F specifies that we need to find a file
+    return findFile(bx);
   }else{
     return -1;
   }

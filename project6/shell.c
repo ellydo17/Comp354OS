@@ -228,10 +228,27 @@ void main() {
       }
       
       printString("kill is finished.\r\n\0");
-    }
+
+      //command is find
+    } else if (command[0] == 'f' && command[1] == 'i'&& command[2] == 'n' && command[3] == 'd' && command[4] == ' ') {
+      char fileIndex[2];
+      fileIndex[1] = '\0';
+      //printString("Command is find.\r\n\0");
+      
+      flag = findFile(command+5);
+      fileIndex[0] = flag;
+
+      if (flag != -1) { //file was found
+	printString("File was found at index\0");
+	printString(fileIndex);
+	printString(".\r\n\0");
+      } else { //file not found, display error
+	printString("Error: file not found\r\n\0");
+      }
+      clearBuffer(fileIndex);
       
     //command is invalid 
-    else {
+    } else {
       printString("Unrecognized command.\r\n\0");
     }  
     
