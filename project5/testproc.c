@@ -83,6 +83,7 @@ void testGetFreePCB() {
 	freePCB = getFreePCB();
 	printf("The state of the free PCB is %d.\n", freePCB->state);
 	printf("PCB at index 0 is %d.\n", pcbPool[0].state);
+	assert(pcbPool[0].state == 0);
 	assert(pcbPool[1].state == 4);
 	assert(pcbPool[2].state == 0);
 }
@@ -147,16 +148,19 @@ int main() {
   testReleaseMemorySegment();
   printf("done\n");
   printf("\n");
+  */
 
   //doesn't work
   printf("Testing free PCB.\n");
   testGetFreePCB();
   printf("done\n");
   printf("\n");
-  */
+
   
+  /*
   printf("Testing release PCB.\n");
   testReleasePCB();
   printf("done\n");
   printf("\n");
+  */
 }

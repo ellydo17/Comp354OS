@@ -9,7 +9,7 @@ nasm bootload.asm
 dd if=bootload of=floppya.img bs=512 count=1 conv=notrunc seek=0
 ##############
 
-#complie the c file
+#compile the c file
 bcc -ansi -c -o kernel.o kernel.c
 
 #to assemble the kernel.asm file
@@ -35,11 +35,7 @@ gcc -o loadFile loadFile.c
 ./loadFile message.txt
 ./loadFile happy1.txt #for testing writeFile from project 4
 ./loadFile apple.txt #for testing writeFile from project 4
-
-#Similarly, copy the contents of the fileToDelete.txt file to your disk image with this command
 ./loadFile delete.txt
-
-#Loading and Executing a User Program
 
 #assemble the lib.asm file
 as86 lib.asm -o lib.o
@@ -47,25 +43,22 @@ as86 lib.asm -o lib.o
 #compile userlib.c with bcc
 bcc -ansi -c -o userlib.o userlib.c
 
-#compile uprog1.c with bcc, link the uprog1.o and lib.o files into the executable kernel file,
-#and use loadFile to copy the contents of the uprog1 file to the disk image
+#compile the uprogs with bcc, link the uprog.o and lib.o files into the executable kernel file,
+#and use loadFile to copy the contents of the uprog files to the disk image
 bcc -ansi -c -o uprog1.o uprog1.c
-ld86 -o uprog1 -d uprog1.o lib.o
-./loadfile uprog1
-
-#Terminating a User Program
-
-#compile uprog2.c with bcc, link the uprog2.o and lib.o files into the executable kernel file,
-#and use loadFile to copy the contents of the uprog2 file to the disk image
 bcc -ansi -c -o uprog2.o uprog2.c
-ld86 -o uprog2 -d uprog2.o lib.o
-./loadfile uprog2
+bcc -ansi -c -o uprog6.o uprog6.c
+bcc -ansi -c -o uprog7.o uprog7.c
 
-#compile textEditor.c with bcc, link the textEditor.o and lib.o files into the executable kernel file,
-#and use loadFile to copy the contents of the textEditor file to the disk image
-bcc -ansi -c -o textEditor.o textEditor.c
-ld86 -o textEditor -d textEditor.o userlib.o lib.o
-./loadfile textEditor
+ld86 -o uprog1 -d uprog1.o lib.o
+ld86 -o uprog2 -d uprog2.o lib.o
+ld86 -o uprog6 -d uprog6.o lib.o userlib.o
+ld86 -o uprog7 -d uprog7.o lib.o userlib.o
+
+./loadfile uprog1
+./loadfile uprog2
+./loadfile uprog6
+./loadfile uprog7
 
 #compile hello.c, world.c with bcc, link the hello.o, world.c and lib.o files into the executable kernel file,
 #and use loadFile to copy the contents of the hello and world file to the disk image
@@ -76,7 +69,11 @@ ld86 -o world -d world.o userlib.o lib.o
 ./loadfile hello
 ./loadfile world
 
-#Command line shell, Improvements - creating a user library
+#compile textEditor.c with bcc, link the textEditor.o and lib.o files into the executable kernel file,
+#and use loadFile to copy the contents of the textEditor file to the disk image
+bcc -ansi -c -o textEditor.o textEditor.c
+ld86 -o textEditor -d textEditor.o userlib.o lib.o
+./loadfile textEditor
 
 #compile shell.c with bcc, link the shell.o and lib.o files into the executable kernel file,
 #and use loadfile to copy the contents of the shell file to the disk image
