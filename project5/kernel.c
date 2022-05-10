@@ -171,26 +171,33 @@ void main() {
 int kill(int segment){
   int actualSeg;
   int memory;
-  struct PCB* PCBToFree;
+  int i;
+  int segUsedflag = -1;
+  struct PCB* curPCB;
 
   setKernelDataSegment();
   printString("kill is in progress\r\n\0");
 
-  memory = memoryMap[segment];
-  restoreDataSegment();
+  actualSeg = (segment * 0x1000) + 0x2000;
   
-  if (memory == USED) {
-    setKernelDataSegment();
-    PCBToFree = &pcbPool[segment+1];
-    releasePCB(PCBToFree); //free the PCB
-    actualSeg = (segment * 0x1000) + 0x2000;
-    releaseMemorySegment(actualSeg); //set the segment to be free
-    restoreDataSegment();
-    return 1;
-  } else {
-    printString("There is no process currently running in the segment with the specified index\r\n\0");
-    return -1;
+  for(i=0; i<8; i++){
+    curPCB = &pcbPool[i];
+    if(curPCB->segment == actualSeg){
+      releasePCB(curPCB);
+      segUsedflag = 1;
+    }
   }
+
+  releaseMemorySegment(actualSeg);
+
+  restoreDataSegment();
+
+  if (segUsedflag == 1){
+    printString("Found the segment and killed the process succesfully.\r\n\0");
+    return 1;
+  }
+  printString("There is no process currently running in the segment with the specified index\r\n\0");
+  return -1;
 }
 
 /*
