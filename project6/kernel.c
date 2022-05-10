@@ -35,7 +35,7 @@ int readfile(char *filename, char *buf);
 
 int findFile(char *filename, struct directory *diskSector);
 
-int findFile(char *filename);
+int findFileBonus(char *filename);
 
 typedef char byte;
 
@@ -602,7 +602,11 @@ int readfile(char *filename, char *buf){
 int findFile(char *filename, struct directory* diskDir){
   int i = 0;
   int j = 0;
-  
+
+  printString("findFile is running\r\n\0");
+  printString("filename is \0");
+  printstring(filename);
+  printString("./r/n/0");
   for(i=0; i<16; i++){
     for(j=0; j<6; j++){
       if(diskDir->entries[i].name[j] != filename[j]){
@@ -623,8 +627,9 @@ int findFile(char *filename, struct directory* diskDir){
  * It calls on the find file method with two paramaters
  */
 
-int findFile(char *filename){
+int findFileBonus(char *filename){
   struct directory* diskDir;
+  printString("findFileBonus is running\r\n\0");
 
   //read the file from disk sector
   readSector(&diskDir, 2);

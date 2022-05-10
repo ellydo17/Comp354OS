@@ -79,8 +79,8 @@ int kill(int segment){
   return interrupt(0x21, 0x0B, segment, 0, 0);
 }
 
-//findFile
-int findFile(char *filename) {
+//findFileBonus
+int findFileBonus(char *filename) {
   return interrupt(0x21, 0x0F, filename, 0, 0);
 }
 

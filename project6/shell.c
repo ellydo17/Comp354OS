@@ -235,7 +235,7 @@ void main() {
       fileIndex[1] = '\0';
       //printString("Command is find.\r\n\0");
       
-      flag = findFile(command+5);
+      flag = findFileBonus(command+5);
       fileIndex[0] = flag;
 
       if (flag != -1) { //file was found
@@ -243,7 +243,7 @@ void main() {
 	printString(fileIndex);
 	printString(".\r\n\0");
       } else { //file not found, display error
-	printString("Error: file not found\r\n\0");
+	printString("Error: cannot find the file.\r\n\0");
       }
       clearBuffer(fileIndex);
       
