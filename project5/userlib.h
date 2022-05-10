@@ -43,5 +43,8 @@ void yield();
 //show processes
 void showProcesses();
 
+//kill
+int kill(int segment);
+
 #endif
   

@@ -168,7 +168,23 @@ void main() {
  * This function should kill the process that is executing in the segment with the specified index.
  */
 int kill(int segment){
-  return -1;
+  int segIndex;
+  int memory;
+  struct PCB* PCBToFree;
+  
+  printString("kill is working\r\n\0");
+
+  segIndex = segment/0x1000 - 2;
+  memory = memoryMap[segIndex];
+  if (memory == USED) {
+    PCBToFree = &pcbPool[segIndex+1];
+    releasePCB(PCBToFree); //free the PCB
+    releaseMemorySegment(segment); //set the segment to be free
+    return 1;
+  } else {
+    printString("There is no process currently running in the segment with the specified index\r\n\0");
+    return -1;
+  }
 }
 
 /*

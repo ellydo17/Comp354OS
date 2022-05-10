@@ -166,6 +166,20 @@ void main() {
       showProcesses();
 
       printString("ps is finished.\r\n\0");
+
+      //command is "kill"
+    } else if (command[0] == 'k' && command[1] == 'i' && command[2] == 'l' && command[3] == 'l' && command[4] == ' ') {  
+      printString("Command is kill.\r\n\0");
+
+      flag = kill(command+5);
+
+      if (flag == 1) { //the process was killed
+	printString("The process was successfully killed.\r\n\0");
+      } else { //no process was running in the segment with the specified index
+	printString("There is no process currently running in the segment with the specified index.\r\n\0");
+      }
+      
+      printString("kill is finished.\r\n\0");
     }
       
     //command is invalid 

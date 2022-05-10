@@ -74,4 +74,8 @@ void showProcesses(){
   return interrupt(0x21, 0x0A, 0, 0, 0);
 }
 
+//kill
+int kill(int segment){
+  return interrupt(0x21, 0x0B, segment, 0, 0);
+}
 
