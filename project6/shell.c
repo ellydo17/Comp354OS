@@ -82,7 +82,6 @@ void main() {
     
       //command is "delete"
     else if (command[0] == '3' && command[1] == '\0') {
-      //printString("Command is delete.\r\n\0");
       printString("\r\n\0");
       printString("Type the name of file you want to delete: \0");
 
@@ -112,25 +111,12 @@ void main() {
       
       //printString("Command is copy.\r\n\0");
 
-      //from index 5, iterate through the remaining characters until we find a space, say we found space at index n, src = command+5 to command+(n-1), dest = command+n+1
-      iCommand = 5;
-      iSrc = 0;
-      iDest = 0;
-
-      //initialize the source and destination filenames with null characters
-      for(j = 0; j < 6; j++){
-	src[j] = '\0';
-	dest[j] = '\0';
-      }
-
-      //get the filename for the source file
-      while(command[iCommand] != ' ') {
-	src[iSrc] = command[iCommand];
-	iSrc++;
-	iCommand++;
-      }
-      src[iSrc] = '\0';
-      iCommand++;
+      //get the name of the source file
+      printString("\r\n\0");
+      printString("Type the name of the source file that you want to copy: \0");
+      
+      readString(src, 6);
+      printString("\r\n\0");
 
       //read the source file
       sectorsRead = readfile(src, buffer);
@@ -139,14 +125,11 @@ void main() {
       if (sectorsRead == -1) {
 	printString("File not found.\0");
       } else { //write the source file into the destination file
-
-	//get the filename for the destination file
-	while(command[iCommand] != '\0') {
-	  dest[iDest] = command[iCommand];
-	  iDest++;
-	  iCommand++;
-	}
-	dest[iDest] = '\0';
+        printString("\r\n\0");
+        printString("Type the name of the destination file that you want to copy to: \0");
+      
+        readString(dest, 6);
+        printString("\r\n\0");
 
 	//write to the destination file
 	sectorsWritten = writeFile(dest, buffer, sectorsRead);
@@ -165,8 +148,6 @@ void main() {
       int iDir = 0;
       struct directory diskDir;
       char* buffer3;
-
-      printString("Command is dir.\r\n\0");
       
       readSector(&diskDir, 2);
 
@@ -182,7 +163,7 @@ void main() {
       clearBuffer(buffer3);
 
      //command is "ps"
-    } else if (command[0] == 'p' && command[1] == 's' && command[2] == '\0') {
+    } else if (command[0] == '6' && command[1] == '\0') {
       printString("Command is ps.\r\n\0");
 
       showProcesses();
