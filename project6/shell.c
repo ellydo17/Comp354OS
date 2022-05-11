@@ -40,9 +40,6 @@ void main() {
     printString("8. Find a file\r\n\0");
     printString("\r\n\0");
     printString("Please choose one: \0");
-  
-    //Print out shell command as "Shell> "
-    //printString("Shell> \0");
 
     //get the command
     readString(command, 2);
@@ -63,31 +60,16 @@ void main() {
       }
       clearBuffer(buffer);
     }
-     /*
-    readString(command, 30);
-    printString("\r\n\0");
-    
-    //command is "type"
-    if (command[0] == 't' && command[1] == 'y' && command[2] == 'p' && command[3] == 'e' && command[4] == ' ') {
-      //printString("Command is type.\r\n\0");
-      
-      flag = readfile(command+5, buffer);
-
-      if (flag != -1) { //file was found
-	printString(buffer);
-	printString("\r\n\0");
-      } else { //file not found, display error
-	printString("Error: file not found\r\n\0");
-      }
-      clearBuffer(buffer);
-    }
-     */
     
       //command is "execute"
-    else if (command[0] == 'e' && command[1] == 'x'&& command[2] == 'e' && command[3] == 'c' && command[4] == 'u' && command[5] == 't' && command[6] == 'e' && command[7] == ' ') {
-      //printString("Command is execute.\r\n\0");
+    else if (command[0] == '2' && command[1] == '\0') {
+      printString("\r\n\0");
+      printString("Type the name of program you want to execute: \0");
 
-      flag = executeProgram(command+8);
+      readString(filename, 6);
+      printString("\r\n\0");
+
+      flag = executeProgram(filename);
 
       if (flag == -1) { //file was found
 	printString("Error: cannot execute file.\r\n\0");
@@ -99,10 +81,15 @@ void main() {
     }
     
       //command is "delete"
-    else if (command[0] == 'd' && command[1] == 'e'&& command[2] == 'l' && command[3] == 'e' && command[4] == 't' && command[5] == 'e' && command[6] == ' ') {
-      printString("Command is delete.\r\n\0");
+    else if (command[0] == '3' && command[1] == '\0') {
+      //printString("Command is delete.\r\n\0");
+      printString("\r\n\0");
+      printString("Type the name of file you want to delete: \0");
 
-      flag = deleteFile(command+7);
+      readString(filename, 6);
+      printString("\r\n\0");
+
+      flag = deleteFile(filename);
 
       if (flag == -1) { //file was found
 	printString("Error: cannot delete file because file not found.\r\n\0");
@@ -112,7 +99,7 @@ void main() {
     }
 
     //command is "copy"
-    else if (command[0] == 'c' && command[1] == 'o'&& command[2] == 'p' && command[3] == 'y' && command[4] == ' ') {
+    else if (command[0] == '4' && command[1] == '\0') {
       int iCommand;
       int iSrc;
       int iDest;
@@ -174,7 +161,7 @@ void main() {
 	//printString("Successfully copied source file to destination.\r\n\0");
 	clearBuffer(buffer);
       }
-    } else if (command[0] == 'd' && command[1] == 'i'&& command[2] == 'r' && command[3] == '\0') {
+    } else if (command[0] == '5' && command[1] == '\0') {
       int iDir = 0;
       struct directory diskDir;
       char* buffer3;
