@@ -164,7 +164,7 @@ void main() {
 
      //command is "ps"
     } else if (command[0] == '6' && command[1] == '\0') {
-      printString("Command is ps.\r\n\0");
+      //printString("Command is ps.\r\n\0");
 
       showProcesses();
 
