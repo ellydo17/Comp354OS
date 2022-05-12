@@ -180,28 +180,28 @@ void main() {
       readString(seg, 1);
       printString("\r\n\0");
       
-      if (seg == "0\0") {
+      if (seg[0] == '0') {
 	segIndex = 0;
 	//printString("0\0");
-      } else if (seg == "1\0") {
+      } else if (seg[0] == '1') {
 	segIndex = 1;
 	//printString("1\0");
-      } else if (seg == "2\0") {
+      } else if (seg[0] == '2') {
 	segIndex = 2;
 	//printString("2\0");
-      } else if (seg == "3\0") {
+      } else if (seg[0] == '3') {
 	segIndex = 3;
 	//printString("3\0");
-      } else if (seg == "4\0") {
+      } else if (seg[0] == '4') {
 	segIndex = 4;
 	//printString("4\0");
-      } else if (seg == "5\0") {
+      } else if (seg[0] == '5') {
 	segIndex = 5;
 	//printString("5\0");
-      } else if (seg == "6\0") {
+      } else if (seg[0] == '6') {
 	segIndex = 6;
 	//printString("6\0");
-      } else if (seg == "7\0") {
+      } else if (seg[0] == '7') {
 	segIndex = 7;
 	//printString("7\0");
       } else {
@@ -212,7 +212,7 @@ void main() {
       //printString(".\r\n\0");
 
       if (segIndex != -1) {	
-	flag = kill(seg);
+	flag = kill(segIndex);
 
 	if (flag == 1) { //the process was killed
 	  printString("Shell: The process was successfully killed.\r\n\0");
@@ -222,7 +222,6 @@ void main() {
       } else {
 	printString("invalid segment index\r\n\0");
       }
-
       //command is find
     } else if (command[0] == '8' && command[1] == '\0') {
       char fileIndex[2];
