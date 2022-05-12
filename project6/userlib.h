@@ -46,8 +46,11 @@ void showProcesses();
 //kill
 int kill(int segment);
 
+//findfile
+int findFile(char *filename, struct directory* diskDir);
+
 //findFileBonus
-int findFileBonus(char *filename);
+//int findFileBonus(char *filename);
 
 #endif
   

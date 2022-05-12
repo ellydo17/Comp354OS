@@ -235,6 +235,8 @@ void main() {
       //command is find
     } else if (command[0] == '8' && command[1] == '\0') {
       char fileIndex[2];
+      struct directory diskDir;
+      
       fileIndex[1] = '\0';
       //printString("Command is find.\r\n\0");
 
@@ -244,8 +246,14 @@ void main() {
       
       readString(filename, 6);
       printString("\r\n\0");
-      
-      flag = findFile(filename);
+
+      printString("The name of the file is: \0");
+      printString(filename);
+      printString("\r\n\0");
+
+      //read the file from disk sector
+      readSector(&diskDir, 2);
+      flag = findFile(filename, &diskDir);
       fileIndex[0] = flag;
 
       if (flag != -1) { //file was found

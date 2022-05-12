@@ -779,7 +779,7 @@ int handleInterrupt21(int ax, int bx, int cx, int dx){
   }else if (ax == 0x0C) {  //0x0C has something to do with yield
     return interrupt(0x08,0,0,0);
   }else if (ax == 0x0F) {  //0x0F specifies that we need to find a file
-    return findFile(bx);
+    return findFile(bx, cx);
   }else{
     return -1;
   }
