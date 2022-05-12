@@ -177,7 +177,6 @@ int kill(int segment){
   int curPCBSeg;
 
   setKernelDataSegment();
-  printString("kill is in progress\r\n\0");
 
   actualSeg = (segment * 0x1000) + 0x2000;
   releaseMemorySegment(actualSeg);
@@ -187,7 +186,6 @@ int kill(int segment){
     curPCB = &pcbPool[i];
     curPCBSeg = curPCB->segment;
     if(pcbPool[i].segment == actualSeg){
-      printString("Entering the loop\r\n\0");
       releasePCB(&pcbPool[i]);
       segUsedflag = 1;
     }
@@ -212,7 +210,6 @@ void showProcesses(){
   int memoryMapIndex; 
 
   setKernelDataSegment();
-  printString("showProssess is running\r\n\0");
   
   for(memoryMapIndex = 0; memoryMapIndex < 8; memoryMapIndex++) {
     memory = memoryMap[memoryMapIndex];
@@ -222,9 +219,9 @@ void showProcesses(){
       //segIndex = (curPCB->segment/0x1000) - 2;
 
       //print out executing process's name and segment index first
-      printString("name = \0");
+      printString("The name of the executing process is: \0");
       printString(curPCB->name);
-      printString(", segment index = \0");
+      printString(", and its segment index is: \0");
       //printInt(segIndex);
       if (memoryMapIndex == 0) {
 	printString("0\0");

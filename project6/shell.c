@@ -165,61 +165,54 @@ void main() {
      //command is "ps"
     } else if (command[0] == '6' && command[1] == '\0') {
       //printString("Command is ps.\r\n\0");
+      printString("\r\n\0");
 
       showProcesses();
 
-      printString("ps is finished.\r\n\0");
-
       //command is "kill"
-    } else if (command[0] == 'k' && command[1] == 'i' && command[2] == 'l' && command[3] == 'l' && command[4] == ' ') {
+    } else if (command[0] == '7' && command[1] == '\0') {
       int segIndex;
-      char seg = command[5];
+      char seg[1];
       
-      printString("Command is kill.\r\n\0");
-
+      //printString("Command is kill.\r\n\0");
+      printString("\r\n\0");
+      printString("Type the segment index of the process that you want to kill: \0");
+      readString(seg, 1);
+      printString("\r\n\0");
       
-      printString("Segment to kill is \0");
-
-      if (seg == '0') {
+      if (seg == "0\0") {
 	segIndex = 0;
-	printString("0\0");
-      } else if (seg == '1') {
+	//printString("0\0");
+      } else if (seg == "1\0") {
 	segIndex = 1;
-	printString("1\0");
-      } else if (seg == '2') {
+	//printString("1\0");
+      } else if (seg == "2\0") {
 	segIndex = 2;
-	printString("2\0");
-      } else if (seg == '3') {
+	//printString("2\0");
+      } else if (seg == "3\0") {
 	segIndex = 3;
-	printString("3\0");
-      } else if (seg == '4') {
+	//printString("3\0");
+      } else if (seg == "4\0") {
 	segIndex = 4;
-	printString("4\0");
-      } else if (seg == '5') {
+	//printString("4\0");
+      } else if (seg == "5\0") {
 	segIndex = 5;
-	printString("5\0");
-      } else if (seg == '6') {
+	//printString("5\0");
+      } else if (seg == "6\0") {
 	segIndex = 6;
-	printString("6\0");
-      } else if (seg == '7') {
+	//printString("6\0");
+      } else if (seg == "7\0") {
 	segIndex = 7;
-	printString("7\0");
+	//printString("7\0");
       } else {
 	segIndex = -1;
-	printString("-1\0");
+	//printString("-1\0");
       }
 
-      printString(".\r\n\0");
+      //printString(".\r\n\0");
 
       if (segIndex != -1) {	
 	flag = kill(seg);
-
-	printString("Value of flag is \0");
-	if (flag == 1) {
-	  printString("1\r\n\0");
-	} else {
-	  printString("-1\r\n\0");
-        }
 
 	if (flag == 1) { //the process was killed
 	  printString("Shell: The process was successfully killed.\r\n\0");
@@ -229,8 +222,6 @@ void main() {
       } else {
 	printString("invalid segment index\r\n\0");
       }
-      
-      printString("kill is finished.\r\n\0");
 
       //command is find
     } else if (command[0] == '8' && command[1] == '\0') {
@@ -247,19 +238,13 @@ void main() {
       readString(filename, 6);
       printString("\r\n\0");
 
-      printString("The name of the file is: \0");
-      printString(filename);
-      printString("\r\n\0");
-
       //read the file from disk sector
       readSector(&diskDir, 2);
       flag = findFile(filename, &diskDir);
       fileIndex[0] = flag;
 
       if (flag != -1) { //file was found
-	printString("File was found at index\0");
-	printString(fileIndex);
-	printString(".\r\n\0");
+	printString("File was found.\r\n\0");
       } else { //file not found, display error
 	printString("Error: cannot find the file.\r\n\0");
       }

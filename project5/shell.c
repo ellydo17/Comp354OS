@@ -65,7 +65,7 @@ void main() {
     
       //command is "delete"
     else if (command[0] == 'd' && command[1] == 'e'&& command[2] == 'l' && command[3] == 'e' && command[4] == 't' && command[5] == 'e' && command[6] == ' ') {
-      printString("Command is delete.\r\n\0");
+      //printString("Command is delete.\r\n\0");
 
       flag = deleteFile(command+7);
 
@@ -161,62 +161,52 @@ void main() {
 
      //command is "ps"
     } else if (command[0] == 'p' && command[1] == 's' && command[2] == '\0') {
-      printString("Command is ps.\r\n\0");
+      //printString("Command is ps.\r\n\0");
 
       showProcesses();
 
-      printString("ps is finished.\r\n\0");
+      //printString("ps is finished.\r\n\0");
 
       //command is "kill"
     } else if (command[0] == 'k' && command[1] == 'i' && command[2] == 'l' && command[3] == 'l' && command[4] == ' ') {
       int segIndex;
       char seg = command[5];
       
-      printString("Command is kill.\r\n\0");
-
-      
-      printString("Segment to kill is \0");
+      //printString("Command is kill.\r\n\0");
 
       if (seg == '0') {
 	segIndex = 0;
-	printString("0\0");
+	//printString("0\0");
       } else if (seg == '1') {
 	segIndex = 1;
-	printString("1\0");
+	//printString("1\0");
       } else if (seg == '2') {
 	segIndex = 2;
-	printString("2\0");
+	//printString("2\0");
       } else if (seg == '3') {
 	segIndex = 3;
-	printString("3\0");
+	//printString("3\0");
       } else if (seg == '4') {
 	segIndex = 4;
-	printString("4\0");
+	//printString("4\0");
       } else if (seg == '5') {
 	segIndex = 5;
-	printString("5\0");
+	//printString("5\0");
       } else if (seg == '6') {
 	segIndex = 6;
-	printString("6\0");
+	//printString("6\0");
       } else if (seg == '7') {
 	segIndex = 7;
-	printString("7\0");
+	//printString("7\0");
       } else {
 	segIndex = -1;
-	printString("-1\0");
+	//printString("-1\0");
       }
 
-      printString(".\r\n\0");
+      //printString(".\r\n\0");
 
       if (segIndex != -1) {	
 	flag = kill(seg);
-
-	printString("Value of flag is \0");
-	if (flag == 1) {
-	  printString("1\r\n\0");
-	} else {
-	  printString("-1\r\n\0");
-        }
 
 	if (flag == 1) { //the process was killed
 	  printString("Shell: The process was successfully killed.\r\n\0");
@@ -226,8 +216,6 @@ void main() {
       } else {
 	printString("invalid segment index\r\n\0");
       }
-      
-      printString("kill is finished.\r\n\0");
     }
       
     //command is invalid 
