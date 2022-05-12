@@ -180,19 +180,19 @@ int kill(int segment){
   printString("kill is in progress\r\n\0");
 
   actualSeg = (segment * 0x1000) + 0x2000;
-  
+  releaseMemorySegment(actualSeg);
+  restoreDataSegment();
   for(i=0; i<8; i++){
+    setKernelDataSegment();
     curPCB = &pcbPool[i];
     curPCBSeg = curPCB->segment;
-    if(curPCBSeg == actualSeg){
-      releasePCB(curPCB);
+    if(pcbPool[i].segment == actualSeg){
+      printString("Entering the loop\r\n\0");
+      releasePCB(&pcbPool[i]);
       segUsedflag = 1;
     }
+    restoreDataSegment();
   }
-
-  releaseMemorySegment(actualSeg);
-
-  restoreDataSegment();
 
   if (segUsedflag == 1){
     printString("Found the segment and killed the process succesfully.\r\n\0");

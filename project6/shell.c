@@ -233,12 +233,19 @@ void main() {
       printString("kill is finished.\r\n\0");
 
       //command is find
-    } else if (command[0] == 'f' && command[1] == 'i'&& command[2] == 'n' && command[3] == 'd' && command[4] == ' ') {
+    } else if (command[0] == '8' && command[1] == '\0') {
       char fileIndex[2];
       fileIndex[1] = '\0';
       //printString("Command is find.\r\n\0");
+
+      //get the name of the file that we want to find
+      printString("\r\n\0");
+      printString("Type the name of the file that you want to find: \0");
       
-      flag = findFileBonus(command+5);
+      readString(filename, 6);
+      printString("\r\n\0");
+      
+      flag = findFile(filename);
       fileIndex[0] = flag;
 
       if (flag != -1) { //file was found
