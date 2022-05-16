@@ -72,12 +72,14 @@ void main() {
   //tests for project 5/6
 
   //test for new user program (bonus 4)
+  
+  initializeProcStructures();
   makeInterrupt21();
-  interrupt(0x21, 0x04, "ffProg\0", 0x2000, 0);
-  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+  handleInterrupt21(0x04,"ffProg\0",0,0);
+  makeTimerInterrupt();
+  
 
   //test for timer interrupts, running the shell, and calling the menu interface in shell (bonus 5)
-
   /*
   initializeProcStructures();
   makeInterrupt21();
@@ -540,7 +542,7 @@ int executeProgram(char *name){
  
   //launchProgram(segment);
   initializeProgram(segment);
-  printString("completed execute program method\r\n\0");
+  //printString("completed execute program method\r\n\0");
   return 1;
 }
 
