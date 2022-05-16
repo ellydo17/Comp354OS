@@ -73,7 +73,7 @@ void main() {
 
   //test for new user program (bonus 4)
   makeInterrupt21();
-  interrupt(0x21, 0x04, "findFileProg\0", 0, 0);
+  interrupt(0x21, 0x04, "ffProg\0", 0x2000, 0);
   interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
 
   //test for timer interrupts, running the shell, and calling the menu interface in shell (bonus 5)
