@@ -84,13 +84,3 @@ int kill(int segment){
 int findFile(char *filename, struct directory* diskDir){
   return interrupt(0x21, 0x0F, filename, diskDir, 0);
 }
-
-
-//findFileBonus
-/*
-int findFileBonus(char *filename) {
-  return interrupt(0x21, 0x0F, filename, 0, 0);
-}
-*/
-
-

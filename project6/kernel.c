@@ -69,14 +69,21 @@ void showProcesses();
 int kill(int segment);
 
 void main() {
-  //tests for project 5
+  //tests for project 5/6
 
-  //tests for timer interrupts
-  
+  //test for new user program (bonus 4)
+  makeInterrupt21();
+  interrupt(0x21, 0x04, "findFileProg\0", 0, 0);
+  interrupt(0x21, 0x00, "Done!\n\r\0", 0, 0);
+
+  //test for timer interrupts, running the shell, and calling the menu interface in shell (bonus 5)
+
+  /*
   initializeProcStructures();
   makeInterrupt21();
-  handleInterrupt21(0x04,"shell\0",0x2000,0);
+  handleInterrupt21(0x04,"shell\0",0,0);
   makeTimerInterrupt();
+  */
   
   //tests for project 4
 
@@ -619,23 +626,6 @@ int findFile(char *filename, struct directory* diskDir){
   
   return -1;
 }
-
-/*
- * Bonus feature: project 6
- * This is the find file method with only one parameter
- * It calls on the find file method with two paramaters
- */
-
-int findFileBonus(char *filename){
-  struct directory* diskDir;
-  printString("findFileBonus is running\r\n\0");
-
-  //read the file from disk sector
-  readSector(&diskDir, 2);
-  
-  return findFile(filename, &diskDir);
-}
-
 
 
 /* Functions for project 2 */
