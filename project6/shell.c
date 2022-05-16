@@ -58,6 +58,7 @@ void main() {
       } else { //file not found, display error
 	printString("Error: file not found\r\n\0");
       }
+      printString("\r\n\0");
       clearBuffer(buffer);
     }
     
@@ -78,6 +79,7 @@ void main() {
       } else {
 	printString("Program was executed.\r\n\0");
       }
+      printString("\r\n\0");
     }
     
       //command is "delete"
@@ -95,6 +97,7 @@ void main() {
       } else {//file was found
 	printString("Successfully deleted file.\r\n\0");
       }
+      printString("\r\n\0");
     }
 
     //command is "copy"
@@ -142,6 +145,7 @@ void main() {
 	}
 	
 	//printString("Successfully copied source file to destination.\r\n\0");
+	printString("\r\n\0");
 	clearBuffer(buffer);
       }
     } else if (command[0] == '5' && command[1] == '\0') {
@@ -151,6 +155,8 @@ void main() {
       
       readSector(&diskDir, 2);
 
+      printString("\r\n\0");
+      
       while(iDir < 16) {
 	if (diskDir.entries[iDir].name[0] != 0x00) {
 	  buffer3 = diskDir.entries[iDir].name;
@@ -160,6 +166,7 @@ void main() {
 	}
 	iDir++;
       }
+      printString("\r\n\0");
       clearBuffer(buffer3);
 
      //command is "ps"
@@ -168,6 +175,7 @@ void main() {
       printString("\r\n\0");
 
       showProcesses();
+      printString("\r\n\0");
 
       //command is "kill"
     } else if (command[0] == '7' && command[1] == '\0') {
@@ -222,6 +230,8 @@ void main() {
       } else {
 	printString("invalid segment index\r\n\0");
       }
+      printString("\r\n\0");
+      
       //command is find
     } else if (command[0] == '8' && command[1] == '\0') {
       char fileIndex[2];
@@ -247,11 +257,13 @@ void main() {
       } else { //file not found, display error
 	printString("Error: cannot find the file.\r\n\0");
       }
+      printString("\r\n\0");
       clearBuffer(fileIndex);
       
     //command is invalid 
     } else {
       printString("Unrecognized command.\r\n\0");
+      printString("\r\n\0");
     }  
     
   }
