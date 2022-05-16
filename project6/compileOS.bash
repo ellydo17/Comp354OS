@@ -49,16 +49,19 @@ bcc -ansi -c -o uprog1.o uprog1.c
 bcc -ansi -c -o uprog2.o uprog2.c
 bcc -ansi -c -o uprog6.o uprog6.c
 bcc -ansi -c -o uprog7.o uprog7.c
+bcc -ansi -c -o ffProg.o ffProg.c
 
 ld86 -o uprog1 -d uprog1.o lib.o
 ld86 -o uprog2 -d uprog2.o lib.o
 ld86 -o uprog6 -d uprog6.o lib.o userlib.o
 ld86 -o uprog7 -d uprog7.o lib.o userlib.o
+ld86 -o ffProg -d ffProg.o lib.o userlib.o
 
 ./loadfile uprog1
 ./loadfile uprog2
 ./loadfile uprog6
 ./loadfile uprog7
+./loadfile ffProg
 
 #compile hello.c, world.c with bcc, link the hello.o, world.c and lib.o files into the executable kernel file,
 #and use loadFile to copy the contents of the hello and world file to the disk image
