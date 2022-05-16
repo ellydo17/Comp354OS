@@ -1,5 +1,16 @@
 #include "userlib.h"
 
+typedef char byte;
+
+struct dirEntry{
+  char name[6];
+  byte sectors[26];
+};
+
+struct directory{
+  struct dirEntry entries[16];
+};
+
 void main(){
   char* filename;
   int filefound;
